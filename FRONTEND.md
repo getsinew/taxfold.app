@@ -124,9 +124,9 @@ The canonical top of `global.css` (copy as-is; values = DESIGN.md § Brand token
 | `src/layouts/Base.astro` | `<head>`, skip link, `<Header>`, `<main id="main" tabindex="-1">`, `<Footer>` | One layout for every page |
 | `src/components/*.astro` | `Header`, `Footer`, `LaunchCta`, `StatusPill`, `GuideCard` (`variant`), `Toc`, `MoreGuides` | One component per DESIGN.md § 5 entry. Props as specced there |
 | `src/lib/launch-state.mjs` | `LAUNCH_STATE` (`'pre-beta'` today), `TESTFLIGHT_URL`, `APP_STORE_ID`, `APP_STORE_PT` | The single switch for DESIGN.md § 5.6. Pages never test the state themselves; they render `<LaunchCta>` / `<StatusPill>` |
-| `src/lib/rehype-taxfold.mjs` | A rehype plugin, no new dependency (hand-written tree walk) | (a) wraps each `table` in `div.table-scroll[role=region][tabindex=0][aria-label]`, (b) gives each `pre` `tabindex=0` + `aria-label="Code"`, (c) wraps the H2 `Where Taxfold fits` and its siblings up to the next H2 or the end in `aside.maker-note[aria-labelledby]` and injects the label |
-| `src/scripts/copy-code.ts` | The copy-button enhancement (DESIGN.md § 5.7) | Loaded only by the guide template, through Astro's bundled `<script>`. The page must work fully without it |
-| `astro.config.mjs` | `markdown: { syntaxHighlight: false, rehypePlugins: [rehypeTaxfold] }` | `syntaxHighlight: false` is a valid value in Astro 7.4.5 (`node_modules/astro/dist/core/config/schemas/base.d.ts:124`) |
+| `src/lib/hast-taxfold.mjs` | A Sätteri hast plugin (Astro 7 renders Markdown with Sätteri, not unified), no new code: `transformRoot()` is a pure tree-in/tree-out walk, `taxfoldHastPlugin()` is the `after` hook that swaps the root | (a) wraps each `table` in `div.table-scroll[role=region][tabindex=0][aria-label]`, (b) wraps each `pre` in `div.code-block` and gives the `pre` `tabindex=0` + `aria-label="Code"`, (c) wraps the H2 `Where Taxfold fits` (given `id="where-taxfold-fits"`) and its siblings up to the next H2 or the end in `aside.maker-note[aria-labelledby]`, injects the label and the launch-state status line |
+| `src/scripts/copy-code.ts` | The copy-button enhancement (DESIGN.md § 5.7) | Loaded only by the guide template, through Astro's bundled `<script>`. The page must work fully without it. The button lives in a `.code-tools` strip at the top of the `.code-block` wrapper (not inside the scrolling `pre`, where it would scroll away and cover the code) |
+| `astro.config.mjs` | `markdown: { syntaxHighlight: false, processor: satteri({ hastPlugins: [taxfoldHastPlugin()] }) }` | `markdown.rehypePlugins` is **invalid in Astro 7.4.5**: `node_modules/astro/dist/core/config/validate.js:51` throws unless `@astrojs/markdown-remark` is installed. Astro's docs say to install `@astrojs/markdown-satteri` to configure Sätteri, so it is a direct dependency pinned to the version Astro 7.4.5 already ships (0.4.6, already in the lockfile). `syntaxHighlight: false` is valid (`node_modules/astro/dist/core/config/schemas/base.d.ts:124`) |
 | `src/pages/guides/[slug].astro` | The guide template (DESIGN.md § 4.2) | Its TOC comes from `const { Content, headings } = await render(guide)` (headings typed at `node_modules/astro/dist/content/runtime.d.ts:74`), filtered to `depth === 2` |
 
 **Class and markup rules** (each one gets a test in § 4):
@@ -141,11 +141,11 @@ The canonical top of `global.css` (copy as-is; values = DESIGN.md § Brand token
   `<time datetime={iso}>`. Keep the literal "Last updated" (it is pinned by `tests/site.test.ts`).
 - 🟢 Spacing uses only the steps in DESIGN.md § Spacing (`1 2 3 4 5 6 8 10 12 16 20 24`).
 
-## 4. Structural tests to add (in `tests/site.test.ts`, against `dist/`)
+## 4. Structural tests (`tests/design.test.ts` against `dist/`, `tests/transform.test.ts` on fixture trees)
 
 | Test | Asserts |
 |---|---|
-| tokens-only-in-global-css | No `#[0-9a-f]{3,8}\b` or `rgb(` in `src/**/*.astro` / `*.ts` / `*.mjs` (the favicon in `public/` is exempt) |
+| tokens-only-in-global-css | No `#[0-9a-f]{3,8}\b` or `rgb(` in `src/**/*.astro` / `*.ts` / `*.mjs` (the favicon in `public/` and the two `theme-color` metas in `Base.astro`, whose attribute cannot read a custom property, are exempt) |
 | no-dark-variant / no-arbitrary-values | No `dark:` and no `-\[` inside `class=` / `class:list` strings in `src/` |
 | one-h1 | Every built page has exactly one `<h1` |
 | tables-are-focusable-regions | Every `<table` in a guide is inside `div.table-scroll` with `role="region"`, `tabindex="0"` and a non-empty `aria-label` |
@@ -153,7 +153,7 @@ The canonical top of `global.css` (copy as-is; values = DESIGN.md § Brand token
 | no-task-list-inputs | No `<input` in any guide page |
 | no-blank-targets | No `target="_blank"` anywhere in `dist/` |
 | nav-is-four | The main nav has exactly 4 links, plus the wordmark |
-| launch-state-single-source | The string "App Store" appears in guide markdown only inside link URLs, never as status prose (this one waits for the writer's content edit, DESIGN.md § 4.2) |
+| launch-state-single-source | The string "App Store" appears in guide markdown only inside link URLs, never as status prose. Waits for the writer's content edit (DESIGN.md § 4.2): `AWAITING_STATUS_PROSE_REMOVAL` and `AWAITING_MAKER_HEADING` in `tests/design.test.ts` list the guides still owing it, and the tests fail when a listed guide no longer needs its entry, so the lists only shrink |
 
 Each test gets an anti-vacuity case: a fixture that **must** fail it (the repo's existing cap test already follows this pattern).
 

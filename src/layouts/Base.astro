@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { launchView } from '../lib/launch-state.mjs';
 
 interface Props {
   title: string;
@@ -10,19 +13,16 @@ interface Props {
 
 const { title, description, noindex = false, ogType = 'website' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-
-const navLinks = [
-  { href: '/about/', label: 'About' },
-  { href: '/how-we-write/', label: 'How we write' },
-  { href: '/privacy/', label: 'Privacy' },
-  { href: '/contact/', label: 'Contact' },
-];
+const appBanner = launchView().itunesMeta?.(canonical);
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#f6f4ee" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#131614" media="(prefers-color-scheme: dark)" />
   <title>{title}</title>
   <meta name="description" content={description} />
   {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
@@ -32,37 +32,15 @@ const navLinks = [
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
+  {appBanner && <meta name="apple-itunes-app" content={appBanner} />}
   <slot name="head" />
 </head>
-<body class="min-h-screen flex flex-col">
-  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-white focus:px-3 focus:py-2">Skip to content</a>
-  <header class="border-b border-rule">
-    <nav aria-label="Main" class="max-w-3xl mx-auto px-5 py-4 flex flex-wrap items-center justify-between gap-3">
-      <a href="/" class="font-semibold text-lg tracking-tight text-brand">Taxfold</a>
-      <ul class="flex flex-wrap gap-x-5 gap-y-1 text-sm">
-        {navLinks.map(({ href, label }) => (
-          <li>
-            <a
-              href={href}
-              class:list={['hover:text-brand', Astro.url.pathname === href ? 'text-ink font-medium' : 'text-ink-soft']}
-              aria-current={Astro.url.pathname === href ? 'page' : undefined}
-            >{label}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  </header>
-
-  <main id="main" class="flex-1 max-w-3xl w-full mx-auto px-5 py-10">
+<body class="flex min-h-screen flex-col">
+  <a href="#main" class="skip-link">Skip to content</a>
+  <Header />
+  <main id="main" tabindex="-1" class="max-w-page mx-auto w-full flex-1 px-5 py-10 md:px-8 md:py-12 lg:px-10">
     <slot />
   </main>
-
-  <footer class="border-t border-rule">
-    <div class="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-soft space-y-2">
-      <p>Taxfold is a receipt and expense log for iPhone. It sends us none of your data.</p>
-      <p>Guides on this site are general information, not tax, legal or accounting advice.</p>
-      <p>© Opal Harmony P.C. · <a class="underline" href="mailto:hello@taxfold.app">hello@taxfold.app</a></p>
-    </div>
-  </footer>
+  <Footer />
 </body>
 </html>

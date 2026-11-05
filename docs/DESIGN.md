@@ -423,7 +423,8 @@ The button is an `<a>` styled as a button, because it navigates. The badge `img`
 - Inline `code`: `sunk` ground, padding 2/6, `radius-sm`, 0.9em.
 - No syntax highlighting. These are one-line formulas, and colour would be noise. Turn off Shiki/Prism highlighting.
 - **Copy button (progressive enhancement, the only site JS besides the beacon):** a script inserts
-  `<button type="button">Copy</button>` at the top-right inside each `pre`. Without JS, no button exists.
+  `<button type="button">Copy</button>` in a strip at the top-right of each code block's `.code-block` wrapper (the `pre` scrolls
+  horizontally, so a button inside it would scroll away and cover the code). Without JS, no button exists.
 
 | State | Treatment |
 |---|---|

@@ -1,0 +1,27 @@
+---
+interface Props {
+  variant: 'disclosure' | 'rail';
+  headings: { slug: string; text: string }[];
+}
+
+const { variant, headings } = Astro.props;
+const count = headings.length;
+---
+{count > 0 && variant === 'disclosure' && (
+  <details class="toc-details">
+    <summary>On this page · {count} {count === 1 ? 'section' : 'sections'}</summary>
+    <nav aria-label="On this page">
+      <ul class="toc-list">
+        {headings.map(({ slug, text }) => <li><a href={`#${slug}`}>{text}</a></li>)}
+      </ul>
+    </nav>
+  </details>
+)}
+{count > 0 && variant === 'rail' && (
+  <nav aria-label="On this page" class="toc-rail">
+    <p class="toc-rail-title">On this page</p>
+    <ul class="toc-list">
+      {headings.map(({ slug, text }) => <li><a href={`#${slug}`}>{text}</a></li>)}
+    </ul>
+  </nav>
+)}

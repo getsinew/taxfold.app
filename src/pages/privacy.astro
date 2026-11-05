@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { formatDate } from '../lib/format-date.mjs';
 import { lastmodForPath } from '../lib/lastmod.mjs';
 
 const updated = lastmodForPath(Astro.url.pathname);
@@ -8,14 +9,24 @@ const updated = lastmodForPath(Astro.url.pathname);
   title="Privacy: what Taxfold and taxfold.app collect"
   description="The Taxfold app sends us no data; your receipts stay on your iPhone. This website runs cookieless Cloudflare Web Analytics. Here is each part."
 >
-  <article class="prose">
-    <h1 class="text-3xl font-bold tracking-tight mb-6">Privacy</h1>
+  <article class="prose mx-auto">
+    <h1>Privacy</h1>
 
     <p>
       This page covers two things: the Taxfold iPhone app, and this website, taxfold.app. They are different, so we
       describe them separately. Both are run by Opal Harmony P.C., the company that makes Taxfold, which is the data
       controller for anything described here.
     </p>
+
+    <section aria-label="In short" class="callout mb-4">
+      <p class="text-ink-soft mb-2 text-sm font-semibold">In short</p>
+      <dl class="summary-list">
+        <dt>App</dt>
+        <dd>Sends us nothing.</dd>
+        <dt>Website</dt>
+        <dd>Counts visits without cookies.</dd>
+      </dl>
+    </section>
 
     <h2 id="app">The app: we collect nothing</h2>
     <p>
@@ -110,8 +121,8 @@ const updated = lastmodForPath(Astro.url.pathname);
         Hellenic Data Protection Authority.
       </li>
     </ul>
-    <p class="text-sm text-ink-soft">
-      Last updated <time datetime={updated.toISOString()}>{updated.toISOString().slice(0, 10)}</time>.
+    <p class="text-ink-soft text-sm">
+      Last updated <time datetime={updated.toISOString()}>{formatDate(updated)}</time>.
     </p>
   </article>
 </Base>

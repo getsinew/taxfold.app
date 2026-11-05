@@ -1,0 +1,14 @@
+---
+import { launchView } from '../lib/launch-state.mjs';
+
+const { primary, secondary, helper } = launchView();
+
+if (primary.kind === 'badge') {
+  throw new Error("LaunchCta: the 'released' state needs Apple's official App Store badge artwork added to public/ first.");
+}
+---
+<div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
+  <a href={primary.href} class="btn-primary">{primary.label}{primary.external && <span aria-hidden="true">&nbsp;↗</span>}</a>
+  <a href={secondary.href} class="link">{secondary.label}</a>
+</div>
+{helper && <p class="text-ink-soft mt-3 text-sm">{helper}</p>}

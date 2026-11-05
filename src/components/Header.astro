@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+
+const guideCount = (await getCollection('guides')).length;
+const pathname = Astro.url.pathname;
+
+// With no guides yet, "Guides" would point at an empty section, so it points at the trust page instead.
+const navItems = [
+  { label: 'Guides', href: guideCount > 0 ? '/#guides' : '/how-we-write/', current: pathname.startsWith('/guides/') ? 'true' : undefined },
+  { label: 'About', href: '/about/', current: pathname === '/about/' ? 'page' : undefined },
+  { label: 'Privacy', href: '/privacy/', current: pathname === '/privacy/' ? 'page' : undefined },
+  { label: 'Contact', href: '/contact/', current: pathname === '/contact/' ? 'page' : undefined },
+] as const;
+---
+<header class="border-rule border-b">
+  <nav aria-label="Main" class="max-w-page mx-auto flex flex-col px-5 md:flex-row md:items-center md:justify-between md:px-8 lg:px-10">
+    <a href="/" class="wordmark">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 32 32" focusable="false">
+        <rect width="32" height="32" rx="7" fill="var(--tf-brand)" />
+        <path d="M9 7h14v18l-2.3-1.6L18.3 25 16 23.4 13.7 25l-2.4-1.6L9 25z" fill="var(--tf-on-brand)" />
+        <path d="M12 12h8M12 16h8M12 20h5" stroke="var(--tf-brand)" stroke-width="1.6" stroke-linecap="round" />
+      </svg>
+      Taxfold
+    </a>
+    <ul class="flex justify-between md:gap-1">
+      {navItems.map(({ label, href, current }) => (
+        <li class="flex-1 text-center md:flex-none">
+          <a href={href} class="nav-link" aria-current={current}><span class="nav-link-label">{label}</span></a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>

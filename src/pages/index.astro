@@ -1,10 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
+import GuideCard from '../components/GuideCard.astro';
+import LaunchCta from '../components/LaunchCta.astro';
+import StatusPill from '../components/StatusPill.astro';
 import Base from '../layouts/Base.astro';
+import { launchView } from '../lib/launch-state.mjs';
 
 const guides = (await getCollection('guides')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+const { priceLine } = launchView();
 
-const points = [
+const does = [
   {
     title: 'Scan on the phone',
     body: 'Photograph a receipt or import one from Photos. Text recognition runs on the iPhone itself; you correct any field it gets wrong.',
@@ -17,61 +22,87 @@ const points = [
     title: 'Export when you need it',
     body: 'Hand a year of receipts to your accountant or your own spreadsheet as CSV or PDF, through the iPhone share sheet.',
   },
-  {
-    title: 'Nothing is sent to us',
-    body: 'The app has no account, no sync server, no bank connection and no analytics. Your receipts stay on your iPhone; they leave it only when you export them or back up the phone.',
-  },
+];
+
+const leavesOut = [
+  { title: 'No account.', body: 'Nothing to sign up for, nothing to sign in to.' },
+  { title: 'No sync server.', body: 'No server holds a copy of your receipts.' },
+  { title: 'No bank connection.', body: 'The app is never linked to your bank.' },
+  { title: 'No analytics.', body: 'No analytics or advertising code runs in the app.' },
+  { title: 'No subscription.', body: 'A one-time purchase when it ships.' },
 ];
 ---
 <Base
   title="Taxfold: a receipt and expense log that keeps your data on your iPhone"
   description="Taxfold scans receipts on your iPhone, files them by tax year and exports CSV or PDF. No account, no sync server, no subscription. In development."
 >
-  <section class="mb-12">
-    <h1 class="text-3xl sm:text-4xl font-bold tracking-tight leading-tight mb-4">
-      Keep your receipts for tax time on your iPhone, not on someone else's server.
-    </h1>
-    <p class="text-lg text-ink-soft mb-4">
+  <section aria-labelledby="hero-title" class="max-w-hero mb-16 lg:mb-24">
+    <h1 id="hero-title" class="mb-4 lg:text-3xl">Receipts for tax time, kept on your iPhone.</h1>
+    <p class="text-ink-soft mb-6 text-base md:text-lg">
       Taxfold is a receipt and expense log for iPhone. It reads receipts on the device, keeps them by tax year
-      and exports them when your return or your accountant asks. There is no subscription: the full app is a one-time purchase.
+      and exports them when your return or your accountant asks.
     </p>
-    <p class="inline-block rounded bg-brand-soft text-brand px-3 py-1 text-sm font-medium">
-      In development. Not on the App Store yet.
+    <LaunchCta />
+    <div class="mt-6 flex flex-col items-start gap-3 md:flex-row md:flex-wrap md:items-center">
+      <StatusPill />
+      <p class="text-ink-soft text-sm">{priceLine}</p>
+    </div>
+    <svg class="tear mt-10" aria-hidden="true" focusable="false">
+      <defs>
+        <pattern id="tear" width="16" height="8" patternUnits="userSpaceOnUse">
+          <path d="M0 8 L8 0 L16 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="8" fill="url(#tear)" />
+    </svg>
+  </section>
+
+  <section aria-labelledby="ledger-title" class="mb-16 lg:mb-24">
+    <h2 id="ledger-title" class="mb-6">What the app does, and what it leaves out</h2>
+    <div class="grid gap-10 md:grid-cols-2 md:gap-6 lg:gap-12">
+      <div>
+        <h3 class="mb-3">What it does</h3>
+        <ul class="ledger-list">
+          {does.map(({ title, body }) => (
+            <li><strong>{title}.</strong> <span class="text-ink-soft">{body}</span></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3">What it leaves out</h3>
+        <ul class="ledger-list">
+          {leavesOut.map(({ title, body }) => (
+            <li><strong>{title}</strong> <span class="text-ink-soft">{body}</span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <p class="text-ink-soft mt-6 max-w-measure">
+      Your receipts stay on your iPhone; they leave it only when you export them or back up the phone.
+      <a class="link" href="/privacy/#app">Read what the app collects</a>.
     </p>
   </section>
 
-  <section aria-labelledby="what" class="mb-12">
-    <h2 id="what" class="text-xl font-bold mb-4">What it does</h2>
-    <ul class="grid gap-5 sm:grid-cols-2">
-      {points.map(({ title, body }) => (
-        <li class="border border-rule rounded-lg p-4 bg-white/60">
-          <h3 class="font-semibold mb-1">{title}</h3>
-          <p class="text-ink-soft text-[0.95rem] leading-relaxed">{body}</p>
-        </li>
-      ))}
-    </ul>
-  </section>
-
-  {guides.length > 0 && (
-    <section aria-labelledby="guides" class="mb-12">
-      <h2 id="guides" class="text-xl font-bold mb-4">Guides</h2>
-      <ul class="space-y-4">
-        {guides.map((g) => (
-          <li>
-            <a href={`/guides/${g.id}/`} class="font-semibold text-brand underline underline-offset-2">{g.data.title}</a>
-            <p class="text-ink-soft text-[0.95rem]">{g.data.description}</p>
-          </li>
+  <section aria-labelledby="guides-title" id="guides" class="mb-16 scroll-mt-6 lg:mb-24">
+    <h2 id="guides-title" class="mb-6">Guides</h2>
+    {guides.length > 0 ? (
+      <ul class="grid gap-4 md:gap-6 lg:grid-cols-2">
+        {guides.map((guide) => (
+          <GuideCard title={guide.data.title} description={guide.data.description} href={`/guides/${guide.id}/`} />
         ))}
       </ul>
-    </section>
-  )}
+    ) : (
+      <p class="text-ink-soft">The first guides are in review.</p>
+    )}
+  </section>
 
-  <section aria-labelledby="who" class="mb-4">
-    <h2 id="who" class="text-xl font-bold mb-3">Who makes it</h2>
+  <section aria-labelledby="who" class="max-w-measure">
+    <h2 id="who" class="mb-3">Who makes it</h2>
     <p class="text-ink-soft">
-      Taxfold is made by Opal Harmony P.C., a small software company. Read <a class="underline" href="/about/">about us</a>,
-      <a class="underline" href="/how-we-write/">how we write the guides</a>, and
-      <a class="underline" href="/privacy/">what this site and the app collect</a>.
+      Taxfold is made by Opal Harmony P.C., a small software company in Greece. Read <a class="link" href="/about/">about us</a>,
+      <a class="link" href="/how-we-write/">how we write the guides</a>, and
+      <a class="link" href="/privacy/">what this site and the app collect</a>. The site's source and every review are public on
+      <a class="link" href="https://github.com/getsinew/taxfold.app">GitHub</a>.
     </p>
   </section>
 </Base>

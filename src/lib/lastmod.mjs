@@ -55,10 +55,11 @@ export const guideFiles = (cwd = process.cwd()) => {
     .map((f) => `${GUIDES_DIR}/${f}`);
 };
 
-// The landing page lists every guide, so a new or edited guide changes the landing page too.
+// The landing page lists every guide, so adding, editing or deleting a guide changes the landing page too:
+// it is dated by the guides directory as a whole, which a deletion also moves.
 export function sourcesForPath(pathname, cwd = process.cwd()) {
   const path = pathname.replace(/^\/|\/$/g, '');
-  if (path === '') return ['src/pages/index.astro', ...guideFiles(cwd)];
+  if (path === '') return ['src/pages/index.astro', GUIDES_DIR];
   const guide = path.match(/^guides\/([^/]+)$/);
   if (guide) return [`${GUIDES_DIR}/${guide[1]}.md`];
   return [`src/pages/${path}.astro`];

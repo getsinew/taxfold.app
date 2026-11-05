@@ -54,12 +54,32 @@ describe('sitemap', () => {
     }
   });
 
-  it('dates the landing page from its newest source, guides included', () => {
-    const newest = Math.max(
-      lastEdited('src/pages/index.astro', ROOT).getTime(),
-      ...guideFiles(ROOT).map((f) => lastEdited(f, ROOT).getTime()),
-    );
-    expect(lastmodForPath('/', ROOT).getTime()).toBe(newest);
+  it('dates the landing page by its own file and the guides directory, deletions included', () => {
+    const repo = mkdtempSync(join(tmpdir(), 'taxfold-landing-'));
+    const g = (iso: string, ...args: string[]) =>
+      execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], {
+        cwd: repo,
+        env: { ...process.env, GIT_AUTHOR_DATE: iso, GIT_COMMITTER_DATE: iso },
+      });
+    try {
+      g('2026-01-01T00:00:00Z', 'init', '--quiet', '-b', 'main');
+      mkdirSync(join(repo, 'src/pages'), { recursive: true });
+      mkdirSync(join(repo, GUIDES_DIR), { recursive: true });
+      writeFileSync(join(repo, 'src/pages/index.astro'), 'landing');
+      writeFileSync(join(repo, GUIDES_DIR, 'a.md'), 'a');
+      writeFileSync(join(repo, GUIDES_DIR, 'b.md'), 'b');
+      g('2026-01-01T00:00:00Z', 'add', '.');
+      g('2026-01-01T00:00:00Z', 'commit', '--quiet', '-m', 'one');
+      writeFileSync(join(repo, GUIDES_DIR, 'b.md'), 'b edited');
+      g('2026-02-01T00:00:00Z', 'commit', '--quiet', '-am', 'edit b');
+      expect(lastmodForPath('/', repo).toISOString()).toBe('2026-02-01T00:00:00.000Z');
+      g('2026-03-01T00:00:00Z', 'rm', '--quiet', join(GUIDES_DIR, 'b.md'));
+      g('2026-03-01T00:00:00Z', 'commit', '--quiet', '-m', 'delete b');
+      expect(lastmodForPath('/', repo).toISOString()).toBe('2026-03-01T00:00:00.000Z');
+      expect(lastEdited(join(GUIDES_DIR, 'a.md'), repo).toISOString()).toBe('2026-01-01T00:00:00.000Z');
+    } finally {
+      rmSync(repo, { recursive: true, force: true });
+    }
   });
 });
 
@@ -150,6 +170,8 @@ describe('trust pages', () => {
     expect(t).toContain('Cloudflare Web Analytics');
     expect(t).toContain('No cookies.');
     expect(t).toContain('for the purpose of displaying analytics');
+    expect(t).toContain('We see these only as aggregate counts');
+    expect(t).toContain('without telling us who you are');
   });
 
   it('contact gives hello@taxfold.app', () => {
@@ -210,6 +232,8 @@ describe('lexical caps', () => {
 
   it('serves the pages.dev copies with noindex', () => {
     expect(read('_headers')).toMatch(/^https:\/\/:project\.pages\.dev\/\*\n\s+X-Robots-Tag: noindex$/m);
+    expect(read('_headers')).toMatch(/^https:\/\/:version\.:project\.pages\.dev\/\*\n\s+X-Robots-Tag: noindex$/m);
+    expect(read('_headers')).not.toMatch(/taxfold\.app/);
   });
 
   it('builds no page outside the declared routes', () => {

@@ -158,7 +158,11 @@ describe('every built page', () => {
 describe('landing page', () => {
   it('leads with the pre-beta CTA to the guides, the status pill and the price-free line', () => {
     const html = read('index.html');
-    expect(html).toMatch(/<a href="#guides" class="btn-primary">Read the receipt guides<\/a>/);
+    expect(html).toMatch(
+      guideSlugs().length > 0
+        ? /<a href="#guides" class="btn-primary">Read the receipt guides<\/a>/
+        : /<a href="\/how-we-write\/" class="btn-primary">How we write the guides<\/a>/,
+    );
     expect(html).toContain('href="/privacy/#app"');
     expect(html).toContain('In development · not on the App Store yet');
     expect(html).toContain('One-time purchase when it ships. No subscription.');

@@ -188,6 +188,44 @@ describe('trust pages', () => {
   });
 });
 
+describe('internal links and launch status', () => {
+  it('every internal link resolves to a built page and, for a fragment, to an id on it', () => {
+    const pages = [...allPaths(), '/404.html'];
+    for (const path of pages) {
+      const page = path.endsWith('.html') ? read(path.slice(1)) : html(path);
+      for (const [, href] of page.matchAll(/href="(\/[^"]*|#[^"]+)"/g)) {
+        const [target, fragment] = href.startsWith('#') ? [path, href.slice(1)] : href.split('#');
+        if (/\.[a-z0-9]+$/i.test(target)) {
+          expect(existsSync(join(DIST, target)), `${path} → ${href}`).toBe(true);
+          continue;
+        }
+        expect(existsSync(join(DIST, target, 'index.html')), `${path} → ${href}`).toBe(true);
+        if (fragment) expect(html(target), `${path} → ${href}`).toContain(`id="${fragment}"`);
+      }
+    }
+  });
+
+  it('the guides links never point at an empty guides section', () => {
+    const landing = html('/');
+    if (guidePaths().length === 0) {
+      expect(landing).not.toMatch(/href="(\/)?#guides"/);
+      expect(landing).toMatch(/href="\/how-we-write\/" class="btn-primary"/);
+    } else {
+      expect(landing).toMatch(/href="#guides" class="btn-primary"/);
+      expect(landing).toMatch(/href="\/#guides" class="nav-link"/);
+    }
+  });
+
+  it('launch-status wording lives only in src/lib/launch-state.mjs', () => {
+    const files = readdirSync(join(ROOT, 'src'), { recursive: true, encoding: 'utf8' })
+      .filter((f) => /\.(astro|mjs|ts|md)$/.test(f) && !f.endsWith('launch-state.mjs'));
+    for (const f of files) {
+      const src = readFileSync(join(ROOT, 'src', f), 'utf8');
+      expect(src, f).not.toMatch(/in development|not (yet )?on the App Store|will read/i);
+    }
+  });
+});
+
 describe('lexical caps', () => {
   it('holds no locale directory (EN only until a locale is added on purpose)', () => {
     for (const dir of [join(ROOT, 'src/pages'), DIST]) {

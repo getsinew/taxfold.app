@@ -1,5 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import { launchView } from '../lib/launch-state.mjs';
+
+const { makerStatus } = launchView();
 ---
 <Base
   title="About Taxfold"
@@ -10,7 +13,7 @@ import Base from '../layouts/Base.astro';
 
     <p>
       Taxfold is a receipt and expense log for iPhone, made by Opal Harmony P.C., a small software company in Greece.
-      It is in development and not yet on the App Store.
+      {makerStatus}
     </p>
 
     <h2>Why local-only</h2>

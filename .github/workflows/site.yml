@@ -22,6 +22,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -41,6 +42,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -56,7 +58,7 @@ jobs:
       - name: Check the live site carries the Web Analytics beacon
         run: |
           for _ in $(seq 1 18); do
-            if curl -fsS https://taxfold.app/ | grep -q 'data-cf-beacon'; then echo "beacon present"; exit 0; fi
+            if curl -fsS -H 'Accept: text/html' https://taxfold.app/ | grep -q 'data-cf-beacon'; then echo "beacon present"; exit 0; fi
             sleep 10
           done
           echo "::error::https://taxfold.app/ has no Cloudflare Web Analytics beacon; the privacy page's analytics section is untrue until it does"

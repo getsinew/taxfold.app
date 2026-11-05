@@ -7,7 +7,7 @@ import Base from '../layouts/Base.astro';
 import { launchView } from '../lib/launch-state.mjs';
 
 const guides = (await getCollection('guides')).sort((a, b) => a.data.title.localeCompare(b.data.title));
-const { priceLine } = launchView();
+const { priceLine, metaStatus } = launchView();
 
 const does = [
   {
@@ -34,7 +34,7 @@ const leavesOut = [
 ---
 <Base
   title="Taxfold: a receipt and expense log that keeps your data on your iPhone"
-  description="Taxfold scans receipts on your iPhone, files them by tax year and exports CSV or PDF. No account, no sync server, no subscription. In development."
+  description={`Taxfold scans receipts on your iPhone, files them by tax year and exports CSV or PDF. No account, no sync server, no subscription. ${metaStatus}`.trim()}
 >
   <section aria-labelledby="hero-title" class="max-w-hero mb-12 lg:mb-16">
     <h1 id="hero-title" class="mb-4 lg:text-3xl">Receipts for tax time, kept on your iPhone.</h1>

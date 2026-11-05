@@ -74,7 +74,11 @@ Aaker personality: **Sincerity + Competence**, low Excitement.
 
 ## Brand tokens
 
-**This section is the brand SSOT for both the site and the iOS app.** Hex values are normative. Every contrast ratio below
+**This section is the brand SSOT for both the site and the iOS app** (seat directive 2026-11-05: the site's DESIGN.md is
+the brand source; the app design inherits it). Hex values are normative. Known divergence to reconcile on the app side:
+`getsinew/taxfold` branch `app-design` (`docs/design/DESIGN.md` @ 79ee6b5) inherited only the pre-spec light seed and
+declares its own dark palette and warning colour; where the two disagree, this section wins until the operator rules
+otherwise. The app keeps its own token *names* (Asset Catalog conventions); only the values come from here. Every contrast ratio below
 is WCAG 2.x relative luminance, computed 2026-11-05 (script: sRGB linearisation, `(L1+0.05)/(L2+0.05)`). AA thresholds:
 text 4.5:1, large text and UI parts 3:1.
 
@@ -197,8 +201,8 @@ are 0 and anchor scrolling is instant. No parallax, no entrance animations.
 
 ### Handing the tokens to the iOS app
 
-- **Colours:** one Asset Catalog colour set per token, with *Any Appearance* set to the light hex and *Dark* to the dark hex,
-  named exactly like the tokens (`paper`, `ink`, `brand`, …). The app adds high-contrast variants if Increase Contrast
+- **Colours:** one Asset Catalog colour set per token, with *Any Appearance* set to the light hex and *Dark* to the dark hex.
+  Set names follow the app's own conventions (e.g. AccentColor for `brand`); the values come from the tables above. The app adds high-contrast variants if Increase Contrast
   testing calls for them (open item).
 - **Type:** use the Dynamic Type text styles named in the scale table, not fixed points. Large titles use `.serif` (New York)
   to match the site's serif H1/H2. Body and controls use the default SF.
@@ -265,7 +269,7 @@ Every page has one H1. Headings never skip a level. Landmarks: `header` › `nav
 |---|---|---|
 | 1 | **Article header** | H1 (title). A byline row: "By the Taxfold team" (→ /about/) · "Last updated *Nov 5, 2026*" (always shown, because `/how-we-write/` promises it and `tests/site.test.ts` pins the string `Last updated <time datetime="`) · "First published *…*" (only when it differs) · "How we write these guides" (→ /how-we-write/). Every date is a `<time datetime>`, formatted `en-US` medium in UTC |
 | 2 | **On this page (TOC)** | `nav[aria-label="On this page"]`, H2s only, from Astro's `render()` → `headings` (depth 2). Below 1024 it is a native `<details>` placed under the byline, **closed by default**, with the summary "On this page · N sections". At 1024 and up it is a sticky right rail (`top: 32px`) with no toggle. No scroll-spy, no JS |
-| 3 | **Body** | Prose in the 68ch measure: tables (§ 5.5), code blocks (§ 5.7), quotes (§ 5.8), lists, then the **maker note** (§ 5.9) wrapping the guide's "Where Taxfold fits" section |
+| 3 | **Body** | Prose in the 35rem text measure (≈70 characters; tables, code and the maker note use the 42.5rem guide column): tables (§ 5.5), code blocks (§ 5.7), quotes (§ 5.8), lists, then the **maker note** (§ 5.9) wrapping the guide's "Where Taxfold fits" section |
 | 4 | **After the article** | The disclaimer (§ 5.9, quiet variant), then "More guides": the other guides as compact links, at most 4 |
 
 **Content conventions this template needs from the writer** (they change the markdown, which is not part of this spec's
@@ -287,7 +291,7 @@ edit; flagged for the writer's next PR):
 ### 4.3 About `/about/`
 
 The skeleton's structure is kept: **Why local-only · The guides · Contact**, after the H1 + intro paragraph. That is 4 blocks
-counting the intro. Layout: the 68ch prose column, no rail.
+counting the intro. Layout: the 35rem text column on the logo's left edge, no rail.
 
 ### 4.4 How we write `/how-we-write/`
 
@@ -374,7 +378,7 @@ line height giving ≥24px vertical pitch.
 
 | State | Treatment |
 |---|---|
-| Default | `surface` ground, 1px `rule` border, `radius-md`, padding 20/24. Title `text-lg` 600 `brand`, no underline. Description `ink-soft` |
+| Default | `surface` ground, 1px `rule` border, `radius-md`, padding 20/24. Title `text-base` 600 `brand` on phones, `text-lg` from 768, no underline. Description `ink-soft` |
 | Hover | Border becomes `rule-strong` and the title gets an underline, 120ms. No lift, no shadow |
 | Focus-visible | Ring on the **card** through `.card:has(a:focus-visible)`; the link's own ring is suppressed |
 | Active | Title `brand-strong` |
@@ -467,8 +471,8 @@ pointer cursor (P5).
 
 ## 6. Responsive behaviour
 
-Breakpoints: **375** (the baseline phone), **768**, **1024**, **1440**. Container `page` = 70rem (1120px) max. Prose measure
-= 42.5rem (≈68ch). TOC rail = 15rem.
+Breakpoints: **375** (the baseline phone), **768**, **1024**, **1440**. Container `page` = 70rem (1120px) max. Guide column
+= 42.5rem (tables, code, maker note); text measure = 35rem (≈70 characters at 17px). TOC rail = 15rem.
 
 | Element | 375 | 768 | 1024 | 1440 |
 |---|---|---|---|---|
@@ -478,8 +482,8 @@ Breakpoints: **375** (the baseline phone), **768**, **1024**, **1440**. Containe
 | Landing guides | 1 column of cards | 1 column | 2 columns | 2 columns |
 | Guide layout | Single column. TOC = `<details>` under the byline | same, gutter 32 | Grid `42.5rem 15rem`, 64 gap, TOC sticky in the rail | same, centred in 1120 |
 | Guide H1 / H2 / H3 | 26 / 21 / 17 | 33 / 26 / 21 | same | same |
-| Tables | Horizontal scroll inside the column, scroll shadows | scroll only if wider than 68ch (the 8-column table still scrolls) | same | same |
-| Code blocks | Horizontal scroll, copy button stays top-right | same | same | same |
+| Tables | Below 600px each row is a card (first cell = title band, other cells = label/value lines) | from 600px: horizontal scroll inside the column, scroll shadows, only if wider than the column | same | same |
+| Code blocks | Wrap (`pre-wrap`, break anywhere), Copy (44×44) right of the first line | same | same | same |
 | Static pages | Prose column, gutter 20 | gutter 32 | 35rem text column on the same left edge as the logo and the guide template, no rail | same |
 | 404 | Message, then compact card list | same | same, cards in 2 columns | same |
 
@@ -513,7 +517,7 @@ iOS doesn't zoom.
   heading (anchor navigation moves the sequential-focus start point). Headings get `scroll-margin-top: 24px`.
 - 🟢 Table and code scroll regions take focus and scroll with ←/→ (native).
 - 🟢 Focus is visible on every focusable element (2px ring, ≥3:1, never `outline: none` without the ring).
-- 🟢 Targets: nav items and the CTA ≥44px tall (CTA 48). Copy button 32px. Footer and byline links ≥24px pitch. Inline prose
+- 🟢 Targets: nav items and the CTA ≥44px tall (CTA 48). Copy button 44×44. Footer and byline links ≥24px pitch. Inline prose
   links are exempt under WCAG 2.5.8 (inline). This is a stated deviation from the employee checklist's "48×48 everything".
 - 🟢 No keyboard traps. No focus moves on page load.
 

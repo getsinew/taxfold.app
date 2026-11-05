@@ -1,7 +1,15 @@
 ---
+import { getCollection } from 'astro:content';
 import { launchView } from '../lib/launch-state.mjs';
 
-const { primary, secondary, helper } = launchView();
+const view = launchView();
+const hasGuides = (await getCollection('guides')).length > 0;
+// Same rule as the header's Guides link: with no guides yet, "read the guides" goes to how-we-write instead.
+const noGuides = (link) =>
+  !hasGuides && link.href === '#guides' ? { ...link, label: 'How we write the guides', href: '/how-we-write/' } : link;
+const primary = noGuides(view.primary);
+const secondary = noGuides(view.secondary);
+const { helper } = view;
 
 if (primary.kind === 'badge') {
   throw new Error("LaunchCta: the 'released' state needs Apple's official App Store badge artwork added to public/ first.");

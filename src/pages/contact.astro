@@ -1,5 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import { launchView } from '../lib/launch-state.mjs';
+
+const { makerStatus } = launchView();
 ---
 <Base
   title="Contact Taxfold"
@@ -12,7 +15,7 @@ import Base from '../layouts/Base.astro';
     <ul>
       <li><strong>Corrections:</strong> name the guide and what is wrong; we fix errors and update the page’s date.</li>
       <li><strong>Privacy questions:</strong> <a href="mailto:privacy@taxfold.app">privacy@taxfold.app</a>.</li>
-      <li><strong>The app:</strong> it is in development and not yet on the App Store.</li>
+      <li><strong>The app:</strong> {makerStatus}</li>
     </ul>
     <p>
       We cannot give tax, legal or accounting advice about your own situation.

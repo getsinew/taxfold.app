@@ -650,8 +650,12 @@
 /* ---------- dark: raised blocks are lighter than the page ---------- */
 
 @media (prefers-color-scheme: dark) {
-  .code-block, .table-scroll th, .prose code, .table-scroll td:first-child {
+  .code-block, .table-scroll th, .prose code {
     background-color: var(--tf-surface);
+  }
+  /* Phone cards only: the title band needs its own ground, distinct from the card body (surface). */
+  @media (max-width: 37.4375rem) {
+    .table-scroll td:first-child { background-color: var(--tf-brand-soft); }
   }
   .prose .code-block code, .table-scroll code { background: none; }
 }

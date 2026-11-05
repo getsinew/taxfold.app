@@ -23,6 +23,8 @@ export function launchView(state = LAUNCH_STATE, ids = { TESTFLIGHT_URL, APP_STO
       helper: null,
       priceLine: 'One-time purchase when it ships. No subscription.',
       makerStatus: 'Taxfold is in development and is not on the App Store yet.',
+      metaStatus: 'In development.',
+      privacyLabelLead: 'When the app is listed, its App Store privacy label will read',
       makerCta: null,
       itunesMeta: null,
     };
@@ -37,6 +39,8 @@ export function launchView(state = LAUNCH_STATE, ids = { TESTFLIGHT_URL, APP_STO
       helper: "Needs an iPhone with a current iOS and Apple's free TestFlight app.",
       priceLine: 'One-time purchase when it ships. No subscription.',
       makerStatus: 'Taxfold is in public beta and not on the App Store yet.',
+      metaStatus: 'In public beta.',
+      privacyLabelLead: 'When the app is listed, its App Store privacy label will read',
       makerCta: { label: 'Join the TestFlight beta', href },
       itunesMeta: null,
     };
@@ -52,6 +56,8 @@ export function launchView(state = LAUNCH_STATE, ids = { TESTFLIGHT_URL, APP_STO
       helper: null,
       priceLine: '$39.99 once. No subscription.',
       makerStatus: 'Taxfold is on the App Store.',
+      metaStatus: '',
+      privacyLabelLead: 'Its App Store privacy label reads',
       makerCta: { label: 'Get Taxfold on the App Store', href: appStoreUrl(id, pt, 'guide') },
       itunesMeta: (canonical) => `app-id=${id}, app-argument=${canonical}`,
     };

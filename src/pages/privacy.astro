@@ -1,9 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import { formatDate } from '../lib/format-date.mjs';
+import { launchView } from '../lib/launch-state.mjs';
 import { lastmodForPath } from '../lib/lastmod.mjs';
 
 const updated = lastmodForPath(Astro.url.pathname);
+const { privacyLabelLead } = launchView();
 ---
 <Base
   title="Privacy: what Taxfold and taxfold.app collect"
@@ -32,7 +34,7 @@ const updated = lastmodForPath(Astro.url.pathname);
     <p>
       The Taxfold app sends us no data. There is no account, no sign-in, no sync server, no bank connection and no
       analytics or advertising code in the app. The receipts you scan, their photos and everything you type stay in
-      the app’s storage on your iPhone. When the app is listed, its App Store privacy label will read
+      the app’s storage on your iPhone. {privacyLabelLead}
       <strong>“Data Not Collected”</strong>.
     </p>
     <ul>

@@ -17,12 +17,15 @@ export function assertFullHistory(cwd = process.cwd()) {
 
 // --first-parent: a page goes live when its change reaches main, so a merge commit dates it, not the branch
 // commit inside it (plain `git log -- file` simplifies the merge away and reports the branch date).
-// A file with uncommitted edits is dated today (UTC midnight, so the build and the tests agree): it is being
-// edited, and CI builds a clean tree.
+// A file with uncommitted edits is dated today (UTC midnight, so the build and the tests agree), never earlier
+// than its last commit: it is being edited, and CI builds a clean tree.
 export function lastEdited(file, cwd = process.cwd()) {
   if (!existsSync(join(cwd, file))) throw new Error(`lastmod: no such source file ${file}`);
-  if (git(cwd, ['status', '--porcelain', '--', file]) !== '') return new Date(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`);
   const iso = git(cwd, ['log', '-1', '--first-parent', '--format=%cI', '--', file]);
+  if (git(cwd, ['status', '--porcelain', '--', file]) !== '') {
+    const today = new Date(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`);
+    return iso && new Date(iso) > today ? new Date(iso) : today;
+  }
   if (!iso) throw new Error(`lastmod: ${file} has no commit`);
   return new Date(iso);
 }

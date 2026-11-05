@@ -419,7 +419,7 @@ The button is an `<a>` styled as a button, because it navigates. The badge `img`
 ### 5.7 Code block (spreadsheet formulas)
 
 - `pre > code`: `sunk` ground, `font-mono` `text-sm`, line height 1.6, padding 16, `radius-md`, `overflow-x: auto`,
-  `tabindex="0"` (a scrollable region needs keyboard access), `aria-label="Code"`.
+  `tabindex="0"` (a scrollable region needs keyboard access), `role="group"` and `aria-label="Code"`.
 - Inline `code`: `sunk` ground, padding 2/6, `radius-sm`, 0.9em.
 - No syntax highlighting. These are one-line formulas, and colour would be noise. Turn off Shiki/Prism highlighting.
 - **Copy button (progressive enhancement, the only site JS besides the beacon):** a script inserts

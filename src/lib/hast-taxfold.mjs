@@ -31,7 +31,7 @@ function wrapTable(table, nearestHeading) {
 }
 
 function wrapCode(pre) {
-  const focusablePre = { ...pre, properties: { ...pre.properties, tabIndex: 0, ariaLabel: 'Code' } };
+  const focusablePre = { ...pre, properties: { ...pre.properties, role: 'group', tabIndex: 0, ariaLabel: 'Code' } };
   return el('div', { className: ['code-block'] }, [focusablePre]);
 }
 

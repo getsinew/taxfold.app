@@ -44,7 +44,7 @@ describe('guide transform', () => {
     const tree = transformRoot(rootOf(element('pre', [element('code', [text('=MONTH(A2)')])])), preBeta);
     const wrapper = tree.children[0] as Node;
     expect(wrapper.properties?.className).toEqual(['code-block']);
-    expect(wrapper.children![0].properties).toMatchObject({ tabIndex: 0, ariaLabel: 'Code' });
+    expect(wrapper.children![0].properties).toMatchObject({ role: 'group', tabIndex: 0, ariaLabel: 'Code' });
   });
 
   it('wraps "Where Taxfold fits" and its siblings up to the next h2 in one labelled aside', () => {

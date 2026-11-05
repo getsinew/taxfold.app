@@ -196,7 +196,7 @@ describe('guide pages', () => {
   it('give every code block a focusable, labelled pre inside a code-block wrapper', () => {
     for (const slug of guideSlugs()) {
       const html = guideHtml(slug);
-      const wrapped = html.match(/<div class="code-block"><pre tabindex="0" aria-label="Code">/g)?.length ?? 0;
+      const wrapped = html.match(/<div class="code-block"><pre role="group" tabindex="0" aria-label="Code">/g)?.length ?? 0;
       expect(html.match(/<pre\b/g)?.length ?? 0, slug).toBe(wrapped);
     }
   });

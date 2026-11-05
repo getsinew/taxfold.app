@@ -14,6 +14,7 @@ import {
   lastEdited,
   lastmodForPath,
 } from '../src/lib/lastmod.mjs';
+import { launchView } from '../src/lib/launch-state.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
 const DIST = join(ROOT, 'dist');
@@ -113,6 +114,32 @@ describe('lastmod helper fails closed', () => {
     }
   });
 
+  it('dates an uncommitted edit today, never before the file\'s last commit', () => {
+    const repo = mkdtempSync(join(tmpdir(), 'taxfold-dirty-'));
+    const g = (iso: string, ...args: string[]) =>
+      execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], {
+        cwd: repo,
+        env: { ...process.env, GIT_AUTHOR_DATE: iso, GIT_COMMITTER_DATE: iso },
+      });
+    const today = `${new Date().toISOString().slice(0, 10)}T00:00:00.000Z`;
+    try {
+      g('2026-01-01T00:00:00Z', 'init', '--quiet', '-b', 'main');
+      writeFileSync(join(repo, 'old.md'), 'old');
+      writeFileSync(join(repo, 'fresh.md'), 'fresh');
+      g('2026-01-01T00:00:00Z', 'add', 'old.md');
+      g('2026-01-01T00:00:00Z', 'commit', '--quiet', '-m', 'old');
+      const later = new Date(Math.floor(Date.now() / 1000) * 1000 + 3_600_000).toISOString();
+      g(later, 'add', 'fresh.md');
+      g(later, 'commit', '--quiet', '-m', 'fresh');
+      writeFileSync(join(repo, 'old.md'), 'old edited');
+      writeFileSync(join(repo, 'fresh.md'), 'fresh edited');
+      expect(lastEdited('old.md', repo).toISOString()).toBe(today);
+      expect(lastEdited('fresh.md', repo).toISOString()).toBe(new Date(later).toISOString());
+    } finally {
+      rmSync(repo, { recursive: true, force: true });
+    }
+  });
+
   it('refuses a shallow clone, where every file would share one date', () => {
     const tmp = mkdtempSync(join(tmpdir(), 'taxfold-shallow-'));
     const origin = join(tmp, 'origin');
@@ -200,7 +227,7 @@ describe('internal links and launch status', () => {
           continue;
         }
         expect(existsSync(join(DIST, target, 'index.html')), `${path} → ${href}`).toBe(true);
-        if (fragment) expect(html(target), `${path} → ${href}`).toContain(`id="${fragment}"`);
+        if (fragment) expect(html(target), `${path} → ${href}`).toMatch(new RegExp(`\\sid="${fragment}"`));
       }
     }
   });
@@ -217,11 +244,16 @@ describe('internal links and launch status', () => {
   });
 
   it('launch-status wording lives only in src/lib/launch-state.mjs', () => {
+    const statusText = ['pre-beta', 'beta', 'released']
+      .map((s) => launchView(s, { TESTFLIGHT_URL: 'https://t', APP_STORE_ID: '1', APP_STORE_PT: 'p' }))
+      .flatMap((v) => [v.pill, v.makerStatus, v.metaStatus, v.privacyLabelLead, v.priceLine, v.helper])
+      .filter(Boolean) as string[];
     const files = readdirSync(join(ROOT, 'src'), { recursive: true, encoding: 'utf8' })
       .filter((f) => /\.(astro|mjs|ts|md)$/.test(f) && !f.endsWith('launch-state.mjs'));
     for (const f of files) {
       const src = readFileSync(join(ROOT, 'src', f), 'utf8');
-      expect(src, f).not.toMatch(/in development|not (yet )?on the App Store|will read/i);
+      expect(src, f).not.toMatch(/in development|in public beta|testflight|(not|isn['’]t)( yet)? on the App Store/i);
+      for (const text of statusText) expect(src, f).not.toContain(text);
     }
   });
 });

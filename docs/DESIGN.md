@@ -1,7 +1,7 @@
 # Taxfold design spec (taxfold.app) — and the Taxfold brand source
 
 Status: draft for implementation, 2026-11-05. Owner: design stage (designer employee). The frontend-engineer
-implements against this file and `FRONTEND.md`; the iOS app designer inherits **§ Brand tokens** unchanged.
+implements against this file and `FRONTEND.md`; the iOS app designer inherits the **values** in **§ Brand tokens** (token names follow the app's own conventions).
 
 Inputs read: the site on branch `site-skeleton` (`src/layouts/Base.astro`, `src/styles/global.css`, every page in
 `src/pages/`), the five guides on `pillars-batch-1`, the lane decisions (OS `context/products/simple-app-seo-lane-2026-11-04.md`
@@ -75,10 +75,11 @@ Aaker personality: **Sincerity + Competence**, low Excitement.
 ## Brand tokens
 
 **This section is the brand SSOT for both the site and the iOS app** (seat directive 2026-11-05: the site's DESIGN.md is
-the brand source; the app design inherits it). Hex values are normative. Known divergence to reconcile on the app side:
-`getsinew/taxfold` branch `app-design` (`docs/design/DESIGN.md` @ 79ee6b5) inherited only the pre-spec light seed and
-declares its own dark palette and warning colour; where the two disagree, this section wins until the operator rules
-otherwise. The app keeps its own token *names* (Asset Catalog conventions); only the values come from here. Every contrast ratio below
+the brand source; the app design inherits it). Hex values are normative. Known conflict to reconcile on the app side:
+`getsinew/taxfold` branch `app-design` (`docs/design/DESIGN.md` @ 4eb4f9f) also calls itself the brand source, says
+this file must adopt its tokens, and declares its own dark palette and warning colour (it inherited only the pre-spec
+light seed). Both files claim the role; the seat directive settles it for this file, and where the two disagree this
+section wins until the operator rules otherwise. The app keeps its own token *names* (Asset Catalog conventions); only the values come from here. Every contrast ratio below
 is WCAG 2.x relative luminance, computed 2026-11-05 (script: sRGB linearisation, `(L1+0.05)/(L2+0.05)`). AA thresholds:
 text 4.5:1, large text and UI parts 3:1.
 

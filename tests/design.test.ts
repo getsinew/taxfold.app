@@ -346,7 +346,11 @@ describe('cards and callouts', () => {
   });
 
   it('lifts code blocks and table headers above the page in dark mode', () => {
-    expect(css()).toMatch(/@media \(prefers-color-scheme: dark\) \{\s*\.code-block, \.table-scroll th[^{]*\{\s*background-color: var\(--tf-surface\);/);
+    const dark = css().match(/@media \(prefers-color-scheme: dark\) \{\s*\.code-block,[\s\S]*?\n\}/)?.[0] ?? '';
+    expect(dark).toMatch(/^@media \(prefers-color-scheme: dark\) \{\s*\.code-block, \.table-scroll th, \.prose code \{\s*background-color: var\(--tf-surface\);/);
+    // The phone-card title band is dark-only AND phone-only, on brand-soft, never on the surface the card body uses.
+    expect(dark).toMatch(/@media \(max-width: 37\.4375rem\) \{\s*\.table-scroll td:first-child \{ background-color: var\(--tf-brand-soft\); \}/);
+    expect(dark.match(/td:first-child/g)).toHaveLength(1);
   });
 
   it('draws the receipt tear once, outside the hero, across the full page width', () => {

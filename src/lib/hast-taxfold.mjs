@@ -16,6 +16,39 @@ export const textOf = (node) =>
 const el = (tagName, properties = {}, children = []) => ({ type: 'element', tagName, properties, children });
 const text = (value) => ({ type: 'text', value });
 
+const elementChildren = (node) => node.children.filter((child) => child.type === 'element');
+const cellsOf = (row) => elementChildren(row).filter((cell) => cell.tagName === 'th' || cell.tagName === 'td');
+
+function headerLabels(table) {
+  const head = elementChildren(table).find((child) => child.tagName === 'thead');
+  const headRow = head && elementChildren(head).find((child) => child.tagName === 'tr');
+  return headRow ? cellsOf(headRow).map((cell) => textOf(cell).trim()) : [];
+}
+
+const withProperties = (node, extra) => ({ ...node, properties: { ...node.properties, ...extra } });
+
+// Below 600px the stylesheet lays each row out as a card, which drops native table semantics in some browsers,
+// so the roles are explicit and every body cell carries its column header as data-label.
+function semanticRow(row, labels) {
+  const cells = row.children.map((child) => {
+    if (child.type !== 'element') return child;
+    const column = cellsOf(row).indexOf(child);
+    if (child.tagName === 'th') return withProperties(child, { role: 'columnheader' });
+    return withProperties(child, { role: 'cell', dataLabel: labels[column] ?? '' });
+  });
+  return withProperties({ ...row, children: cells }, { role: 'row' });
+}
+
+function semanticTable(table) {
+  const labels = headerLabels(table);
+  const groups = table.children.map((child) => {
+    if (child.type !== 'element' || !['thead', 'tbody'].includes(child.tagName)) return child;
+    const rows = child.children.map((row) => (isElement(row, 'tr') ? semanticRow(row, labels) : row));
+    return withProperties({ ...child, children: rows }, { role: 'rowgroup' });
+  });
+  return withProperties({ ...table, children: groups }, { role: 'table' });
+}
+
 function tableLabel(table, nearestHeading) {
   const caption = table.children.find((child) => isElement(child, 'caption'));
   if (caption && textOf(caption).trim()) return textOf(caption).trim();
@@ -26,7 +59,7 @@ function wrapTable(table, nearestHeading) {
   return el(
     'div',
     { className: ['table-scroll'], role: 'region', tabIndex: 0, ariaLabel: tableLabel(table, nearestHeading) },
-    [table],
+    [semanticTable(table)],
   );
 }
 

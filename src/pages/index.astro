@@ -29,14 +29,14 @@ const leavesOut = [
   { title: 'No sync server.', body: 'No server holds a copy of your receipts.' },
   { title: 'No bank connection.', body: 'The app is never linked to your bank.' },
   { title: 'No analytics.', body: 'No analytics or advertising code runs in the app.' },
-  { title: 'No subscription.', body: 'A one-time purchase when it ships.' },
+  { title: 'No subscription.', body: 'Nothing to renew or cancel.' },
 ];
 ---
 <Base
   title="Taxfold: a receipt and expense log that keeps your data on your iPhone"
   description="Taxfold scans receipts on your iPhone, files them by tax year and exports CSV or PDF. No account, no sync server, no subscription. In development."
 >
-  <section aria-labelledby="hero-title" class="max-w-hero mb-16 lg:mb-24">
+  <section aria-labelledby="hero-title" class="max-w-hero mb-12 lg:mb-16">
     <h1 id="hero-title" class="mb-4 lg:text-3xl">Receipts for tax time, kept on your iPhone.</h1>
     <p class="text-ink-soft mb-6 text-base md:text-lg">
       Taxfold is a receipt and expense log for iPhone. It reads receipts on the device, keeps them by tax year
@@ -47,15 +47,16 @@ const leavesOut = [
       <StatusPill />
       <p class="text-ink-soft text-sm">{priceLine}</p>
     </div>
-    <svg class="tear mt-10" aria-hidden="true" focusable="false">
-      <defs>
-        <pattern id="tear" width="16" height="8" patternUnits="userSpaceOnUse">
-          <path d="M0 8 L8 0 L16 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="8" fill="url(#tear)" />
-    </svg>
   </section>
+
+  <svg class="tear" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="tear" width="16" height="8" patternUnits="userSpaceOnUse">
+        <path d="M0 8 L8 0 L16 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="miter" />
+      </pattern>
+    </defs>
+    <rect width="100%" height="8" fill="url(#tear)" />
+  </svg>
 
   <section aria-labelledby="ledger-title" class="mb-16 lg:mb-24">
     <h2 id="ledger-title" class="mb-6">What the app does, and what it leaves out</h2>
@@ -86,7 +87,7 @@ const leavesOut = [
   <section aria-labelledby="guides-title" id="guides" class="mb-16 scroll-mt-6 lg:mb-24">
     <h2 id="guides-title" class="mb-6">Guides</h2>
     {guides.length > 0 ? (
-      <ul class="grid gap-4 md:gap-6 lg:grid-cols-2">
+      <ul class="card-grid">
         {guides.map((guide) => (
           <GuideCard title={guide.data.title} description={guide.data.description} href={`/guides/${guide.id}/`} />
         ))}
@@ -101,7 +102,7 @@ const leavesOut = [
     <p class="text-ink-soft">
       Taxfold is made by Opal Harmony P.C., a small software company in Greece. Read <a class="link" href="/about/">about us</a>,
       <a class="link" href="/how-we-write/">how we write the guides</a>, and
-      <a class="link" href="/privacy/">what this site and the app collect</a>. The site's source and every review are public on
+      <a class="link" href="/privacy/">what this site and the app collect</a>. The site’s source and every review are public on
       <a class="link" href="https://github.com/getsinew/taxfold.app">GitHub</a>.
     </p>
   </section>

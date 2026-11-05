@@ -18,7 +18,7 @@ export function launchView(state = LAUNCH_STATE, ids = { TESTFLIGHT_URL, APP_STO
     return {
       state,
       primary: READ_GUIDES,
-      secondary: { label: "What the app will and won't collect", href: PRIVACY_HREF },
+      secondary: { label: "What the app will and won’t collect", href: PRIVACY_HREF },
       pill: 'In development · not on the App Store yet',
       helper: null,
       priceLine: 'One-time purchase when it ships. No subscription.',

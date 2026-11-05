@@ -105,3 +105,35 @@ describe('launch state', () => {
     expect(state.itunesMeta?.('https://taxfold.app/')).toBe('app-id=123, app-argument=https://taxfold.app/');
   });
 });
+
+describe('table semantics for the mobile card layout', () => {
+  const tableOf = () =>
+    element('table', [
+      element('thead', [element('tr', [element('th', [text('Situation')]), element('th', [text('Source')])])]),
+      element('tbody', [element('tr', [element('td', [text('Groceries')]), element('td', [text('Pub. 529')])])]),
+    ]);
+
+  it('labels each body cell with its column header and names every role', () => {
+    const wrapped = transformRoot(rootOf(tableOf()), launchView('pre-beta')).children[0] as Node;
+    const table = wrapped.children![0];
+    expect(table.properties?.role).toBe('table');
+    const [head, body] = table.children!;
+    expect(head.properties?.role).toBe('rowgroup');
+    expect(head.children![0].children!.map((cell) => cell.properties?.role)).toEqual(['columnheader', 'columnheader']);
+    const row = body.children![0];
+    expect(row.properties?.role).toBe('row');
+    expect(row.children!.map((cell) => cell.properties)).toEqual([
+      { role: 'cell', dataLabel: 'Situation' },
+      { role: 'cell', dataLabel: 'Source' },
+    ]);
+  });
+
+  it('gives a cell beyond the header an empty label rather than crashing (anti-vacuity)', () => {
+    const wide = element('table', [
+      element('thead', [element('tr', [element('th', [text('A')])])]),
+      element('tbody', [element('tr', [element('td', [text('1')]), element('td', [text('2')])])]),
+    ]);
+    const row = ((transformRoot(rootOf(wide), launchView('pre-beta')).children[0] as Node).children![0].children![1]).children![0];
+    expect(row.children!.map((cell) => cell.properties?.dataLabel)).toEqual(['A', '']);
+  });
+});

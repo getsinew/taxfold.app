@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import MoreGuides from '../../components/MoreGuides.astro';
 import Toc from '../../components/Toc.astro';
 import Base from '../../layouts/Base.astro';
+import { curlyApostrophes } from '../../lib/typography.mjs';
 import { formatDate, sameDay } from '../../lib/format-date.mjs';
 import { firstPublished, GUIDES_DIR, lastmodForPath } from '../../lib/lastmod.mjs';
 
@@ -30,11 +31,11 @@ const jsonLd = {
   publisher: { '@type': 'Organization', name: 'Opal Harmony P.C.' },
 };
 ---
-<Base title={`${guide.data.title} · Taxfold`} description={guide.data.description} ogType="article">
+<Base title={`${guide.data.title} · Taxfold`} description={guide.data.description} ogType="article" footerDisclaimer={false}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
   <div class="guide-layout">
     <header class="guide-head">
-      <h1 id="guide-title" class="mb-3">{guide.data.title}</h1>
+      <h1 id="guide-title" class="mb-3">{curlyApostrophes(guide.data.title)}</h1>
       <p class="byline">
         By the <a href="/about/">Taxfold team</a> ·
         Last updated <time datetime={updated.toISOString()}>{formatDate(updated)}</time> ·

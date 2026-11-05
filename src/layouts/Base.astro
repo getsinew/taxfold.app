@@ -9,9 +9,10 @@ interface Props {
   description: string;
   noindex?: boolean;
   ogType?: 'website' | 'article';
+  footerDisclaimer?: boolean;
 }
 
-const { title, description, noindex = false, ogType = 'website' } = Astro.props;
+const { title, description, noindex = false, ogType = 'website', footerDisclaimer = true } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const appBanner = launchView().itunesMeta?.(canonical);
 ---
@@ -41,6 +42,6 @@ const appBanner = launchView().itunesMeta?.(canonical);
   <main id="main" tabindex="-1" class="max-w-page mx-auto w-full flex-1 px-5 py-10 md:px-8 md:py-12 lg:px-10">
     <slot />
   </main>
-  <Footer />
+  <Footer showDisclaimer={footerDisclaimer} />
 </body>
 </html>

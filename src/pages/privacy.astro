@@ -9,7 +9,7 @@ const updated = lastmodForPath(Astro.url.pathname);
   title="Privacy: what Taxfold and taxfold.app collect"
   description="The Taxfold app sends us no data; your receipts stay on your iPhone. This website runs cookieless Cloudflare Web Analytics. Here is each part."
 >
-  <article class="prose mx-auto">
+  <article class="prose">
     <h1>Privacy</h1>
 
     <p>
@@ -32,27 +32,27 @@ const updated = lastmodForPath(Astro.url.pathname);
     <p>
       The Taxfold app sends us no data. There is no account, no sign-in, no sync server, no bank connection and no
       analytics or advertising code in the app. The receipts you scan, their photos and everything you type stay in
-      the app's storage on your iPhone. When the app is listed, its App Store privacy label will read
-      <strong>"Data Not Collected"</strong>.
+      the app’s storage on your iPhone. When the app is listed, its App Store privacy label will read
+      <strong>“Data Not Collected”</strong>.
     </p>
     <ul>
       <li>
-        <strong>Reading receipts</strong> happens on the iPhone, with Apple's built-in text recognition. The images
+        <strong>Reading receipts</strong> happens on the iPhone, with Apple’s built-in text recognition. The images
         are not uploaded anywhere.
       </li>
       <li>
         <strong>Camera and Photos:</strong> the app asks for camera access the first time you scan. Importing uses
-        Apple's photo picker, so the app sees only the photos you choose.
+        Apple’s photo picker, so the app sees only the photos you choose.
       </li>
       <li>
         <strong>Exports</strong> (CSV or PDF) go only where you send them with the iPhone share sheet.
       </li>
       <li>
-        <strong>Backups:</strong> if you back up your iPhone with iCloud Backup or to a computer, the app's data is
+        <strong>Backups:</strong> if you back up your iPhone with iCloud Backup or to a computer, the app’s data is
         part of that backup, held by Apple or on your computer under your control. We have no access to it.
       </li>
       <li>
-        <strong>Apple's reports:</strong> purchases go through Apple. Apple gives developers sales figures and, from
+        <strong>Apple’s reports:</strong> purchases go through Apple. Apple gives developers sales figures and, from
         people who agree to share them with developers, app usage statistics and crash reports. Apple shares
         these without telling us who you are.
       </li>
@@ -64,19 +64,19 @@ const updated = lastmodForPath(Astro.url.pathname);
 
     <h2>This website: cookieless analytics</h2>
     <p>
-      "We collect nothing" would not be true of the website, so here is what it does. taxfold.app is hosted on
+      “We collect nothing” would not be true of the website, so here is what it does. taxfold.app is hosted on
       Cloudflare and runs <strong>Cloudflare Web Analytics</strong> to count visits.
     </p>
     <ul>
       <li>
-        <strong>No cookies.</strong> In Cloudflare's words, Web Analytics "does not use any client-side state, such as
-        cookies or localStorage, to collect usage metrics", and Cloudflare does not "fingerprint" individuals "via
-        their IP address, User Agent string, or any other data for the purpose of displaying analytics."
+        <strong>No cookies.</strong> In Cloudflare’s words, Web Analytics “does not use any client-side state, such as
+        cookies or localStorage, to collect usage metrics”, and Cloudflare does not “fingerprint” individuals “via
+        their IP address, User Agent string, or any other data for the purpose of displaying analytics.”
       </li>
       <li>
-        <strong>What it records:</strong> page views and visits, the page visited, the referring site, the visitor's
+        <strong>What it records:</strong> page views and visits, the page visited, the referring site, the visitor’s
         country, device type, browser and operating system, and page-load timing. We see these only as aggregate
-        counts in Cloudflare's dashboard; we keep no copy of our own. A small script from <code>static.cloudflareinsights.com</code> loads on each
+        counts in Cloudflare’s dashboard; we keep no copy of our own. A small script from <code>static.cloudflareinsights.com</code> loads on each
         page to report them.
       </li>
       <li>
@@ -109,7 +109,7 @@ const updated = lastmodForPath(Astro.url.pathname);
       <li>
         <strong>Recipients:</strong> Cloudflare (hosting, analytics, email forwarding) and Google (our email
         inbox). Both are US companies and may process data outside the EU, under the safeguards they offer,
-        such as the EU–US Data Privacy Framework and the European Commission's standard contractual clauses.
+        such as the EU–US Data Privacy Framework and the European Commission’s standard contractual clauses.
       </li>
       <li>
         <strong>Your rights:</strong> you can ask for access to, correction or deletion of what we hold about you,

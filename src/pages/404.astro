@@ -6,14 +6,14 @@ import Base from '../layouts/Base.astro';
 const guides = (await getCollection('guides')).sort((a, b) => a.data.title.localeCompare(b.data.title));
 ---
 <Base title="Page not found · Taxfold" description="This page does not exist on taxfold.app." noindex>
-  <div class="max-w-measure mx-auto">
+  <div class="max-w-measure">
     <h1 class="mb-4">Page not found</h1>
     <p class="mb-10">The link may be old, or the address mistyped. <a class="link" href="/">Go to the Taxfold home page</a>.</p>
 
     {guides.length > 0 && (
       <section aria-labelledby="ways-forward" class="mb-10">
         <h2 id="ways-forward" class="mb-3">Or start with a guide</h2>
-        <ul class="grid gap-4 lg:grid-cols-2">
+        <ul class="card-grid">
           {guides.map((guide) => (
             <GuideCard variant="compact" title={guide.data.title} description={guide.data.description} href={`/guides/${guide.id}/`} />
           ))}

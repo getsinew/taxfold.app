@@ -245,3 +245,132 @@ describe('dates', () => {
     expect(formatDate(new Date('2026-12-31T23:30:00Z'))).toBe('Dec 31, 2026');
   });
 });
+
+// ──────────────────────────────────────────────
+// Blind-critique fixes (docs/DESIGN.md § Blind critique): the checkable ones
+// ──────────────────────────────────────────────
+
+const css = () => readFileSync(join(ROOT, 'src/styles/global.css'), 'utf8');
+const ruleBody = (selector: string) => css().match(new RegExp(`${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+const visibleBodyText = (html: string) =>
+  html
+    .split('<body')[1]
+    .replace(/<script[\s\S]*?<\/script>/g, '')
+    .replace(/<[^>]+>/g, ' ');
+const straightApostrophes = (text: string) => text.match(/[A-Za-z]'[a-z]/g) ?? [];
+
+describe('mobile tables become cards', () => {
+  it('give every body cell its column label and explicit table roles', () => {
+    for (const slug of guideSlugs()) {
+      const html = guideHtml(slug);
+      const cells = html.match(/<td\b[^>]*>/g) ?? [];
+      for (const cell of cells) expect(cell, slug).toMatch(/role="cell"[^>]*data-label="[^"]+"|data-label="[^"]+"[^>]*role="cell"/);
+      expect(html.match(/<table\b[^>]*>/g)?.every((table) => table.includes('role="table"')) ?? true, slug).toBe(true);
+      expect(html.match(/<tr\b[^>]*>/g)?.every((row) => row.includes('role="row"')) ?? true, slug).toBe(true);
+    }
+  });
+
+  it('lays rows out as cards below 600px, with the header row kept for screen readers', () => {
+    const mobile = css().match(/@media \(max-width: 37\.4375rem\) \{[\s\S]*?\n  \}\n/)?.[0] ?? '';
+    expect(mobile).toMatch(/\.table-scroll td::before[\s\S]*content: attr\(data-label\)/);
+    expect(mobile).toMatch(/\.table-scroll thead \{[^}]*clip-path/);
+    expect(mobile).not.toMatch(/\.table-scroll thead \{[^}]*display: none/);
+  });
+});
+
+describe('code blocks', () => {
+  it('wrap long formulas instead of clipping them', () => {
+    expect(ruleBody('.code-block pre')).toMatch(/white-space: pre-wrap/);
+    expect(ruleBody('.code-block pre')).toMatch(/overflow-wrap: anywhere/);
+  });
+
+  it('keep the Copy button at a 44px target, beside the first line', () => {
+    expect(ruleBody('.copy-btn')).toMatch(/min-height: calc\(var\(--spacing\) \* 11\)/);
+    expect(ruleBody('.copy-btn')).toMatch(/min-width: calc\(var\(--spacing\) \* 11\)/);
+    expect(ruleBody('.code-block')).toMatch(/display: flex/);
+    expect(ruleBody('.code-tools')).toMatch(/order: 2/);
+  });
+});
+
+describe('reading measure and alignment', () => {
+  it('caps body text near 70 characters (35rem) while the guide column stays wider for tables', () => {
+    const text = Number(css().match(/--container-text: ([\d.]+)rem/)?.[1]);
+    const column = Number(css().match(/--container-measure: ([\d.]+)rem/)?.[1]);
+    expect(text).toBeLessThanOrEqual(36);
+    expect(column).toBeGreaterThan(text);
+    expect(css()).toMatch(/\.prose :where\(p, ul, ol, dl, blockquote\) \{ max-width: var\(--container-text\); \}/);
+  });
+
+  it('starts single-column pages at the same left edge as the logo (no centring)', () => {
+    for (const page of ['about', 'how-we-write', 'privacy', 'contact', '404']) {
+      expect(readFileSync(join(ROOT, 'src/pages', `${page}.astro`), 'utf8'), page).not.toMatch(/\bmx-auto\b/);
+    }
+  });
+});
+
+describe('tap targets', () => {
+  it('stacks footer links below 600px with 12px of vertical padding', () => {
+    expect(ruleBody('.footer-link')).toMatch(/py-3/);
+    expect(ruleBody('.footer-links')).toMatch(/flex-direction: column/);
+    expect(css()).toMatch(/@media \(min-width: 37\.5rem\) \{\s*\.footer-links \{ flex-direction: row;/);
+  });
+
+  it('reserves bold width in the nav so the current item does not shift its neighbours', () => {
+    expect(ruleBody('.nav-link-label::after')).toMatch(/content: attr\(data-text\)/);
+    expect(ruleBody('.nav-link-label::after')).toMatch(/font-weight: 600/);
+    for (const { file, html } of builtPages()) {
+      for (const [, text, label] of html.matchAll(/class="nav-link-label" data-text="([^"]+)">([^<]+)</g)) expect(text, file).toBe(label);
+    }
+  });
+});
+
+describe('cards and callouts', () => {
+  it('give cards equal heights and let an odd count lead with a full-width card', () => {
+    expect(ruleBody('.card')).toMatch(/height: 100%/);
+    expect(css()).toMatch(/\.card-grid > :first-child:nth-last-child\(odd\) \{ grid-column: 1 \/ -1; \}/);
+    if (guideSlugs().length > 0) expect(read('index.html')).toContain('<ul class="card-grid">');
+  });
+
+  it('keeps card titles at body size on phones', () => {
+    expect(ruleBody('.card-title')).toMatch(/text-base[^;]*md:text-lg/);
+  });
+
+  it('draws the privacy summary as a left-ruled callout, not a bordered card', () => {
+    const body = ruleBody('.callout');
+    expect(body).toMatch(/border-left: 3px solid/);
+    expect(body).not.toMatch(/border-rule/);
+  });
+
+  it('lifts code blocks and table headers above the page in dark mode', () => {
+    expect(css()).toMatch(/@media \(prefers-color-scheme: dark\) \{\s*\.code-block, \.table-scroll th[^{]*\{\s*background-color: var\(--tf-surface\);/);
+  });
+
+  it('draws the receipt tear once, outside the hero, across the full page width', () => {
+    const html = read('index.html');
+    expect(html.match(/class="tear"/g)).toHaveLength(1);
+    expect(html.indexOf('class="tear"')).toBeGreaterThan(html.indexOf('</section>'));
+  });
+});
+
+describe('say it once per screen', () => {
+  it('shows the no-advice sentence once on a guide (footer drops its copy) and in the footer elsewhere', () => {
+    for (const slug of guideSlugs()) {
+      const text = visibleBodyText(guideHtml(slug)).replace(/\s+/g, ' ');
+      expect(text.match(/not tax, legal or accounting advice/gi), slug).toHaveLength(1);
+    }
+    for (const page of ['index.html', 'privacy/index.html']) {
+      expect(visibleBodyText(read(page)).match(/not tax, legal or accounting advice/gi), page).toHaveLength(1);
+    }
+  });
+
+  it('keeps the one-time purchase line out of the leaves-out ledger', () => {
+    expect(visibleBodyText(read('index.html')).match(/one-time purchase/gi)).toHaveLength(1);
+  });
+});
+
+describe('typography', () => {
+  it('uses curly apostrophes in visible text on every page', () => {
+    expect(straightApostrophes("you're")).toEqual(["u'r"]);
+    for (const { file, html } of builtPages()) expect(straightApostrophes(visibleBodyText(html)), file).toEqual([]);
+  });
+});

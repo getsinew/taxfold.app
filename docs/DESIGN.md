@@ -110,7 +110,7 @@ Elevation goes **up in lightness**, not by shadow. Brand is lighter and a little
 |---|---|---|---|
 | `paper` | `#131614` | Page background (green-tinted near-black) | — |
 | `surface` | `#1b1f1c` | Raised blocks | — |
-| `sunk` | `#0e100f` | Inset blocks (code, table header) | — |
+| `sunk` | `#0e100f` | Inset blocks that should read as sunk: the privacy summary. Code blocks, inline code and table header rows use `surface` instead in dark mode, because a block that is darker than the page reads as a hole, not as content | — |
 | `ink` | `#e7e5dd` | Body text, headings | 14.45 on paper · 13.22 on surface · 15.14 on sunk · 10.66 on brand-soft |
 | `ink-soft` | `#a9b0aa` | Secondary text | 8.22 on paper · 7.53 on surface · 8.62 on sunk · 6.07 on brand-soft |
 | `rule` | `#2e342f` | Decorative dividers | 1.43 on paper (decorative) |
@@ -157,7 +157,7 @@ in `rem`, so they follow the user's browser font setting.
 | `text-3xl` | 2.5625 | 41 | 1.1 | 700 (serif) | Landing hero H1 ≥1024 only | — (web only) |
 
 - **On mobile (<768) headings drop one step**: H1 `text-xl`, H2 `text-lg` in serif 700, H3 `text-base` in sans 700. Body stays 17px.
-- Measure: prose is capped at **68ch** (≈ 42.5rem). Numbers in tables and amounts use `font-variant-numeric: tabular-nums`.
+- Measure: body text is capped at **35rem** (≈ 70 characters at 17px; the earlier 42.5rem gave ≈ 87). The guide column stays 42.5rem wide so tables, code blocks and the maker note have room. Numbers in tables and amounts use `font-variant-numeric: tabular-nums`.
 - Display headings get `letter-spacing: -0.01em` at `text-2xl` and above. Body tracking stays at 0. The one uppercase label
   (the maker-note label) is `text-sm`, weight 600, `letter-spacing: 0.06em`.
 - Heading spacing: the gap above a heading is 2–3× the gap below it, so each heading groups with the section it opens.
@@ -366,6 +366,8 @@ line height giving ≥24px vertical pitch.
 
 ### 5.4 Guide card (landing § 3, 404, "More guides")
 
+- Cards in a grid have equal heights, and an odd count gives the first card the full row (no orphan in the last row). Card titles are `text-base` on phones and `text-lg` from 768, so a card title never outweighs the section heading above it.
+
 - Props: `title`, `description`, `href`, `variant: full | compact` (compact = title only).
 - Structure: `li` › `article` › `h3 > a` (the only link) plus a `p` description. The whole card is clickable through
   `a::after { position:absolute; inset:0 }`. The card is `position:relative`.
@@ -383,7 +385,7 @@ The screen reader reads the title link, then the description. No "Read more" dup
 
 - The rehype step wraps every `<table>` in `<div class="table-scroll" role="region" tabindex="0" aria-label="<label>">`. The
   label is the nearest preceding heading's text plus " (table)". If the table has a `caption`, that is used instead.
-- **Horizontal scroll at every width** when the table is wider than the 68ch column. Nothing breaks out of the column (the
+- **Below 600px each row becomes a card** (first cell = bold title band, every other cell a label and value line from `data-label`; the header row stays in the accessibility tree; table roles are explicit because a block layout drops native semantics). From 600px: **horizontal scroll** when the table is wider than the 42.5rem column. Nothing breaks out of the column (the
   rail sits beside it on desktop).
 - Scroll affordance without JS: CSS scroll shadows (`background-attachment: local` gradients) on the left and right edges.
   They show only when there is content to scroll toward.
@@ -418,7 +420,7 @@ The button is an `<a>` styled as a button, because it navigates. The badge `img`
 
 ### 5.7 Code block (spreadsheet formulas)
 
-- `pre > code`: `sunk` ground, `font-mono` `text-sm`, line height 1.6, padding 16, `radius-md`, `overflow-x: auto`,
+- `pre > code`: `sunk` ground, `font-mono` `text-sm`, line height 1.6, padding 16, `radius-md`, `white-space: pre-wrap` with `overflow-wrap: anywhere` (formulas wrap instead of clipping), `overflow-x: auto` as the fallback,
   `tabindex="0"` (a scrollable region needs keyboard access), `role="group"` and `aria-label="Code"`.
 - Inline `code`: `sunk` ground, padding 2/6, `radius-sm`, 0.9em.
 - No syntax highlighting. These are one-line formulas, and colour would be noise. Turn off Shiki/Prism highlighting.
@@ -428,7 +430,7 @@ The button is an `<a>` styled as a button, because it navigates. The badge `img`
 
 | State | Treatment |
 |---|---|
-| Default | `text-sm` 500, `ink-soft` on `surface`, 1px `rule-strong`, 32px tall (≥24, 2.5.8), padding 0/12 |
+| Default | `text-sm` 500, `ink-soft` on `surface`, 1px `rule-strong`, 44×44px minimum, padding 0/12, to the right of the first line of code |
 | Hover | `ink` text |
 | Focus-visible | Ring |
 | Active | `sunk` ground |
@@ -447,7 +449,7 @@ The button is an `<a>` styled as a button, because it navigates. The badge `img`
 | Variant | Use | Treatment | Semantics |
 |---|---|---|---|
 | **Maker note** | Wraps the guide's `## Where Taxfold fits` section | `brand-soft` ground, 4px `brand` left bar, `radius-md`, padding 20/24. Above the H2, a label "FROM THE MAKERS OF TAXFOLD" (`text-sm` 600, tracking 0.06em, `brand`). After the prose, the launch-state status line in `ink-soft` and, in `beta`/`released`, a compact primary CTA | `<aside aria-labelledby="<h2 id>">`. The H2 stays in the TOC. This puts the how-we-write promise ("read those mentions as coming from its maker") on screen |
-| **Neutral / summary** | Privacy "In short" | `surface` ground, 1px `rule`, `radius-md` | `<section aria-label="In short">` |
+| **Neutral / summary** | Privacy "In short" | `sunk` ground, 3px `rule-strong` left rule, no full border (a bordered `surface` box reads as a clickable guide card) | `<section aria-label="In short">` |
 | **Disclaimer (quiet)** | Foot of every guide | Not a box. A 1px `rule` above, `text-sm` `ink-soft`, padding-top 16 | `<p>`, plain text |
 
 ### 5.10 Status pill
@@ -459,7 +461,7 @@ pointer cursor (P5).
 
 - Header: no sticky positioning, so nothing can hide a focused element (WCAG 2.4.11 holds by construction). A 1px `rule`
   bottom border. Wordmark mark (the favicon receipt glyph at 24px) + "Taxfold".
-- Footer: `text-sm` `ink-soft`, three short lines (§ 3). A 1px `rule` top border.
+- Footer: `text-sm` `ink-soft`, three short lines (§ 3). A 1px `rule` top border. The links are a list: stacked with 12px vertical padding below 600px, one row from 600px. On a guide page the footer drops the no-advice line, because the guide already ends with it.
 
 ---
 
@@ -478,7 +480,7 @@ Breakpoints: **375** (the baseline phone), **768**, **1024**, **1440**. Containe
 | Guide H1 / H2 / H3 | 26 / 21 / 17 | 33 / 26 / 21 | same | same |
 | Tables | Horizontal scroll inside the column, scroll shadows | scroll only if wider than 68ch (the 8-column table still scrolls) | same | same |
 | Code blocks | Horizontal scroll, copy button stays top-right | same | same | same |
-| Static pages | Prose column, gutter 20 | gutter 32 | centred 68ch column, no rail | same |
+| Static pages | Prose column, gutter 20 | gutter 32 | 35rem text column on the same left edge as the logo and the guide template, no rail | same |
 | 404 | Message, then compact card list | same | same, cards in 2 columns | same |
 
 There are no fixed or bottom elements, so no safe-area insets and no `viewport-fit=cover`. Body is never below 17px, so
@@ -542,4 +544,24 @@ The app's data model belongs to the build kickoff's DesignSpec, not this one.
 
 ## Blind critique
 
-pending
+A second designer saw only the screenshots of `2eea1e8` (file: `/tmp/taxfold-briefs/blind-critique.md`). Each item is folded or answered.
+
+| # | Finding | Outcome |
+|---|---|---|
+| 1 must | Decision table clips the answer column at 375 | **Folded.** Below 600px every row is a card: first cell as a title band, other cells as label and value lines from `data-label` on each cell. Table roles are explicit and the header row stays for screen readers. From 600px it is still a scroll region. Tests: unit (roles and labels), dist (every `td` has role and label), CSS (mobile block). |
+| 2 must | Formula code blocks clip at 375, no scroll cue | **Folded.** `pre-wrap` with `overflow-wrap: anywhere`, so a formula wraps at its spaces instead of clipping. The Copy button moved from its own row to the right of the first line. The copied text is unchanged. Tests: CSS. |
+| 3 | Mobile headings weaker than content below | **Partly folded.** Card titles are 17px on phones (21px from 768) and H2 gets 48px above it on phones. **Answered:** H2 stays 21px and H3 17px bold on phones. The type scale is the shared SSOT with the iOS text styles, and a 22px or 19px step would be a one-off. Bold lead-ins in the guides are the writer's markup, not a heading problem. |
+| 4 | Line length about 87 characters at 768 and up | **Folded.** Body text is capped at 35rem (≈70 characters). The guide column stays 42.5rem so tables, code and callouts keep their width. The original spec's "≈68ch" was wrong for 17px system sans. Test: CSS. |
+| 5 | Left edge jumps between page types at 1440 | **Folded.** Single-column pages are left-aligned on the logo's edge, the same as landing and guides. This reverses the spec's "centred column". Test: no `mx-auto` on those pages. |
+| 6 | Landing hero about 55% empty on the right, H1 about 40px | **Answered, not changed.** The suggested artifact is a sample export with CSV rows. The app's export does not exist yet, so any such artifact is a mock of the unbuilt app, and it states column names and content nobody has approved. The right-hand emptiness is the Z-pattern's resting space and stays honest. Revisit when TestFlight screenshots exist; the slot is the top right of the hero. The H1 stays at `text-3xl` (41px): the scale is shared with the app. |
+| 7 | Privacy summary looks like a clickable card | **Folded.** It is now a `sunk` ground with a 3px left rule and no border or full radius. Spec § 5.9 updated. Test: CSS. |
+| 8 | Product mentions styled inconsistently across guides | **Folded** by the writer's content pass (every guide ends in `Where Taxfold fits`) and by the maker-note component, which wraps it. The existing test now expects exactly one labelled note in all five guides, with the awaiting-list empty. |
+| 9 | Small tap targets at 375 (Copy, footer links) | **Folded.** Copy is 44×44. Footer links are a list, stacked below 600px with 12px vertical padding. Tests: CSS. |
+| 10 | Long function signature as inline code inside a link wraps over four underlined lines | **Answered, not changed here.** The fix is guide markup (signature in a code block, plain link beside it), which is the writer's. Inline code now breaks anywhere inside a link so it cannot overflow. Handed to the writer. |
+| 11 | Card grids uneven | **Folded.** Cards in a row have equal heights. An odd count gives the first card the full row, so the landing's five cards read as one wide plus two rows of two. Tests: CSS and markup. |
+| 12 | Dark mode: table header and code darker than the page | **Folded.** In dark mode code blocks, inline code and table header rows use `surface`. The `sunk` token is unchanged because the app inherits it. Test: CSS. |
+| 13 | Bold active nav item shifts neighbours | **Folded.** An invisible bold copy of the label reserves the bold width (`data-text`). Test: CSS and markup. |
+| 14 | Guide TOC sidebar heavy | **Partly folded.** No underline at rest (it is a nav list), `ink-soft`, underline on hover, sticky at 24px. **Answered:** the current-section bar needs scroll-spy JavaScript, which the spec rules out (no JS beyond the copy button). |
+| 15 | Repeated messages | **Folded.** The ledger's "one-time purchase" line became "Nothing to renew or cancel", so the purchase line appears once. The writer pass removed the status prose from the guides, so the maker note says it once. A guide's footer drops the no-advice line that the guide itself ends with. Tests: dist text counts. |
+| 16 | Title Case, straight and curly quotes, spelling | **Folded.** The guide title is sentence case (writer). Apostrophes and quotation marks on the site's own pages are curly, and a build helper curls apostrophes in guide titles and descriptions that come from frontmatter. "organising" became "organizing". Test: no straight apostrophe in any page's visible text. |
+| 17 | Zigzag divider narrower than the section below | **Folded.** The tear is its own element across the full page width, outside the hero. Test: markup. |

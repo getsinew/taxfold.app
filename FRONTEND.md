@@ -88,7 +88,8 @@ The canonical top of `global.css` (copy as-is; values = DESIGN.md § Brand token
   --breakpoint-md: 48rem;   /* 768 */
   --breakpoint-lg: 64rem;   /* 1024 */
 
-  --container-measure: 42.5rem;  /* ≈68ch prose */
+  --container-measure: 42.5rem;  /* guide column: tables, code and callouts */
+  --container-text: 35rem;       /* ≈70 characters of body text */
   --container-hero: 40rem;
   --container-rail: 15rem;
   --container-page: 70rem;       /* 1120 */

@@ -1,4 +1,6 @@
 ---
+import { curlyApostrophes } from '../lib/typography.mjs';
+
 interface Props {
   title: string;
   description: string;
@@ -10,7 +12,7 @@ const { title, description, href, variant = 'full' } = Astro.props;
 ---
 <li>
   <article class:list={['card', variant === 'compact' && 'card-compact']}>
-    <h3 class="card-title"><a href={href}>{title}</a></h3>
-    {variant === 'full' && <p class="text-ink-soft mt-1">{description}</p>}
+    <h3 class="card-title"><a href={href}>{curlyApostrophes(title)}</a></h3>
+    {variant === 'full' && <p class="text-ink-soft mt-1">{curlyApostrophes(description)}</p>}
   </article>
 </li>

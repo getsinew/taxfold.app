@@ -25,7 +25,7 @@ const navItems = [
     <ul class="flex justify-between md:gap-1">
       {navItems.map(({ label, href, current }) => (
         <li class="flex-1 text-center md:flex-none">
-          <a href={href} class="nav-link" aria-current={current}><span class="nav-link-label">{label}</span></a>
+          <a href={href} class="nav-link" aria-current={current}><span class="nav-link-label" data-text={label}>{label}</span></a>
         </li>
       ))}
     </ul>

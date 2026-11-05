@@ -19,6 +19,7 @@
     "tailwindcss": "4.3.4"
   },
   "devDependencies": {
-    "vitest": "5.1.0"
+    "vitest": "5.1.0",
+    "wrangler": "4.158.0"
   }
 }

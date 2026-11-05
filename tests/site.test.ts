@@ -1,10 +1,10 @@
 // Runs against dist/ — `npm test` builds first.
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { assertFullHistory, guideFiles, lastEdited, lastmodForPath } from '../src/lib/lastmod.mjs';
+import { assertFullHistory, firstPublished, guideFiles, lastEdited, lastmodForPath } from '../src/lib/lastmod.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
 const DIST = join(ROOT, 'dist');
@@ -61,6 +61,30 @@ describe('lastmod helper fails closed', () => {
     expect(() => lastmodForPath('/nope/', ROOT)).toThrow(/no such source file/);
   });
 
+  it('dates each file by its own last change, and a merged change by the merge', () => {
+    const repo = mkdtempSync(join(tmpdir(), 'taxfold-dates-'));
+    const at = (iso: string) => ({ ...process.env, GIT_AUTHOR_DATE: iso, GIT_COMMITTER_DATE: iso });
+    const g = (iso: string, ...args: string[]) =>
+      execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], { cwd: repo, env: at(iso) });
+    try {
+      g('2026-01-01T00:00:00Z', 'init', '--quiet', '-b', 'main');
+      writeFileSync(join(repo, 'a.md'), 'a');
+      g('2026-01-01T00:00:00Z', 'add', 'a.md');
+      g('2026-01-01T00:00:00Z', 'commit', '--quiet', '-m', 'a');
+      g('2026-01-02T00:00:00Z', 'checkout', '--quiet', '-b', 'draft');
+      writeFileSync(join(repo, 'b.md'), 'b');
+      g('2026-01-02T00:00:00Z', 'add', 'b.md');
+      g('2026-01-02T00:00:00Z', 'commit', '--quiet', '-m', 'b drafted');
+      g('2026-02-10T00:00:00Z', 'checkout', '--quiet', 'main');
+      g('2026-02-10T00:00:00Z', 'merge', '--quiet', '--no-ff', '-m', 'b published', 'draft');
+      expect(lastEdited('a.md', repo).toISOString()).toBe('2026-01-01T00:00:00.000Z');
+      expect(lastEdited('b.md', repo).toISOString()).toBe('2026-02-10T00:00:00.000Z');
+      expect(firstPublished('b.md', repo).toISOString()).toBe('2026-02-10T00:00:00.000Z');
+    } finally {
+      rmSync(repo, { recursive: true, force: true });
+    }
+  });
+
   it('refuses a shallow clone, where every file would share one date', () => {
     const tmp = mkdtempSync(join(tmpdir(), 'taxfold-shallow-'));
     const origin = join(tmp, 'origin');
@@ -88,6 +112,13 @@ describe('every page', () => {
     expect(page).toContain(`<link rel="canonical" href="${SITE}${path}"`);
   });
 
+  it('keeps a space between a word and the inline element after it', () => {
+    for (const path of allPaths()) {
+      const body = html(path).split('<body')[1];
+      expect(body.match(/[A-Za-z0-9,.:;"')]<(a|strong|em|code|time)\b/g), path).toBeNull();
+    }
+  });
+
   it('carries no App Store badge or link before approval', () => {
     for (const path of allPaths()) {
       expect(html(path), path).not.toMatch(/apps\.apple\.com|Download on the App Store|apple-itunes-app/i);
@@ -109,7 +140,8 @@ describe('trust pages', () => {
     expect(t).toContain('we collect nothing');
     expect(t).toContain('Data Not Collected');
     expect(t).toContain('Cloudflare Web Analytics');
-    expect(t).toMatch(/No cookies, no fingerprinting/);
+    expect(t).toContain('No cookies.');
+    expect(t).toContain('for the purpose of displaying analytics');
   });
 
   it('contact gives hello@taxfold.app', () => {
@@ -127,7 +159,7 @@ describe('trust pages', () => {
 });
 
 describe('lexical caps', () => {
-  it('holds no locale directory (locales are earned by their own kickoff)', () => {
+  it('holds no locale directory (EN only until a locale is added on purpose)', () => {
     for (const dir of [join(ROOT, 'src/pages'), DIST]) {
       const locales = readdirSync(dir).filter((d) => /^[a-z]{2}(-[a-z]{2})?$/i.test(d));
       expect(locales, dir).toEqual([]);
@@ -137,15 +169,7 @@ describe('lexical caps', () => {
   it(`adds at most ${GUIDE_URL_CAP_PER_MONTH} new guide URLs in any calendar month`, () => {
     const perMonth = new Map<string, number>();
     for (const file of guideFiles(ROOT)) {
-      const added = execFileSync('git', ['log', '--diff-filter=A', '--format=%cI', '--', file], {
-        cwd: ROOT,
-        encoding: 'utf8',
-      })
-        .trim()
-        .split('\n')
-        .filter(Boolean)
-        .pop();
-      const month = (added ?? new Date().toISOString()).slice(0, 7);
+      const month = firstPublished(file, ROOT).toISOString().slice(0, 7);
       perMonth.set(month, (perMonth.get(month) ?? 0) + 1);
     }
     for (const [month, n] of perMonth) expect(n, month).toBeLessThanOrEqual(GUIDE_URL_CAP_PER_MONTH);

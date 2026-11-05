@@ -6,14 +6,15 @@ const updated = lastmodForPath(Astro.url.pathname);
 ---
 <Base
   title="Privacy: what Taxfold and taxfold.app collect"
-  description="The Taxfold app collects no data; your receipts stay on your iPhone. This website runs cookieless Cloudflare Web Analytics. Here is each part."
+  description="The Taxfold app sends us no data; your receipts stay on your iPhone. This website runs cookieless Cloudflare Web Analytics. Here is each part."
 >
   <article class="prose">
     <h1 class="text-3xl font-bold tracking-tight mb-6">Privacy</h1>
 
     <p>
       This page covers two things: the Taxfold iPhone app, and this website, taxfold.app. They are different, so we
-      describe them separately. Both are run by Opal Harmony P.C., the company that makes Taxfold.
+      describe them separately. Both are run by Opal Harmony P.C., the company that makes Taxfold, which is the data
+      controller for anything described here.
     </p>
 
     <h2>The app: we collect nothing</h2>
@@ -29,8 +30,8 @@ const updated = lastmodForPath(Astro.url.pathname);
         are not uploaded anywhere.
       </li>
       <li>
-        <strong>Camera and Photos</strong> are used only when you scan or import a receipt, and only with your
-        permission.
+        <strong>Camera and Photos:</strong> the app asks for camera access the first time you scan. Importing uses
+        Apple's photo picker, so the app sees only the photos you choose.
       </li>
       <li>
         <strong>Exports</strong> (CSV or PDF) go only where you send them with the iPhone share sheet.
@@ -40,7 +41,9 @@ const updated = lastmodForPath(Astro.url.pathname);
         part of that backup, held by Apple or on your computer under your control. We have no access to it.
       </li>
       <li>
-        <strong>Purchases</strong> go through Apple. Apple tells us aggregate sales figures, not who you are.
+        <strong>Apple's reports:</strong> purchases go through Apple. Apple gives developers sales figures and, from
+        people who agree to share them with developers, app usage statistics and crash reports. These come to us
+        from Apple in aggregate and do not tell us who you are.
       </li>
     </ul>
     <p>
@@ -55,13 +58,14 @@ const updated = lastmodForPath(Astro.url.pathname);
     </p>
     <ul>
       <li>
-        <strong>No cookies, no fingerprinting.</strong> In Cloudflare's words, Web Analytics "does not use any
-        client-side state, such as cookies or localStorage, to collect usage metrics", and Cloudflare does not
-        "fingerprint" individuals via their IP address, User Agent string, or any other data.
+        <strong>No cookies.</strong> In Cloudflare's words, Web Analytics "does not use any client-side state, such as
+        cookies or localStorage, to collect usage metrics", and Cloudflare does not "fingerprint" individuals "via
+        their IP address, User Agent string, or any other data for the purpose of displaying analytics."
       </li>
       <li>
-        <strong>What it records:</strong> page views and visits, the referring site, and page-load timing, which we
-        see only as aggregate counts. A small script from <code>static.cloudflareinsights.com</code> loads on each
+        <strong>What it records:</strong> page views and visits, the page visited, the referring site, the visitor's
+        country, device type, browser and operating system, and page-load timing. We see these only as aggregate
+        counts in Cloudflare's dashboard. A small script from <code>static.cloudflareinsights.com</code> loads on each
         page to report them.
       </li>
       <li>
@@ -80,16 +84,31 @@ const updated = lastmodForPath(Astro.url.pathname);
     <h2>Email</h2>
     <p>
       If you write to us, we receive your email address and your message, and use them only to reply. Mail to
-      taxfold.app addresses is forwarded through Cloudflare Email Routing to the inbox we read.
+      taxfold.app addresses is forwarded through Cloudflare Email Routing to a Gmail inbox, so Google also processes
+      it. We keep a message as long as we need it to deal with what you asked, and delete it when you ask us to.
     </p>
 
-    <h2>Your rights and contact</h2>
-    <p>
-      Under the GDPR you can ask what we hold about you, and ask us to correct or delete it. For the app there is
-      nothing to ask for: the data is on your phone. For email, write to
-      <a href="mailto:privacy@taxfold.app">privacy@taxfold.app</a>. You can also complain to your data protection
-      authority; in Greece that is the Hellenic Data Protection Authority.
-    </p>
+    <h2>Legal basis, recipients and your rights</h2>
+    <ul>
+      <li>
+        <strong>Legal basis:</strong> our legitimate interests (GDPR Article 6(1)(f)) in running, measuring and
+        protecting the website and in answering the messages you send us.
+      </li>
+      <li>
+        <strong>Recipients:</strong> Cloudflare (hosting, analytics, email forwarding) and Google (Search Console,
+        our email inbox). Both are US companies and may process data outside the EU, under the safeguards they offer,
+        such as the EU–US Data Privacy Framework and the European Commission's standard contractual clauses.
+      </li>
+      <li>
+        <strong>Your rights:</strong> you can ask for access to, correction or deletion of what we hold about you,
+        restrict or object to our use of it, and ask for a copy in a portable format. For the app there is nothing
+        to ask for: the data is on your phone. Write to <a href="mailto:privacy@taxfold.app">privacy@taxfold.app</a>.
+      </li>
+      <li>
+        <strong>Complaints:</strong> you can complain to your data protection authority. In Greece that is the
+        Hellenic Data Protection Authority.
+      </li>
+    </ul>
     <p class="text-sm text-ink-soft">
       Last updated <time datetime={updated.toISOString()}>{updated.toISOString().slice(0, 10)}</time>.
     </p>

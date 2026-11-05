@@ -25,7 +25,7 @@ const jsonLd = {
 };
 ---
 <Base title={`${guide.data.title} · Taxfold`} description={guide.data.description}>
-  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
   <article class="prose">
     <h1 class="text-3xl font-bold tracking-tight leading-tight mb-3">{guide.data.title}</h1>
     <p class="text-sm text-ink-soft mb-8">

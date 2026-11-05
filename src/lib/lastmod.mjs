@@ -15,14 +15,22 @@ export function assertFullHistory(cwd = process.cwd()) {
   }
 }
 
+// --first-parent: a page goes live when its change reaches main, so a merge commit dates it, not the branch
+// commit inside it (plain `git log -- file` simplifies the merge away and reports the branch date).
 // A file with uncommitted edits is dated today (UTC midnight, so the build and the tests agree): it is being
 // edited, and CI builds a clean tree.
 export function lastEdited(file, cwd = process.cwd()) {
   if (!existsSync(join(cwd, file))) throw new Error(`lastmod: no such source file ${file}`);
   if (git(cwd, ['status', '--porcelain', '--', file]) !== '') return new Date(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`);
-  const iso = git(cwd, ['log', '-1', '--format=%cI', '--', file]);
+  const iso = git(cwd, ['log', '-1', '--first-parent', '--format=%cI', '--', file]);
   if (!iso) throw new Error(`lastmod: ${file} has no commit`);
   return new Date(iso);
+}
+
+// The month a guide counts against the new-URL cap is the month its file first reached the first-parent line.
+export function firstPublished(file, cwd = process.cwd()) {
+  const added = git(cwd, ['log', '--first-parent', '--diff-filter=A', '--format=%cI', '--', file]).split('\n').filter(Boolean).pop();
+  return added ? new Date(added) : new Date();
 }
 
 export const GUIDES_DIR = 'src/content/guides';

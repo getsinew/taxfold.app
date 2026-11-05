@@ -26,14 +26,8 @@ const markupFiles = () => sourceFiles(join(ROOT, 'src')).filter((file) => file.e
 
 // Guides whose Markdown still predates the template. They fail the rules below until the writer's content pass
 // lands; the tests demand the entry be removed the moment a guide passes, so these lists can only shrink.
-const AWAITING_MAKER_HEADING = ['expense-spreadsheet-export', 'receipt-scanner-iphone'];
-const AWAITING_STATUS_PROSE_REMOVAL = [
-  'expense-spreadsheet-export',
-  'how-to-organize-receipts',
-  'receipt-scanner-iphone',
-  'self-employed-expense-tracking',
-  'which-receipts-to-keep-for-taxes',
-];
+const AWAITING_MAKER_HEADING: string[] = [];
+const AWAITING_STATUS_PROSE_REMOVAL: string[] = [];
 
 // ──────────────────────────────────────────────
 // Rule helpers, each exercised by a fixture that must trip it

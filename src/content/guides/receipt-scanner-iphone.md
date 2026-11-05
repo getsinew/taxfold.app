@@ -1,6 +1,6 @@
 ---
 title: "How to scan receipts on iPhone and keep copies you can use"
-description: "Scan paper receipts with Notes, Files or Live Text on iPhone, check every copy is legible and complete, and see what the IRS says about scans."
+description: "Scan paper receipts with Notes or Files on iPhone, copy text with Live Text, check each copy is legible and complete, and see what the IRS says."
 cluster: "core:receipt-scan-ocr, core:receipt-app-generic"
 ---
 
@@ -12,7 +12,7 @@ Some apps sold as receipt scanners are reward apps, where you scan shopping rece
 
 ### The document scanner in Notes
 
-Apple's support page [How to scan documents on your iPhone or iPad](https://support.apple.com/en-us/108963) gives these steps:
+Apple's support page [How to scan documents on your iPhone or iPad](https://support.apple.com/en-us/108963) gives these steps. We checked them, and the Files steps below, against the page as written for iOS 26 (published February 13, 2026); later versions may move a button.
 
 1. Open Notes and select a note or create a new one.
 2. Tap the Attachment button, then tap **Scan Documents**.
@@ -38,7 +38,7 @@ Both give you an image. Use the document scanner when you can, because it lets y
 
 ## What makes a scan worth keeping
 
-The IRS page [What kind of records should I keep](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep) says supporting documents for business expenses "should identify the payee, the amount paid, proof of payment, the date incurred, and include a description of the item purchased or service received that shows the amount was for a business expense." It adds that "a combination of supporting documents may be needed." That gives you a practical test for each scan (this is US federal guidance):
+The IRS page [What kind of records should I keep](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep) says supporting documents for business expenses "should identify the payee, the amount paid, proof of payment, the date incurred, and include a description of the item purchased or service received that shows the amount was for a business expense." It adds that "a combination of supporting documents may be needed." That is the IRS standard for business-expense records (US federal), and it gives you a practical test for each scan:
 
 - **Merchant name** is readable.
 - **Date** is readable.
@@ -63,7 +63,7 @@ The zoom check is not a house rule. It comes from the IRS standard for electroni
 
 ## Faded thermal paper
 
-Many register receipts are printed on heat-sensitive paper, and the print can fade over time. The defense is timing: scan receipts the same day or the same week, not at the end of the year.
+Register receipts are often printed on heat-sensitive paper, and that print can fade over time. The defense is timing: scan receipts the same day or the same week, not at the end of the year.
 
 If a receipt has already faded past the zoom test, a scan won't rescue it. The IRS revenue procedure on electronic records, discussed below, lists "retaining hardcopies of books or records that are illegible or that cannot be accurately or completely transferred" among its recommended practices. So keep that paper, and back it up with whatever else you have: the card statement, an order confirmation, or a duplicate receipt from the merchant if they can print one.
 
@@ -77,7 +77,7 @@ Two primary sources cover this.
 
 [Publication 583, Starting a Business and Keeping Records](https://www.irs.gov/publications/p583), says "all requirements that apply to hard copy books and records also apply to electronic storage systems that maintain tax books and records," and defines an electronic storage system as "any system for preparing or keeping your records either by electronic imaging or by transfer to an electronic storage media."
 
-For the details, Publication 583 points to [Rev. Proc. 97-22 (Internal Revenue Bulletin 1997-13, from page 9)](https://www.irs.gov/pub/irs-irbs/irb97-13.pdf). The points that matter for receipts:
+For the details, Publication 583 refers you to Revenue Procedure 97-22. [Rev. Proc. 97-22](https://www.irs.gov/pub/irs-tege/rp-97-22.pdf) (published in Internal Revenue Bulletin 1997-13, page 9) is the IRS standard for electronic records. The points that matter for receipts:
 
 - **It accepts electronic records that meet its terms.** Records kept in a system that "complies with the requirements of this revenue procedure will constitute records" under section 6001 of the Code.
 - **The copy must be accurate and complete.** The system "must ensure an accurate and complete transfer" and must "index, store, preserve, retrieve, and reproduce" the records.
@@ -90,21 +90,23 @@ For the details, Publication 583 points to [Rev. Proc. 97-22 (Internal Revenue B
 
 The revenue procedure sets requirements for a system. It does not list approved apps or devices. Two practical consequences follow from the last two points: when you replace your phone or delete an app, make sure the receipts come with you or exist as an export somewhere else, and keep a backup.
 
-How long to keep the copies depends on the return they support. The IRS page [How long should I keep records?](https://www.irs.gov/businesses/small-businesses-self-employed/how-long-should-i-keep-records) says you generally keep records that support an item on your return "until the period of limitations for that tax return runs out," and lists the periods, which run longer than the basic one in some situations. Our guide on [which receipts to keep for taxes](/guides/which-receipts-to-keep-for-taxes/) goes through them. State rules vary.
+How long to keep each copy depends on the return it supports: the IRS ties it to the period of limitations for that return, and our guide on [which receipts to keep for taxes](/guides/which-receipts-to-keep-for-taxes/) goes through the federal periods (state rules vary).
 
 ## Worked example: one week of receipts
 
-A freelance designer comes home with three receipts and gets one by email.
+A wedding photographer comes home with three receipts and gets one by email.
 
-1. **Printer ink, thermal register receipt, paid by card.** Scanned in Notes that evening. The zoom check passes. The receipt shows the card's last four digits, so payment is covered. She adds a line: "ink, studio printer."
+1. **Printer ink, thermal register receipt, paid by card.** Scanned in Notes that evening. The zoom check passes. The receipt shows the card's last four digits, so payment is covered. She adds a line: "ink, proof printer."
 2. **Hardware store, receipt about as long as her forearm.** Scanned in three overlapping sections into one Notes document. She checks the top section shows the store and date and the bottom shows the total.
-3. **Parking, small card slip with no description.** Scanned, with a note: "client site visit, Tuesday."
-4. **Software subscription, emailed PDF.** Saved to the same year folder as the scans. No scan needed.
+3. **Parking, small card slip with no description.** Scanned, with a note: "venue walk-through, Tuesday."
+4. **Photo-editing subscription, emailed PDF.** Saved to the same year folder as the scans. No scan needed.
 
 At month end she copies the four totals into her spreadsheet with Live Text instead of retyping them. She files by year, then month, as our guide on [how to organize receipts](/guides/how-to-organize-receipts/) describes in more detail.
 
-## What a dedicated receipt app adds
+## What a receipt app adds
 
-The built-in tools give you images. A receipt app turns each image into a record: it reads the date, merchant, total and tax lines into fields you can correct, files the receipt under a year and category, and lets you export a year at once instead of collecting files by hand. Text recognition does misread faint digits, so check the total against the image before you rely on it. An export also covers the "deemed destroyed" point above, because the export can live somewhere other than the phone. Our guide to [exporting expenses to a spreadsheet](/guides/expense-spreadsheet-export/) covers what to do with it.
+The built-in tools give you images. A receipt app turns each image into a record: it reads the text into fields you can correct, files the receipt under a year, and lets you export a year at once instead of collecting files by hand. Text recognition can misread faint digits, so check the total against the image before you rely on it. An export gives you a copy outside the phone, which lowers the risk if you change phones or delete the app; check that the file includes what you need, such as the receipt images and not only the fields. Our guide to [tracking expenses in a spreadsheet](/guides/expense-tracker-spreadsheet/) covers what to do with an export.
 
-Taxfold, the iPhone app we make, works this way. You scan a receipt with the camera or import it from Photos, text recognition runs on the iPhone itself, and you correct any field: date, merchant, total, currency, tax or VAT amount and rate, category, payment method and notes. Receipts are filed by tax year, and you can export a year as CSV or PDF through the share sheet. It has no account, no sync server, no bank connection and no analytics; the data stays on the phone and is included in your own iPhone backup. Taxfold is still in development and not yet on the App Store.
+## Where Taxfold fits
+
+Taxfold is the iPhone app we make for this. You scan a receipt with the camera or import it from Photos, the text is read on the iPhone itself, and every field the app reads is editable. Receipts are filed by tax year, and you can export a year as CSV or PDF through the share sheet. It has no account, no sync server, no bank connection and no analytics; the data stays on the phone and is included in your own iPhone backup.

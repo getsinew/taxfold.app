@@ -17,7 +17,7 @@ For expenses, its basic records are sales slips, invoices, receipts, canceled ch
 
 ## Grocery receipts and other personal purchases
 
-For most people, grocery receipts have no federal tax use. Groceries are a personal expense, and the IRS's list of [nondeductible expenses in Publication 529](https://www.irs.gov/publications/p529) includes "Personal, living, or family expenses." For business owners, [Publication 334, Tax Guide for Small Business](https://www.irs.gov/publications/p334), lists "Personal, living, and family expenses" among the things you usually can't deduct as business expenses.
+For most people, grocery receipts have no federal tax use. Groceries are a personal expense, and the IRS's list of [nondeductible expenses in Publication 529](https://www.irs.gov/publications/p529) (Rev. 12/2020) includes "Personal, living, or family expenses." For business owners, [Publication 334, Tax Guide for Small Business](https://www.irs.gov/publications/p334), lists "Personal, living, and family expenses" among the things you usually can't deduct as business expenses.
 
 There is one case in the IRS instructions where a grocery receipt matters, and it is about the sales tax printed on it, not the food. If you itemize deductions, you can choose to deduct state and local general sales taxes instead of state and local income taxes ([IRS Topic 503, Deductible Taxes](https://www.irs.gov/taxtopics/tc503)). The [Instructions for Schedule A](https://www.irs.gov/instructions/i1040sca) give two ways to figure that deduction: your actual expenses or the IRS's optional sales tax tables. For the actual-expenses method:
 
@@ -34,7 +34,7 @@ Keep the income side too. Publication 583 lists the documents that show gross re
 
 When one receipt mixes business and personal items, Publication 334 says to "separate the personal part from the business part. The personal part is generally not deductible."
 
-Travel, gifts and transportation have their own rules, in [Publication 463, Travel, Gift, and Car Expenses](https://www.irs.gov/publications/p463):
+Travel, gifts and transportation have their own rules, in [Publication 463, Travel, Gift, and Car Expenses](https://www.irs.gov/publications/p463) (2025 edition, for 2025 returns):
 
 - **Receipts are the default.** "You must generally have documentary evidence such as receipts, canceled checks, or bills, to support your expenses."
 - **The $75 exception.** Documentary evidence isn't needed if "Your expense, other than lodging, is less than $75," or if you have "a transportation expense for which a receipt isn't readily available." Lodging is left out of the $75 rule, so keep hotel receipts whatever the amount.
@@ -81,20 +81,20 @@ Before shredding anything, the same page warns that "your insurance company or c
 | Employment tax records, if you have employees | Yes | At least 4 years after the tax is due or paid, whichever is later | [How long should I keep records?](https://www.irs.gov/businesses/small-businesses-self-employed/how-long-should-i-keep-records) |
 | Unreported income over 25% of gross income shown | Yes | 6 years | [How long should I keep records?](https://www.irs.gov/businesses/small-businesses-self-employed/how-long-should-i-keep-records) |
 
-"Generally 3 years" assumes none of the longer periods in the section above applies to that return.
+The "How long" column comes from the IRS page [How long should I keep records?](https://www.irs.gov/businesses/small-businesses-self-employed/how-long-should-i-keep-records); the Source column backs the keep-or-not answer. "Generally 3 years" assumes none of the longer periods in the section above applies to that return.
 
 ## Three worked examples
 
 **A salaried employee who takes the standard deduction.** Grocery, takeout and clothing receipts support nothing on the return. Worth keeping: the W-2, any 1099s, records for any credits claimed, and a copy of the filed return. The IRS page says copies of filed returns "help in preparing future tax returns and making computations if you file an amended return."
 
-**A freelance designer paid on Forms 1099-NEC.** One store receipt shows printer paper and ink alongside groceries. The receipt goes in the business records, with the business items marked; only that part is deductible. A laptop bought for the business is property, so its receipt stays until the limitations period runs out for the year the laptop is sold or otherwise disposed of. A $40 dinner on a business trip needs no receipt under the $75 rule, but the log entry with amount, date, place and business purpose is still required. The $160 hotel night on the same trip needs its receipt.
+**A freelance translator paid on Forms 1099-NEC.** One store receipt shows printer paper and ink alongside groceries. The receipt goes in the business records, with the business items marked; only that part is deductible. A laptop bought for the business is property, so its receipt stays until the limitations period runs out for the year the laptop is sold or otherwise disposed of. A $40 dinner on a business trip needs no receipt under the $75 rule, but the log entry with amount, date, place and business purpose is still required. The $160 hotel night on the same trip needs its receipt.
 
 **An itemizer in a state with sales tax.** If they figure the sales tax deduction from actual expenses, every receipt showing general sales tax paid counts, grocery receipts included. If they use the optional tables instead, those receipts are not needed for this deduction.
 
 ## Paper or scanned receipts
 
-Paper is not the only acceptable form. Publication 583 says the requirements for paper records also apply to electronic storage systems, which "must index, store, preserve, retrieve, and reproduce the electronically stored books and records in legible format." It allows that "The original hard copy books and records may be destroyed provided that the electronic storage system has been tested to establish that the hard copy books and records are being reproduced in compliance with IRS requirements," and points to Revenue Procedure 97-22 for the details. A scan only helps if it stays legible and you can find it again. The [guide to organizing receipts](/guides/how-to-organize-receipts/) covers filing by year and type, which is also what [Publication 583](https://www.irs.gov/publications/p583) suggests.
+Paper is not the only acceptable form: [Publication 583](https://www.irs.gov/publications/p583) says the requirements for paper records also apply to electronic storage systems, and points to [Rev. Proc. 97-22](https://www.irs.gov/pub/irs-tege/rp-97-22.pdf) for the conditions, including when the paper may be destroyed; our guide to [scanning receipts on iPhone](/guides/receipt-scanner-iphone/) goes through them. The [guide to organizing receipts](/guides/how-to-organize-receipts/) covers filing by year and type, which is also what Publication 583 suggests.
 
 ## Where Taxfold fits
 
-Taxfold is an iPhone app we are building, not yet on the App Store. It scans or imports a receipt, reads it on the phone, files it under its tax year with the date, merchant, total, tax amount and category, and exports a year as CSV or PDF. There is no account and no server; the receipts stay on your iPhone. You still decide which receipts count; the app keeps a copy of each, sorted by year.
+Taxfold is an iPhone app we make for keeping receipts. You scan a receipt with the camera or import it from Photos, the text is read on the phone, every field the app reads is editable, and the receipt is filed under its tax year. A year can be exported as CSV or PDF through the share sheet. There is no account, no sync server, no bank connection and no analytics; the receipts stay on your iPhone and in your own iPhone backup. You still decide which receipts count.

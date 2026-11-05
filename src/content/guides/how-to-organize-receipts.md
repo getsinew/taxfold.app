@@ -1,5 +1,5 @@
 ---
-title: "How to Organize Receipts: A System You Can Set Up in an Afternoon"
+title: "How to organize receipts: a system to set up in an afternoon"
 description: "Tax-year folders, a category list, a file-naming rule, a weekly 10-minute routine, and what IRS guidance says about paper copies and backups."
 cluster: "core:receipt-organizer-storage"
 ---
@@ -22,32 +22,15 @@ For which receipts are worth keeping in the first place, see [which receipts to 
 
 ### 1. One container per tax year
 
-Paper: one expanding file or large envelope per year, labeled with the year. Digital: one folder per year. Nothing from 2026 goes in the 2027 folder, even if you file it late.
+Paper: one expanding file or large envelope per year, labeled with the year. Digital: one folder per year. Nothing from 2026 goes in the 2027 folder, even if you file it late. That assumes a calendar tax year; if your business uses a fiscal tax year, which Publication 583 defines as "12 consecutive months ending on the last day of any month except December," label each container with that year instead.
 
 If you run more than one business, Publication 583 says "you should keep a complete and separate set of records for each business." That means one set of year folders per business.
 
 ### 2. A short category list
 
-Inside each year, use a handful of categories. If you file Schedule C as a sole proprietor, borrow the expense line names from Part II of [Schedule C (Form 1040)](https://www.irs.gov/pub/irs-pdf/f1040sc.pdf), so that at year end each folder total maps to one line. A typical set:
+Inside each year, use a handful of categories. If you file Schedule C as a sole proprietor, name the folders after the expense lines in Part II of the [2025 Schedule C (Form 1040)](https://www.irs.gov/pub/irs-prior/f1040sc--2025.pdf), so that at year end each folder total maps to one line. A typical set: Advertising, Car and truck expenses, Contract labor, Insurance (other than health), Legal and professional services, Office expense, Rent or lease, Repairs and maintenance, Supplies, Taxes and licenses, Travel, Meals, Utilities, and Other. Which line a given cost belongs on is covered in the [self-employed expense tracking guide](/guides/self-employed-expense-tracking/).
 
-| Folder | Schedule C (2026) line |
-|---|---|
-| Advertising | 8 |
-| Car and truck expenses | 9 |
-| Contract labor | 11 |
-| Insurance (other than health) | 15 |
-| Legal and professional services | 17 |
-| Office expense | 18 |
-| Rent or lease | 20 |
-| Repairs and maintenance | 21 |
-| Supplies | 22 |
-| Taxes and licenses | 23 |
-| Travel | 24a |
-| Meals | 24b |
-| Utilities | 25 |
-| Other | 27b |
-
-Add two more folders. **Income** holds documents that show where money came from; the IRS lists cash register tapes, deposit information, receipt books, invoices and Forms 1099-MISC. **Assets** holds purchase records for equipment and other property, because those are kept longer (more on that below). If you are not self-employed, name the folders after the deductions or credits you actually claim and skip the rest.
+Add two more folders. **Income** holds documents that show where money came from; the IRS lists cash register tapes, deposit information, receipt books, invoices and Forms 1099-MISC (Publication 583's list adds Forms 1099-NEC). **Assets** holds purchase records for equipment and other property, because those are kept longer (more on that below). If you are not self-employed, name the folders after the deductions or credits you actually claim and skip the rest.
 
 Fewer folders beat more. You should never hesitate over where a receipt goes.
 
@@ -59,23 +42,19 @@ Name every scan the same way:
 
 For the lumber above: `2026-03-14_harbor-lumber_86.40.pdf`. Files then sort by date on their own, a search for the merchant finds every visit, and the amount lets you match a file to a card statement line without opening it. Two receipts from the same store on the same day get `_2` at the end.
 
-[Rev. Proc. 97-22](https://www.irs.gov/pub/irs-tege/rp-97-22.pdf), the IRS guidance on electronic records, asks for an indexing system that lets you identify and retrieve stored records, and says that requirement "will be satisfied if the indexing system is functionally comparable to a reasonable hardcopy filing system." Year folders, category folders and consistent names are that kind of filing system in practice.
+[Rev. Proc. 97-22](https://www.irs.gov/pub/irs-tege/rp-97-22.pdf), the IRS guidance on electronic records, accepts an index that is "functionally comparable to a reasonable hardcopy filing system," which is what year folders, category folders and consistent names give you; the [iPhone receipt scanner guide](/guides/receipt-scanner-iphone/) covers the rest of what it asks.
 
 ### 4. Decide what happens to paper after scanning
 
-Publication 583 says original paper records "may be destroyed provided that the electronic storage system has been tested to establish that the hard copy books and records are being reproduced in compliance with IRS requirements" and procedures are in place to keep it that way. Rev. Proc. 97-22 sets the bar for those copies: they must be legible, meaning you can "identify all letters and numerals positively and quickly," and readable, meaning you can recognize them "as words or complete numbers."
+Publication 583 says original paper records "may be destroyed provided that the electronic storage system has been tested to establish that the hard copy books and records are being reproduced in compliance with IRS requirements." Section 7 of Rev. Proc. 97-22 adds a second condition: procedures "that ensure its continued compliance." In practice, shred a receipt only if you have tested your scanning setup, the scan passes the reading test (open it and read every number on it), and you keep doing both. If you are unsure, keep the paper.
 
-So the test before any paper goes in the shredder is simple: open the scan and read every number on it. Among the record-keeping practices Rev. Proc. 97-22 lists is "retaining hardcopies of books or records that are illegible or that cannot be accurately or completely transferred to an electronic storage system." A faint or crumpled slip that scans badly stays in the paper envelope for its year.
-
-If you are unsure, keeping the paper in the year envelope costs little. Scanning is still worth it, because the scan is the copy you search.
+A faint or crumpled slip that fails the reading test stays in the paper envelope for its year; Rev. Proc. 97-22 lists "retaining hardcopies of books or records that are illegible" among its recommended practices. Scanning is still worth it, because the scan is the copy you search.
 
 ### 5. Set up backups once
 
-Rev. Proc. 97-22 lists "creating back-up copies" and "selecting an off-site storage location" as practices it calls "a business decision that is solely within the discretion of the taxpayer." The IRS does not set a number. A common practice among people who look after files is three copies on two kinds of storage, with one kept somewhere other than home. For receipts that can be the working folder, an external drive, and a copy in a second place.
+Rev. Proc. 97-22 lists "creating back-up copies" and "selecting an off-site storage location" as practices it calls "a business decision that is solely within the discretion of the taxpayer." The IRS does not set a number. One widely used rule of thumb is three copies on two kinds of storage, with one kept somewhere other than home. For receipts that can be the working folder, an external drive, and a copy in a second place.
 
-One clause in the same Rev. Proc. matters when you change phones, computers or apps. Records in a system "with respect to which the taxpayer ceases to maintain the hardware and the software necessary" to meet its requirements "will be deemed destroyed," unless they stay available. Before you retire a device or stop using a tool, export the years you still need into a format you can open without it.
-
-For phone scanning specifically, the [iPhone receipt scanner guide](/guides/receipt-scanner-iphone/) covers capture.
+Before you retire a phone or computer or stop using an app, export the years you still need into a format you can open without it. Rev. Proc. 97-22 treats records as destroyed once you stop maintaining the hardware and software needed to reproduce them, unless they remain available.
 
 ## The weekly 10-minute routine
 
@@ -89,17 +68,15 @@ Same day each week:
 - Save emailed receipts and invoices as PDF, same name format, same folders.
 - Write the business purpose on anything where it is not obvious from the receipt.
 - Add a dated note for any cash payment that came without a receipt.
-- Put scanned paper in that year's envelope, or shred it if you have decided to and the scan passed the reading test.
+- Put scanned paper in that year's envelope. Shred a slip only if your scanning setup has been tested and this scan passed the reading test; if unsure, keep it.
 
 Once a month, add a second step: go down your card and bank statements and check that every business charge has a file. Publication 583 also recommends reconciling your checking account to catch errors, and this is the natural time to do both.
 
 ## Year end, and when a year can retire
 
-At year end, total each category folder and hand the totals, or the folders, to whoever prepares your return. For moving totals into a spreadsheet, see [exporting expenses to a spreadsheet](/guides/expense-spreadsheet-export/).
+At year end, total each category folder and hand the totals, or the folders, to whoever prepares your return. For moving totals into a spreadsheet, see [tracking expenses in a spreadsheet](/guides/expense-tracker-spreadsheet/).
 
-The IRS page [How long should I keep records?](https://www.irs.gov/businesses/small-businesses-self-employed/how-long-should-i-keep-records) ties retention to the period of limitations for each return. The usual case is 3 years. The page also says to keep records 6 years "if you do not report income that you should report, and it is more than 25% of the gross income shown on your return," 7 years "if you file a claim for a loss from worthless securities or bad debt deduction," and indefinitely if you do not file a return or file a fraudulent one. Unless the page says otherwise, years count from when the return was filed, and a return filed early counts as filed on the due date.
-
-The **Assets** folder works differently. Keep records relating to property "until the period of limitations expires for the year in which you dispose of the property." When you retire an old year, move its Assets folder forward into the current year instead of deleting it. The same page also suggests checking whether your insurance company or creditors want records kept longer than the IRS does.
+How long a year must be kept depends on the returns it supports; [which receipts to keep for taxes](/guides/which-receipts-to-keep-for-taxes/) goes through the IRS periods. The **Assets** folder works differently: the IRS page [How long should I keep records?](https://www.irs.gov/businesses/small-businesses-self-employed/how-long-should-i-keep-records) says to keep property records "until the period of limitations expires for the year in which you dispose of the property," so when you retire an old year, move its Assets folder forward into the current year instead of deleting it.
 
 ## Four ways to store receipts, compared
 
@@ -114,4 +91,4 @@ The **Assets** folder works differently. Keep records relating to property "unti
 
 ## Where Taxfold fits
 
-Taxfold, an iPhone app we are building, is in development and not on the App Store yet. It follows the system above: you scan a receipt or import one from Photos, the text is read on the iPhone itself, you correct any field (date, merchant, total, category and the rest), and receipts are filed by tax year. There is no account and no server; the data stays on the phone and is part of your own iPhone backup. Exporting a year as CSV or PDF through the share sheet gives you the off-device copy the backup step calls for.
+Taxfold is an iPhone app we make for receipts. You scan a receipt or import one from Photos, the text is read on the iPhone itself, every field the app reads is editable, and receipts are filed by tax year. There is no account, no sync server, no bank connection and no analytics; the data stays on the phone and is part of your own iPhone backup. Exporting a year as CSV or PDF through the share sheet gives you a copy of your records off the phone.

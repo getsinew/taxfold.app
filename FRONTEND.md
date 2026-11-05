@@ -165,7 +165,7 @@ Each test gets an anti-vacuity case: a fixture that **must** fail it (the repo's
 Build and serve the built site. From an OS session, run through the heavy slice
 (`scripts/os heavy -- bash -c 'cd ~/dev/taxfold.app && npm test'`), then `npx astro preview --port 4321`.
 
-**Page types (7):** `/`, `/about/`, `/how-we-write/`, `/privacy/`, `/contact/`, `/guides/expense-spreadsheet-export/`
+**Page types (7):** `/`, `/about/`, `/how-we-write/`, `/privacy/`, `/contact/`, `/guides/expense-tracker-spreadsheet/`
 (8-column table + code blocks), `/guides/which-receipts-to-keep-for-taxes/` (wide decision table), and `/no-such-page/` for the 404.
 Once a guide has a blockquote, add it as the quote fixture.
 

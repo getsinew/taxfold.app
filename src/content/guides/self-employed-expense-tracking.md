@@ -27,7 +27,7 @@ In practice, a separate account and a card tied to it do most of the sorting for
 
 ## Where common expenses go on Schedule C
 
-Part II of Schedule C lists expense categories by line. The table matches everyday costs to the lines in the [Instructions for Schedule C](https://www.irs.gov/instructions/i1040sc) (2025) and on the [Schedule C form](https://www.irs.gov/pub/irs-pdf/f1040sc.pdf), with the conditions the instructions attach. Use the line names as your categories and year-end totals are a matter of adding up.
+Part II of Schedule C lists expense categories by line. The table matches everyday costs to the lines on the [2025 Schedule C form](https://www.irs.gov/pub/irs-prior/f1040sc--2025.pdf) and in the [2025 Instructions for Schedule C](https://www.irs.gov/pub/irs-prior/i1040sc--2025.pdf), with the conditions the instructions attach. Line numbers are from the 2025 form. Use the line names as your categories and year-end totals are a matter of adding up.
 
 | Everyday expense | Schedule C line | What the instructions say |
 |---|---|---|
@@ -36,8 +36,8 @@ Part II of Schedule C lists expense categories by line. The table matches everyd
 | Commissions and fees you pay | 10, Commissions and fees | Don't include fees deducted elsewhere or capitalized |
 | Freelancers and independent contractors you pay | 11, Contract labor | Not employee wages (those go on line 26) |
 | Equipment that lasts well beyond a year | 13, Depreciation and section 179, or Part V | Depreciation recovers the cost of property useful substantially beyond the tax year; see the de minimis safe harbor below |
-| Business insurance, such as liability | 15, Insurance (other than health) | Your own health insurance doesn't go here; it may be deductible on Schedule 1 instead |
-| Interest on business loans | 16, Interest | 2025 form: 16a mortgage, 16b other. The 2026 form has 16a mortgage, 16b vehicle loan, 16c other |
+| Business insurance, such as liability | 15, Insurance (other than health) | Your own health insurance doesn't go here; the line 14 instructions say you may be able to deduct it on Schedule 1 (Form 1040), line 17 |
+| Interest on business loans | 16, Interest | 2025 form: 16a mortgage, 16b other. The [2026 form](https://www.irs.gov/pub/irs-prior/f1040sc--2026.pdf) has 16a mortgage, 16b vehicle loan, 16c other |
 | Accountant, attorney, business tax preparation | 17, Legal and professional services | Fees that are ordinary and necessary and directly related to the business |
 | Office supplies and postage | 18, Office expense | The two items the instructions name |
 | Renting equipment or a vehicle | 20a, Rent or lease | Business portion of the rental cost |
@@ -49,10 +49,10 @@ Part II of Schedule C lists expense categories by line. The table matches everyd
 | A meal with a client | 24b, Deductible meals | In most cases 50% of the cost; no entertainment |
 | Utilities for the business | 25, Utilities | Base rate of the first phone line into your home isn't deductible |
 | Employee pay | 26, Wages | Not amounts you pay yourself |
-| Software and subscriptions used to run the business | Part V (line 48), totaled on 27b | Not software that must be depreciated or amortized |
+| Technology and software tools, such as tax preparation software and subscription services paid to manage your business | Part V (line 48), totaled on 27b | Ordinary and necessary, directly related to operating your business; not tools that must be depreciated or amortized |
 | A home office | 30, Business use of your home | Form 8829, or the simplified method: in most cases $5 per square foot, up to 300 square feet |
 
-On the equipment row: the instructions describe a **de minimis safe harbor** that, if you elect it, lets you deduct tangible property up to $2,500 per item or invoice (or $5,000 if you have an applicable financial statement) as an other expense in Part V. On the car row: the 2025 instructions give 70 cents a mile and conditions for using the rate; Publication 334 gives 72.5 cents a mile for 2026. On contract labor: the 2025 instructions say you must file Form 1099-NEC for contract labor payments "of $600 or more during the year," and Publication 334 says that for reportable payments made after 2025 the threshold increases to $2,000. So record who you paid, not just how much.
+On the equipment row: the instructions describe a **de minimis safe harbor** that, if you elect it, lets you deduct tangible property up to $2,500 per item or invoice (or $5,000 if you have an applicable financial statement) as an other expense in Part V. On the car row: the 2025 instructions give 70 cents a mile and conditions for using the rate; Publication 334 gives 72.5 cents a mile for 2026. On contract labor: the 2025 instructions say you must file Form 1099-NEC for contract labor payments "of $600 or more during the year," and Publication 334 says that for reportable payments made after 2025 the threshold increases to $2,000. So record who you paid, not just how much. On the software row: the instructions add that "Most computer software expenses must be capitalized and depreciated or expensed under section 179." Most software purchases are capitalized rather than deducted here.
 
 Part V is also where any ordinary and necessary expense goes that has no line of its own. You list each type and amount separately there.
 
@@ -79,7 +79,7 @@ Publication 583 notes that "you may forget expenses when you prepare your tax re
 
 **When you spend**
 
-1. Capture the receipt the same day (a photo or scan; see [how to organize receipts](/guides/how-to-organize-receipts/)).
+1. Capture the receipt the same day (a photo or scan; see [scanning receipts on iPhone](/guides/receipt-scanner-iphone/) and [how to organize receipts](/guides/how-to-organize-receipts/)).
 2. Write the business purpose on it or next to it, in a few words: "Client lunch, Acme, Q3 proposal."
 3. For car use, keep a log. Publication 463 says a log kept weekly that accounts for the week's use "is considered a timely kept record."
 
@@ -101,7 +101,7 @@ A freelance designer's month in 2026, after the monthly pass:
 | Date | Merchant | Amount | Business purpose | Schedule C line |
 |---|---|---|---|---|
 | Mar 3 | Coworking space | $250.00 | Desk rental, March | 20b |
-| Mar 7 | Design software | $54.99 | Monthly subscription for client work | Part V (48) |
+| Mar 7 | Online bookkeeping service | $30.00 | Monthly subscription to manage the business's books | Part V (48) |
 | Mar 12 | Restaurant | $64.00 | Lunch with client, 2 people, brand review | 24b (in most cases 50% of the cost, $32.00) |
 | Mar 18 | Office supply store | $23.40 | Printer paper, mailers | 18 |
 | Mar 1–31 | Mileage log | 180 business miles | Client visits | 9 (2026 standard rate, 72.5 cents: $130.50, if the car qualifies) |
@@ -110,8 +110,8 @@ The record keeps the full $64.00; the 50% limit applies when the deduction is fi
 
 ## Spreadsheet, app or notebook
 
-Because the IRS lets you choose "any recordkeeping system suited to your business," a spreadsheet works as well as dedicated software, provided it carries the fields above: date, merchant, amount, payment method, business purpose, Schedule C line, and a link or reference to the receipt image. For getting records into one, see [exporting expenses to a spreadsheet](/guides/expense-spreadsheet-export/).
+Because the IRS lets you choose "any recordkeeping system suited to your business," a spreadsheet works as well as dedicated software, provided it carries the fields above: date, merchant, amount, payment method, business purpose, Schedule C line, and a link or reference to the receipt image. For setting one up, see [tracking expenses in a spreadsheet](/guides/expense-tracker-spreadsheet/).
 
 ## Where Taxfold fits
 
-We make Taxfold, a receipt and expense log for iPhone that is in development and not yet on the App Store. You scan or import a receipt, the text is read on the phone, and you check the date, merchant, total, tax, category, payment method and notes. Receipts are filed by tax year and a year can be exported as CSV or PDF. There is no account and no bank connection; the data stays on your phone. Everything in this guide works just as well with a spreadsheet and a folder.
+We make Taxfold, a receipt and expense log for iPhone. You scan a receipt or import one from Photos, the text is read on the phone, and every field the app reads is editable. Receipts are filed by tax year, and a year can be exported as CSV or PDF through the share sheet. There is no account, no sync server, no bank connection and no analytics; the data stays on your phone and in your own iPhone backup. Everything in this guide works just as well with a spreadsheet and a folder.

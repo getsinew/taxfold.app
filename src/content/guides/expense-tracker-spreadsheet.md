@@ -4,17 +4,18 @@ description: "A column layout to copy, SUMIFS formulas for monthly and category 
 cluster: "core:expense-spreadsheet-export"
 ---
 
-A spreadsheet is a perfectly good expense log. For federal tax purposes the IRS says you
-[may choose any recordkeeping system suited to your business that clearly shows your income and expenses](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep),
-and a sheet with one row per expense meets that description. What it needs is a fixed set of columns, a few formulas
+A spreadsheet is a perfectly good expense log. For US federal tax purposes the IRS says you
+[may choose any recordkeeping system suited to your business that clearly shows your income and expenses](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep).
+The page does not mention spreadsheets, but in our reading a sheet with one row per expense meets that description. What it needs is a fixed set of columns, a few formulas
 that do the adding for you, and a reliable way to get from any row back to the receipt behind it.
 
 This guide gives you all three. Everything below works the same way in Microsoft Excel and Google Sheets.
 
 ## The column layout
 
-Use one workbook per tax year and one sheet for the log. Put these headers in row 1, starting in column A, and add one
-row per expense:
+Use one workbook per tax year and one sheet for the log. The examples assume a calendar tax year; if your business uses
+a fiscal year, the workbook covers that year instead. Put these headers in row 1, starting in column A, and add one
+row per expense. Dates are in the US month/day/year format, so 1/8/2026 is January 8:
 
 | Date | Merchant | Description | Category | Amount | Paid with | Receipt file | Month |
 |---|---|---|---|---|---|---|---|
@@ -38,8 +39,8 @@ of what was bought that shows it was for the business. The columns mirror that l
   [a combination of supporting documents may be needed](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep),
   such as a receipt plus the card statement it appears on. Naming the card (last four digits only) tells you which
   statement to pull.
-- **Category** is for totals. Use a short, fixed list and spell each name the same way every time, because the
-  formulas match the text exactly. Which categories make sense for a Schedule C or another return is covered in
+- **Category** is for totals. Use a short, fixed list and spell each category the same way every time, so the
+  formulas find every row. Which categories make sense for a Schedule C or another return is covered in
   [the self-employed expense tracking guide](/guides/self-employed-expense-tracking/).
 - **Receipt file** links the row to its receipt (more on this below).
 - **Month** is a helper column that a formula fills in.
@@ -52,7 +53,7 @@ In H2, enter:
 =MONTH(A2)
 ```
 
-then fill it down the column. Both
+then fill it down the column, only as far as you have data. Both
 [Excel's MONTH function](https://support.microsoft.com/en-us/office/month-function-579a2881-199b-48b2-ab90-ddba0eba86e8)
 and [Google Sheets' MONTH function](https://support.google.com/docs/answer/3093052?hl=en) take one argument, the date,
 and return the month as a number; Microsoft's page states the range as 1 (January) to 12 (December). Because each
@@ -205,8 +206,7 @@ Once a month, after entering the last receipt:
 - The card rows for the month add up to the business charges on that card's statement.
 - The Month column has no errors.
 
-## Using Taxfold with a spreadsheet
+## Where Taxfold fits
 
 Taxfold, the iPhone app we make, keeps receipts on the phone filed by tax year and exports a year as a CSV file
-through the iPhone share sheet. That file opens in Excel or Google Sheets with the steps above, and the receipt photos
-stay in the app. Taxfold is in development and not yet on the App Store.
+through the iPhone share sheet that you can open in Excel or Google Sheets.

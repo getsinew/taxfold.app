@@ -276,13 +276,13 @@ Every page has one H1. Headings never skip a level. Landmarks: `header` › `nav
 **Content conventions this template needs from the writer** (they change the markdown, which is not part of this spec's
 edit; flagged for the writer's next PR):
 
-- 🟡 **One Taxfold section per guide, H2 text exactly `Where Taxfold fits`, as the last H2.** Two of the five use other
-  headings today: `receipt-scanner-iphone` uses "What a dedicated receipt app adds", which mixes generic and Taxfold
-  paragraphs, and `expense-spreadsheet-export` uses "Using Taxfold with a spreadsheet". The rehype step wraps the section
-  by that exact heading. A build test asserts exactly one per guide.
-- 🟡 **No launch-status sentences in the markdown.** Every guide currently says "not yet on the App Store". The day the app
-  ships, that sentence would be false on every page at once. The maker note appends the status line from the single
-  launch-state constant (§ 5.6). Remove it from the prose.
+- 🟢 **One Taxfold section per guide, H2 text exactly `Where Taxfold fits`, as the last H2.** Met by all five guides
+  since the content-fix pass (`receipt-scanner-iphone` split its mixed section into a generic "What a receipt app adds"
+  and the Taxfold section; `expense-tracker-spreadsheet`, formerly `expense-spreadsheet-export`, renamed its heading).
+  The rehype step wraps the section by that exact heading. A build test asserts exactly one per guide.
+- 🟢 **No launch-status sentences in the markdown.** Removed from every guide in the content-fix pass. The day the app
+  ships, such a sentence would be false on every page at once. The maker note appends the status line from the single
+  launch-state constant (§ 5.6). Keep it out of the prose.
 - 🟢 **Long primary-source quotes** (more than about 40 words, or more than one sentence) go in a `>` blockquote, after a
   sentence that names and links the source. Short quotes stay inline, as the guides do now.
 - 🟢 **Checklists are ordinary lists.** GFM task-list syntax (`- [ ]`) is not used: it renders disabled checkboxes that look

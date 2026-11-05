@@ -1,5 +1,5 @@
 ---
-title: "How to scan receipts on iPhone and keep copies you can use"
+title: "iPhone receipt scanner: scan receipts and keep copies you can use"
 description: "Scan paper receipts with Notes or Files on iPhone, copy text with Live Text, check each copy is legible and complete, and see what the IRS says."
 cluster: "core:receipt-scan-ocr, core:receipt-app-generic"
 ---

@@ -91,4 +91,4 @@ How long a year must be kept depends on the returns it supports; [which receipts
 
 ## Where Taxfold fits
 
-Taxfold is an iPhone app we make for receipts. You scan a receipt or import one from Photos, the text is read on the iPhone itself, every field the app reads is editable, and receipts are filed by tax year. There is no account, no sync server, no bank connection and no analytics; the data stays on the phone and is part of your own iPhone backup. Exporting a year as CSV or PDF through the share sheet gives you a copy of your records off the phone.
+Taxfold is an iPhone app we make for receipts. You scan a receipt or import one from Photos, the text is read on the iPhone itself, every field the app reads is editable, and receipts are filed by tax year. There is no account, no sync server, no bank connection and no analytics; the data stays on the phone and is part of your own iPhone backup. You can export a year as CSV or PDF through the share sheet.

@@ -34,7 +34,7 @@ of what was bought that shows it was for the business. The columns mirror that l
 
 - **Date** and **Merchant** (the payee) come straight off the receipt.
 - **Description** is the business reason in your own words: "500 business cards", not "Corner Print".
-- **Amount** is the total you paid. Type it as a plain number, without a currency sign, so the formulas can add it.
+- **Amount** is the total you paid. Type it as a plain number (for example 64.20) and let the cell's number format show the currency.
 - **Paid with** points to proof of payment. The IRS page notes that
   [a combination of supporting documents may be needed](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep),
   such as a receipt plus the card statement it appears on. Naming the card (last four digits only) tells you which
@@ -154,7 +154,7 @@ describes two routes:
 Two points from the same page matter for an expense log. When Excel opens a .csv file directly, it uses your default
 data format settings to read each column; Microsoft's example is a file whose dates are month-day-year opened on a
 system that expects year-month-day. The From Text/CSV route gives you more control. And when you save, a CSV keeps only
-the current worksheet, and Excel warns that features text formats do not support may be lost. Once you have added the Month column and the
+the current worksheet, and Excel warns that features that text formats do not support may be lost. Once you have added the Month column and the
 totals, save the file as an Excel workbook.
 
 ### Google Sheets

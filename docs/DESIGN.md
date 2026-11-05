@@ -283,8 +283,9 @@ edit; flagged for the writer's next PR):
 - 🟢 **No launch-status sentences in the markdown.** Removed from every guide in the content-fix pass. The day the app
   ships, such a sentence would be false on every page at once. The maker note appends the status line from the single
   launch-state constant (§ 5.6). Keep it out of the prose.
-- 🟢 **Long primary-source quotes** (more than about 40 words, or more than one sentence) go in a `>` blockquote, after a
-  sentence that names and links the source. Short quotes stay inline, as the guides do now.
+- 🟡 **Long primary-source quotes** (more than about 40 words, or more than one sentence) go in a `>` blockquote, after a
+  sentence that names and links the source; short quotes stay inline. Batch 1 does not follow this yet: six quoted
+  passages run past one sentence inline (final review 2026-11-05). Converting them is the next content pass.
 - 🟢 **Checklists are ordinary lists.** GFM task-list syntax (`- [ ]`) is not used: it renders disabled checkboxes that look
   interactive and read as "checkbox, not checked, dimmed" to screen readers. A test fails on `<input` inside a guide.
 - 🟢 Numeric table columns are right-aligned with `---:`.

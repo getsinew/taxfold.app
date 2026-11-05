@@ -63,8 +63,17 @@ workbook holds one tax year, a month number is all you need to group rows.
 
 The function that does the work is SUMIFS. Microsoft and Google document the same argument order:
 
-- **Excel:** [`SUMIFS(sum_range, criteria_range1, criteria1, [criteria_range2, criteria2], ...)`](https://support.microsoft.com/en-us/office/sumifs-function-c9e748f5-7ea7-455d-9406-611cebce642b)
-- **Google Sheets:** [`SUMIFS(sum_range, criteria_range1, criterion1, [criteria_range2, criterion2, ...])`](https://support.google.com/docs/answer/3238496?hl=en)
+Excel ([Microsoft's SUMIFS page](https://support.microsoft.com/en-us/office/sumifs-function-c9e748f5-7ea7-455d-9406-611cebce642b)):
+
+```
+SUMIFS(sum_range, criteria_range1, criteria1, [criteria_range2, criteria2], ...)
+```
+
+Google Sheets ([Google's SUMIFS page](https://support.google.com/docs/answer/3238496?hl=en)):
+
+```
+SUMIFS(sum_range, criteria_range1, criterion1, [criteria_range2, criterion2, ...])
+```
 
 In words: first the column you want added, then pairs of "which column to check" and "what to look for". Only rows that
 meet every condition are added.

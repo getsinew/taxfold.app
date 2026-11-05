@@ -1,0 +1,42 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { lastmodForPath } from '../../lib/lastmod.mjs';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+  return guides.map((guide) => ({ params: { slug: guide.id }, props: { guide } }));
+}
+
+const { guide } = Astro.props;
+const { Content } = await render(guide);
+const updated = lastmodForPath(Astro.url.pathname);
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: guide.data.title,
+  description: guide.data.description,
+  dateModified: updated.toISOString(),
+  mainEntityOfPage: canonical,
+  author: { '@type': 'Organization', name: 'Taxfold team', url: new URL('/about/', Astro.site).href },
+  publisher: { '@type': 'Organization', name: 'Opal Harmony P.C.' },
+};
+---
+<Base title={`${guide.data.title} · Taxfold`} description={guide.data.description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <article class="prose">
+    <h1 class="text-3xl font-bold tracking-tight leading-tight mb-3">{guide.data.title}</h1>
+    <p class="text-sm text-ink-soft mb-8">
+      By the <a href="/about/">Taxfold team</a> ·
+      Last updated <time datetime={updated.toISOString()}>{updated.toISOString().slice(0, 10)}</time> ·
+      <a href="/how-we-write/">How we write these guides</a>
+    </p>
+    <Content />
+    <p class="text-sm text-ink-soft mt-10 border-t border-rule pt-4">
+      General information, not tax, legal or accounting advice. Rules differ by country and change; check anything
+      you rely on with your tax authority or an accountant.
+    </p>
+  </article>
+</Base>

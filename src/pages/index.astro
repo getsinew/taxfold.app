@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const guides = (await getCollection('guides')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+
+const points = [
+  {
+    title: 'Scan on the phone',
+    body: 'Photograph a receipt or import one from Photos. Text recognition runs on the iPhone itself; you correct any field it gets wrong.',
+  },
+  {
+    title: 'Sorted by tax year',
+    body: 'Each receipt carries its date, merchant, total, tax amount and a category, and files itself under the tax year it belongs to.',
+  },
+  {
+    title: 'Export when you need it',
+    body: 'Hand a year of receipts to your accountant or your own spreadsheet as CSV or PDF, through the iPhone share sheet.',
+  },
+  {
+    title: 'Nothing leaves the phone',
+    body: 'No account, no sync server, no bank connection, no analytics. Your receipts live in the app on your iPhone.',
+  },
+];
+---
+<Base
+  title="Taxfold: a receipt and expense log that stays on your iPhone"
+  description="Taxfold scans receipts on your iPhone, files them by tax year and exports CSV or PDF. No account, no cloud, no subscription. In development."
+>
+  <section class="mb-12">
+    <h1 class="text-3xl sm:text-4xl font-bold tracking-tight leading-tight mb-4">
+      Keep your receipts for tax time, on your iPhone and nowhere else.
+    </h1>
+    <p class="text-lg text-ink-soft mb-4">
+      Taxfold is a receipt and expense log for iPhone. It reads receipts on the device, keeps them by tax year
+      and exports them when your return or your accountant asks. It is a one-time purchase, with no subscription.
+    </p>
+    <p class="inline-block rounded bg-brand-soft text-brand px-3 py-1 text-sm font-medium">
+      In development. Not on the App Store yet.
+    </p>
+  </section>
+
+  <section aria-labelledby="what" class="mb-12">
+    <h2 id="what" class="text-xl font-bold mb-4">What it does</h2>
+    <ul class="grid gap-5 sm:grid-cols-2">
+      {points.map(({ title, body }) => (
+        <li class="border border-rule rounded-lg p-4 bg-white/60">
+          <h3 class="font-semibold mb-1">{title}</h3>
+          <p class="text-ink-soft text-[0.95rem] leading-relaxed">{body}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {guides.length > 0 && (
+    <section aria-labelledby="guides" class="mb-12">
+      <h2 id="guides" class="text-xl font-bold mb-4">Guides</h2>
+      <ul class="space-y-4">
+        {guides.map((g) => (
+          <li>
+            <a href={`/guides/${g.id}/`} class="font-semibold text-brand underline underline-offset-2">{g.data.title}</a>
+            <p class="text-ink-soft text-[0.95rem]">{g.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section aria-labelledby="who" class="mb-4">
+    <h2 id="who" class="text-xl font-bold mb-3">Who makes it</h2>
+    <p class="text-ink-soft">
+      Taxfold is made by Opal Harmony P.C., a small software company. Read <a class="underline" href="/about/">about us</a>,
+      <a class="underline" href="/how-we-write/">how we write the guides</a> and
+      <a class="underline" href="/privacy/">what this site and the app collect</a>.
+    </p>
+  </section>
+</Base>

@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import { lastmodForPath } from '../lib/lastmod.mjs';
+
+const updated = lastmodForPath(Astro.url.pathname);
+---
+<Base
+  title="Privacy: what Taxfold and taxfold.app collect"
+  description="The Taxfold app collects no data; your receipts stay on your iPhone. This website runs cookieless Cloudflare Web Analytics. Here is each part."
+>
+  <article class="prose">
+    <h1 class="text-3xl font-bold tracking-tight mb-6">Privacy</h1>
+
+    <p>
+      This page covers two things: the Taxfold iPhone app, and this website, taxfold.app. They are different, so we
+      describe them separately. Both are run by Opal Harmony P.C., the company that makes Taxfold.
+    </p>
+
+    <h2>The app: we collect nothing</h2>
+    <p>
+      The Taxfold app sends us no data. There is no account, no sign-in, no sync server, no bank connection and no
+      analytics or advertising code in the app. The receipts you scan, their photos and everything you type stay in
+      the app's storage on your iPhone. When the app is listed, its App Store privacy label will read
+      <strong>"Data Not Collected"</strong>.
+    </p>
+    <ul>
+      <li>
+        <strong>Reading receipts</strong> happens on the iPhone, with Apple's built-in text recognition. The images
+        are not uploaded anywhere.
+      </li>
+      <li>
+        <strong>Camera and Photos</strong> are used only when you scan or import a receipt, and only with your
+        permission.
+      </li>
+      <li>
+        <strong>Exports</strong> (CSV or PDF) go only where you send them with the iPhone share sheet.
+      </li>
+      <li>
+        <strong>Backups:</strong> if you back up your iPhone with iCloud Backup or to a computer, the app's data is
+        part of that backup, held by Apple or on your computer under your control. We have no access to it.
+      </li>
+      <li>
+        <strong>Purchases</strong> go through Apple. Apple tells us aggregate sales figures, not who you are.
+      </li>
+    </ul>
+    <p>
+      Because nothing reaches us, deleting the app deletes your Taxfold data from the phone. Export what you want to
+      keep first.
+    </p>
+
+    <h2>This website: cookieless analytics</h2>
+    <p>
+      "We collect nothing" would not be true of the website, so here is what it does. taxfold.app is hosted on
+      Cloudflare and runs <strong>Cloudflare Web Analytics</strong> to count visits.
+    </p>
+    <ul>
+      <li>
+        <strong>No cookies, no fingerprinting.</strong> In Cloudflare's words, Web Analytics "does not use any
+        client-side state, such as cookies or localStorage, to collect usage metrics", and Cloudflare does not
+        "fingerprint" individuals via their IP address, User Agent string, or any other data.
+      </li>
+      <li>
+        <strong>What it records:</strong> page views and visits, the referring site, and page-load timing, which we
+        see only as aggregate counts. A small script from <code>static.cloudflareinsights.com</code> loads on each
+        page to report them.
+      </li>
+      <li>
+        <strong>Delivering pages:</strong> like any web host, Cloudflare processes your IP address and browser
+        details to serve the site and protect it from abuse.
+      </li>
+      <li>
+        <strong>Search statistics:</strong> Google Search Console shows us which searches led to the site, as
+        aggregate numbers from Google. It puts nothing on this site.
+      </li>
+    </ul>
+    <p>
+      The site has no sign-up form, no ads and no other trackers.
+    </p>
+
+    <h2>Email</h2>
+    <p>
+      If you write to us, we receive your email address and your message, and use them only to reply. Mail to
+      taxfold.app addresses is forwarded through Cloudflare Email Routing to the inbox we read.
+    </p>
+
+    <h2>Your rights and contact</h2>
+    <p>
+      Under the GDPR you can ask what we hold about you, and ask us to correct or delete it. For the app there is
+      nothing to ask for: the data is on your phone. For email, write to
+      <a href="mailto:privacy@taxfold.app">privacy@taxfold.app</a>. You can also complain to your data protection
+      authority; in Greece that is the Hellenic Data Protection Authority.
+    </p>
+    <p class="text-sm text-ink-soft">
+      Last updated <time datetime={updated.toISOString()}>{updated.toISOString().slice(0, 10)}</time>.
+    </p>
+  </article>
+</Base>

@@ -193,9 +193,13 @@
     justify-content: center;
     min-height: calc(var(--spacing) * 11);
     min-width: calc(var(--spacing) * 11);
-    padding-inline: calc(var(--spacing) * 3);
+    padding-inline: calc(var(--spacing) * 1);
     text-decoration: none;
     transition: color 120ms ease-out;
+  }
+
+  @media (min-width: 48rem) {
+    .nav-link { padding-inline: calc(var(--spacing) * 3); }
   }
 
   .nav-link-label {

@@ -1,4 +1,5 @@
 // Progressive enhancement for DESIGN.md § 5.7: without this script a code block simply has no Copy button.
+const IDLE_LABEL = 'Copy';
 const COPIED_LABEL_MS = 2000;
 
 const isApplePlatform = /Mac|iPhone|iPad/.test(navigator.userAgent);
@@ -21,12 +22,11 @@ function selectText(code: HTMLElement): void {
 }
 
 async function copyCode(code: HTMLElement, button: HTMLButtonElement, status: HTMLElement): Promise<void> {
-  const idleLabel = button.textContent ?? 'Copy';
   const finish = (label: string) => {
     button.textContent = label;
     status.textContent = label;
     setTimeout(() => {
-      button.textContent = idleLabel;
+      button.textContent = IDLE_LABEL;
     }, COPIED_LABEL_MS);
   };
   try {
@@ -44,7 +44,7 @@ function addCopyButton(block: HTMLElement, status: HTMLElement): void {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'copy-btn';
-  button.textContent = 'Copy';
+  button.textContent = IDLE_LABEL;
   button.addEventListener('click', () => copyCode(code, button, status));
   const tools = document.createElement('div');
   tools.className = 'code-tools';

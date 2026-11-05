@@ -75,11 +75,7 @@ Aaker personality: **Sincerity + Competence**, low Excitement.
 ## Brand tokens
 
 **This section is the brand SSOT for both the site and the iOS app** (seat directive 2026-11-05: the site's DESIGN.md is
-the brand source; the app design inherits it). Hex values are normative. Known conflict to reconcile on the app side:
-`getsinew/taxfold` branch `app-design` (`docs/design/DESIGN.md` @ 4eb4f9f) also calls itself the brand source, says
-this file must adopt its tokens, and declares its own dark palette and warning colour (it inherited only the pre-spec
-light seed). Both files claim the role; the seat directive settles it for this file, and where the two disagree this
-section wins until the operator rules otherwise. The app keeps its own token *names* (Asset Catalog conventions); only the values come from here. Every contrast ratio below
+the brand source; the app design inherits it). Hex values are normative. The app's DesignSpec (`getsinew/taxfold` `docs/design/DESIGN.md` §3, reconciled 2026-11-05) inherits every value below and parity-checks them with `docs/design/tools/contrast-brand-reconcile.py`. The app keeps its own token *names* (Asset Catalog conventions); only the values come from here. Every contrast ratio below
 is WCAG 2.x relative luminance, computed 2026-11-05 (script: sRGB linearisation, `(L1+0.05)/(L2+0.05)`). AA thresholds:
 text 4.5:1, large text and UI parts 3:1.
 

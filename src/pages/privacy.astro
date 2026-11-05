@@ -1,0 +1,130 @@
+---
+import Base from '../layouts/Base.astro';
+import { formatDate } from '../lib/format-date.mjs';
+import { launchView } from '../lib/launch-state.mjs';
+import { lastmodForPath } from '../lib/lastmod.mjs';
+
+const updated = lastmodForPath(Astro.url.pathname);
+const { privacyLabelLead } = launchView();
+---
+<Base
+  title="Privacy: what Taxfold and taxfold.app collect"
+  description="The Taxfold app sends us no data; your receipts stay on your iPhone. This website runs cookieless Cloudflare Web Analytics. Here is each part."
+>
+  <article class="prose">
+    <h1>Privacy</h1>
+
+    <p>
+      This page covers two things: the Taxfold iPhone app, and this website, taxfold.app. They are different, so we
+      describe them separately. Both are run by Opal Harmony P.C., the company that makes Taxfold, which is the data
+      controller for anything described here.
+    </p>
+
+    <section aria-label="In short" class="callout mb-4">
+      <p class="text-ink-soft mb-2 text-sm font-semibold">In short</p>
+      <dl class="summary-list">
+        <dt>App</dt>
+        <dd>Sends us nothing.</dd>
+        <dt>Website</dt>
+        <dd>Counts visits without cookies.</dd>
+      </dl>
+    </section>
+
+    <h2 id="app">The app: we collect nothing</h2>
+    <p>
+      The Taxfold app sends us no data. There is no account, no sign-in, no sync server, no bank connection and no
+      analytics or advertising code in the app. The receipts you scan, their photos and everything you type stay in
+      the app’s storage on your iPhone. {privacyLabelLead}
+      <strong>“Data Not Collected”</strong>.
+    </p>
+    <ul>
+      <li>
+        <strong>Reading receipts</strong> happens on the iPhone, with Apple’s built-in text recognition. The images
+        are not uploaded anywhere.
+      </li>
+      <li>
+        <strong>Camera and Photos:</strong> the app asks for camera access the first time you scan. Importing uses
+        Apple’s photo picker, so the app sees only the photos you choose.
+      </li>
+      <li>
+        <strong>Exports</strong> (CSV or PDF) go only where you send them with the iPhone share sheet.
+      </li>
+      <li>
+        <strong>Backups:</strong> if you back up your iPhone with iCloud Backup or to a computer, the app’s data is
+        part of that backup, held by Apple or on your computer under your control. We have no access to it.
+      </li>
+      <li>
+        <strong>Apple’s reports:</strong> purchases go through Apple. Apple gives developers sales figures and, from
+        people who agree to share them with developers, app usage statistics and crash reports. Apple shares
+        these without telling us who you are.
+      </li>
+    </ul>
+    <p>
+      Because nothing reaches us, deleting the app deletes your Taxfold data from the phone. Export what you want to
+      keep first.
+    </p>
+
+    <h2>This website: cookieless analytics</h2>
+    <p>
+      “We collect nothing” would not be true of the website, so here is what it does. taxfold.app is hosted on
+      Cloudflare and runs <strong>Cloudflare Web Analytics</strong> to count visits.
+    </p>
+    <ul>
+      <li>
+        <strong>No cookies.</strong> In Cloudflare’s words, Web Analytics “does not use any client-side state, such as
+        cookies or localStorage, to collect usage metrics”, and Cloudflare does not “fingerprint” individuals “via
+        their IP address, User Agent string, or any other data for the purpose of displaying analytics.”
+      </li>
+      <li>
+        <strong>What it records:</strong> page views and visits, the page visited, the referring site, the visitor’s
+        country, device type, browser and operating system, and page-load timing. We see these only as aggregate
+        counts in Cloudflare’s dashboard; we keep no copy of our own. A small script from <code>static.cloudflareinsights.com</code> loads on each
+        page to report them.
+      </li>
+      <li>
+        <strong>Delivering pages:</strong> like any web host, Cloudflare processes your IP address and browser
+        details to serve the site and protect it from abuse. Cloudflare keeps that data under its own
+        <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>.
+      </li>
+      <li>
+        <strong>Search statistics:</strong> Google Search Console shows us which searches led to the site, as
+        aggregate numbers from Google. It puts nothing on this site.
+      </li>
+    </ul>
+    <p>
+      The site has no sign-up form, no ads and no other trackers.
+    </p>
+
+    <h2>Email</h2>
+    <p>
+      If you write to us, we receive your email address and your message, and use them only to reply. Mail to
+      taxfold.app addresses is forwarded through Cloudflare Email Routing to a Gmail inbox, so Google also processes
+      it. We keep a message as long as we need it to deal with what you asked, and delete it when you ask us to.
+    </p>
+
+    <h2>Legal basis, recipients and your rights</h2>
+    <ul>
+      <li>
+        <strong>Legal basis:</strong> our legitimate interests (GDPR Article 6(1)(f)) in running, measuring and
+        protecting the website and in answering the messages you send us.
+      </li>
+      <li>
+        <strong>Recipients:</strong> Cloudflare (hosting, analytics, email forwarding) and Google (our email
+        inbox). Both are US companies and may process data outside the EU, under the safeguards they offer,
+        such as the EU–US Data Privacy Framework and the European Commission’s standard contractual clauses.
+      </li>
+      <li>
+        <strong>Your rights:</strong> you can ask for access to, correction or deletion of what we hold about you,
+        restrict or object to our use of it, and ask for a copy in a portable format. For the app there is nothing
+        to ask for: the data is on your phone. Write to <a href="mailto:privacy@taxfold.app">privacy@taxfold.app</a>.
+      </li>
+      <li>
+        <strong>Complaints:</strong> you can complain to your data protection authority. In Greece that is the
+        Hellenic Data Protection Authority.
+      </li>
+    </ul>
+    <p class="text-ink-soft text-sm">
+      Last updated <time datetime={updated.toISOString()}>{formatDate(updated)}</time>.
+    </p>
+  </article>
+</Base>

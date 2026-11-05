@@ -1,0 +1,64 @@
+---
+import { getCollection, render } from 'astro:content';
+import MoreGuides from '../../components/MoreGuides.astro';
+import Toc from '../../components/Toc.astro';
+import Base from '../../layouts/Base.astro';
+import { curlyApostrophes } from '../../lib/typography.mjs';
+import { formatDate, sameDay } from '../../lib/format-date.mjs';
+import { firstPublished, GUIDES_DIR, lastmodForPath } from '../../lib/lastmod.mjs';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+  return guides.map((guide) => ({ params: { slug: guide.id }, props: { guide } }));
+}
+
+const { guide } = Astro.props;
+const { Content, headings } = await render(guide);
+const sections = headings.filter((heading) => heading.depth === 2);
+const updated = lastmodForPath(Astro.url.pathname);
+const published = firstPublished(`${GUIDES_DIR}/${guide.id}.md`);
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: guide.data.title,
+  description: guide.data.description,
+  datePublished: published.toISOString(),
+  dateModified: updated.toISOString(),
+  mainEntityOfPage: canonical,
+  author: { '@type': 'Organization', name: 'Taxfold team', url: new URL('/about/', Astro.site).href },
+  publisher: { '@type': 'Organization', name: 'Opal Harmony P.C.' },
+};
+---
+<Base title={`${guide.data.title} · Taxfold`} description={guide.data.description} ogType="article" footerDisclaimer={false}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
+  <div class="guide-layout">
+    <header class="guide-head">
+      <h1 id="guide-title" class="mb-3">{curlyApostrophes(guide.data.title)}</h1>
+      <p class="byline">
+        By the <a href="/about/">Taxfold team</a> ·
+        Last updated <time datetime={updated.toISOString()}>{formatDate(updated)}</time> ·
+        {!sameDay(published, updated) && (
+          <>First published <time datetime={published.toISOString()}>{formatDate(published)}</time> · </>
+        )}
+        <a href="/how-we-write/">How we write these guides</a>
+      </p>
+    </header>
+    <Toc variant="disclosure" headings={sections} />
+    <Toc variant="rail" headings={sections} />
+    <article class="prose guide-body" aria-labelledby="guide-title">
+      <Content />
+      <p class="disclaimer mt-10">
+        General information, not tax, legal or accounting advice. Rules differ by country and change; check anything
+        you rely on with your tax authority or an accountant.
+      </p>
+    </article>
+    <div class="guide-after">
+      <MoreGuides currentId={guide.id} />
+    </div>
+  </div>
+  <script>
+    import '../../scripts/copy-code.ts';
+  </script>
+</Base>

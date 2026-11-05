@@ -1,0 +1,6 @@
+---
+import { launchView } from '../lib/launch-state.mjs';
+
+const { pill } = launchView();
+---
+{pill && <p class="pill">{pill}</p>}

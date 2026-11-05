@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { launchView } from '../lib/launch-state.mjs';
+
+const { makerStatus } = launchView();
+---
+<Base
+  title="About Taxfold"
+  description="Who makes Taxfold, the local-only receipt and expense log for iPhone, and who writes the guides on taxfold.app."
+>
+  <article class="prose">
+    <h1>About Taxfold</h1>
+
+    <p>
+      Taxfold is a receipt and expense log for iPhone, made by Opal Harmony P.C., a small software company in Greece.
+      {makerStatus}
+    </p>
+
+    <h2>Why local-only</h2>
+    <p>
+      A box of receipts is a record of where you shop, what you earn from and who you work with. Taxfold keeps that
+      record on your phone: there is no account to create, no server that holds a copy and no bank connection. When
+      you need the receipts somewhere else, you export them yourself. The <a href="/privacy/">privacy page</a> says
+      exactly what the app and this website collect.
+    </p>
+
+    <h2>The guides</h2>
+    <p>
+      The guides on this site explain how to keep, organize and hand over receipts and expense records. They are
+      signed by the <strong>Taxfold team</strong> at Opal Harmony P.C., which builds the app. A person on the team
+      reviews every page before it is published. <a href="/how-we-write/">How we write the guides</a> describes the process,
+      including where AI tools are used.
+    </p>
+    <p>
+      The guides are general information, not tax, legal or accounting advice. Tax rules differ by country and change
+      over time; check anything you rely on with your tax authority or an accountant.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Write to <a href="mailto:hello@taxfold.app">hello@taxfold.app</a> with questions, corrections or anything else.
+    </p>
+  </article>
+</Base>

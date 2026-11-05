@@ -1,0 +1,6 @@
+# The pages.dev copies duplicate the production domain; keep them out of search results.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex

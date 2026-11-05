@@ -206,6 +206,7 @@ describe('trust pages', () => {
   });
 
   it('every guide is bylined "Taxfold team", linked to about, and dated', () => {
+    expect(guidePaths().length).toBeGreaterThan(0);
     for (const path of guidePaths()) {
       const page = html(path);
       expect(page, path).toMatch(/By the <a href="\/about\/">Taxfold team<\/a>/);

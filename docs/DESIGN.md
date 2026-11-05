@@ -75,11 +75,7 @@ Aaker personality: **Sincerity + Competence**, low Excitement.
 ## Brand tokens
 
 **This section is the brand SSOT for both the site and the iOS app** (seat directive 2026-11-05: the site's DESIGN.md is
-the brand source; the app design inherits it). Hex values are normative. Known conflict to reconcile on the app side:
-`getsinew/taxfold` branch `app-design` (`docs/design/DESIGN.md` @ 4eb4f9f) also calls itself the brand source, says
-this file must adopt its tokens, and declares its own dark palette and warning colour (it inherited only the pre-spec
-light seed). Both files claim the role; the seat directive settles it for this file, and where the two disagree this
-section wins until the operator rules otherwise. The app keeps its own token *names* (Asset Catalog conventions); only the values come from here. Every contrast ratio below
+the brand source; the app design inherits it). Hex values are normative. The app's DesignSpec (`getsinew/taxfold` `docs/design/DESIGN.md` §3, reconciled 2026-11-05) inherits every value below and parity-checks them with `docs/design/tools/contrast-brand-reconcile.py`. The app keeps its own token *names* (Asset Catalog conventions); only the values come from here. Every contrast ratio below
 is WCAG 2.x relative luminance, computed 2026-11-05 (script: sRGB linearisation, `(L1+0.05)/(L2+0.05)`). AA thresholds:
 text 4.5:1, large text and UI parts 3:1.
 
@@ -276,15 +272,16 @@ Every page has one H1. Headings never skip a level. Landmarks: `header` › `nav
 **Content conventions this template needs from the writer** (they change the markdown, which is not part of this spec's
 edit; flagged for the writer's next PR):
 
-- 🟡 **One Taxfold section per guide, H2 text exactly `Where Taxfold fits`, as the last H2.** Two of the five use other
-  headings today: `receipt-scanner-iphone` uses "What a dedicated receipt app adds", which mixes generic and Taxfold
-  paragraphs, and `expense-spreadsheet-export` uses "Using Taxfold with a spreadsheet". The rehype step wraps the section
-  by that exact heading. A build test asserts exactly one per guide.
-- 🟡 **No launch-status sentences in the markdown.** Every guide currently says "not yet on the App Store". The day the app
-  ships, that sentence would be false on every page at once. The maker note appends the status line from the single
-  launch-state constant (§ 5.6). Remove it from the prose.
-- 🟢 **Long primary-source quotes** (more than about 40 words, or more than one sentence) go in a `>` blockquote, after a
-  sentence that names and links the source. Short quotes stay inline, as the guides do now.
+- 🟢 **One Taxfold section per guide, H2 text exactly `Where Taxfold fits`, as the last H2.** Met by all five guides
+  since the content-fix pass (`receipt-scanner-iphone` split its mixed section into a generic "What a receipt app adds"
+  and the Taxfold section; `expense-tracker-spreadsheet`, formerly `expense-spreadsheet-export`, renamed its heading).
+  The rehype step wraps the section by that exact heading. A build test asserts exactly one per guide.
+- 🟢 **No launch-status sentences in the markdown.** Removed from every guide in the content-fix pass. The day the app
+  ships, such a sentence would be false on every page at once. The maker note appends the status line from the single
+  launch-state constant (§ 5.6). Keep it out of the prose.
+- 🟡 **Long primary-source quotes** (more than about 40 words, or more than one sentence) go in a `>` blockquote, after a
+  sentence that names and links the source; short quotes stay inline. Batch 1 does not follow this yet: six quoted
+  passages run past one sentence inline (final review 2026-11-05). Converting them is the next content pass.
 - 🟢 **Checklists are ordinary lists.** GFM task-list syntax (`- [ ]`) is not used: it renders disabled checkboxes that look
   interactive and read as "checkbox, not checked, dimmed" to screen readers. A test fails on `<input` inside a guide.
 - 🟢 Numeric table columns are right-aligned with `---:`.
@@ -562,7 +559,7 @@ A second designer saw only the screenshots of `2eea1e8` (file: `/tmp/taxfold-bri
 | 7 | Privacy summary looks like a clickable card | **Folded.** It is now a `sunk` ground with a 3px left rule and no border or full radius. Spec § 5.9 updated. Test: CSS. |
 | 8 | Product mentions styled inconsistently across guides | **Folded** by the writer's content pass (every guide ends in `Where Taxfold fits`) and by the maker-note component, which wraps it. The existing test now expects exactly one labelled note in all five guides, with the awaiting-list empty. |
 | 9 | Small tap targets at 375 (Copy, footer links) | **Folded.** Copy is 44×44. Footer links are a list, stacked below 600px with 12px vertical padding. Tests: CSS. |
-| 10 | Long function signature as inline code inside a link wraps over four underlined lines | **Answered, not changed here.** The fix is guide markup (signature in a code block, plain link beside it), which is the writer's. Inline code now breaks anywhere inside a link so it cannot overflow. Handed to the writer. |
+| 10 | Long function signature as inline code inside a link wraps over four underlined lines | **Folded in PR #2** (guide markup): both SUMIFS signatures are code blocks, each with a plain link to its vendor page above it. Inline code also breaks anywhere inside a link so it cannot overflow. |
 | 11 | Card grids uneven | **Folded.** Cards in a row have equal heights. An odd count gives the first card the full row, so the landing's five cards read as one wide plus two rows of two. Tests: CSS and markup. |
 | 12 | Dark mode: table header and code darker than the page | **Folded.** In dark mode code blocks, inline code and table header rows use `surface`. The `sunk` token is unchanged because the app inherits it. Test: CSS. |
 | 13 | Bold active nav item shifts neighbours | **Folded.** An invisible bold copy of the label reserves the bold width (`data-text`). Test: CSS and markup. |

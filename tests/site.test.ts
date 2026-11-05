@@ -1,16 +1,24 @@
 // Runs against dist/ — `npm test` builds first.
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { assertFullHistory, firstPublished, guideFiles, lastEdited, lastmodForPath } from '../src/lib/lastmod.mjs';
+import {
+  assertFullHistory,
+  firstPublished,
+  GUIDE_URL_CAP_PER_MONTH,
+  GUIDES_DIR,
+  guideCapViolations,
+  guideFiles,
+  lastEdited,
+  lastmodForPath,
+} from '../src/lib/lastmod.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
 const DIST = join(ROOT, 'dist');
 const SITE = 'https://taxfold.app';
 const STATIC_PATHS = ['/', '/about/', '/contact/', '/how-we-write/', '/privacy/'];
-const GUIDE_URL_CAP_PER_MONTH = 8;
 
 const read = (rel: string) => readFileSync(join(DIST, rel), 'utf8');
 const html = (path: string) => read(join(path, 'index.html'));
@@ -137,7 +145,7 @@ describe('trust pages', () => {
 
   it('privacy names both halves: the app collects nothing, the site runs cookieless Cloudflare Web Analytics', () => {
     const t = text('/privacy/');
-    expect(t).toContain('we collect nothing');
+    expect(html('/privacy/')).toMatch(/<h2 id="app">The app: we collect nothing<\/h2>/);
     expect(t).toContain('Data Not Collected');
     expect(t).toContain('Cloudflare Web Analytics');
     expect(t).toContain('No cookies.');
@@ -167,12 +175,41 @@ describe('lexical caps', () => {
   });
 
   it(`adds at most ${GUIDE_URL_CAP_PER_MONTH} new guide URLs in any calendar month`, () => {
-    const perMonth = new Map<string, number>();
-    for (const file of guideFiles(ROOT)) {
-      const month = firstPublished(file, ROOT).toISOString().slice(0, 7);
-      perMonth.set(month, (perMonth.get(month) ?? 0) + 1);
+    expect(GUIDE_URL_CAP_PER_MONTH).toBe(8);
+    expect(guideCapViolations(ROOT)).toEqual([]);
+  });
+
+  it('counts the cap per calendar month of publication: 8 passes, a 9th in the same month fails', () => {
+    const repo = mkdtempSync(join(tmpdir(), 'taxfold-cap-'));
+    const g = (iso: string, ...args: string[]) =>
+      execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...args], {
+        cwd: repo,
+        env: { ...process.env, GIT_AUTHOR_DATE: iso, GIT_COMMITTER_DATE: iso },
+      });
+    const addGuide = (iso: string, name: string) => {
+      writeFileSync(join(repo, GUIDES_DIR, `${name}.md`), name);
+      g(iso, 'add', '.');
+      g(iso, 'commit', '--quiet', '-m', name);
+    };
+    try {
+      g('2026-01-01T00:00:00Z', 'init', '--quiet', '-b', 'main');
+      mkdirSync(join(repo, GUIDES_DIR), { recursive: true });
+      for (let i = 1; i <= 8; i++) addGuide('2026-03-10T00:00:00Z', `march-${i}`);
+      addGuide('2026-04-01T00:00:00Z', 'april-1');
+      expect(guideCapViolations(repo)).toEqual([]);
+      addGuide('2026-03-31T23:00:00Z', 'march-9');
+      expect(guideCapViolations(repo)).toEqual(['2026-03: 9 new guides (cap 8)']);
+    } finally {
+      rmSync(repo, { recursive: true, force: true });
     }
-    for (const [month, n] of perMonth) expect(n, month).toBeLessThanOrEqual(GUIDE_URL_CAP_PER_MONTH);
+  });
+
+  it('the build itself refuses a shallow clone (astro.config calls the guard)', () => {
+    expect(readFileSync(join(ROOT, 'astro.config.mjs'), 'utf8')).toMatch(/^assertFullHistory\(\);$/m);
+  });
+
+  it('serves the pages.dev copies with noindex', () => {
+    expect(read('_headers')).toMatch(/^https:\/\/:project\.pages\.dev\/\*\n\s+X-Robots-Tag: noindex$/m);
   });
 
   it('builds no page outside the declared routes', () => {

@@ -33,6 +33,18 @@ export function firstPublished(file, cwd = process.cwd()) {
   return added ? new Date(added) : new Date();
 }
 
+export const GUIDE_URL_CAP_PER_MONTH = 8;
+
+// Months (YYYY-MM) in which more than `cap` guide files first reached the first-parent line.
+export function guideCapViolations(cwd = process.cwd(), cap = GUIDE_URL_CAP_PER_MONTH) {
+  const perMonth = new Map();
+  for (const file of guideFiles(cwd)) {
+    const month = firstPublished(file, cwd).toISOString().slice(0, 7);
+    perMonth.set(month, (perMonth.get(month) ?? 0) + 1);
+  }
+  return [...perMonth].filter(([, n]) => n > cap).map(([month, n]) => `${month}: ${n} new guides (cap ${cap})`);
+}
+
 export const GUIDES_DIR = 'src/content/guides';
 
 export const guideFiles = (cwd = process.cwd()) => {

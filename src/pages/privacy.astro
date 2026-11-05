@@ -17,7 +17,7 @@ const updated = lastmodForPath(Astro.url.pathname);
       controller for anything described here.
     </p>
 
-    <h2>The app: we collect nothing</h2>
+    <h2 id="app">The app: we collect nothing</h2>
     <p>
       The Taxfold app sends us no data. There is no account, no sign-in, no sync server, no bank connection and no
       analytics or advertising code in the app. The receipts you scan, their photos and everything you type stay in
@@ -42,8 +42,8 @@ const updated = lastmodForPath(Astro.url.pathname);
       </li>
       <li>
         <strong>Apple's reports:</strong> purchases go through Apple. Apple gives developers sales figures and, from
-        people who agree to share them with developers, app usage statistics and crash reports. These come to us
-        from Apple in aggregate and do not tell us who you are.
+        people who agree to share them with developers, app usage statistics and crash reports. Apple shares
+        these without telling us who you are.
       </li>
     </ul>
     <p>
@@ -65,12 +65,13 @@ const updated = lastmodForPath(Astro.url.pathname);
       <li>
         <strong>What it records:</strong> page views and visits, the page visited, the referring site, the visitor's
         country, device type, browser and operating system, and page-load timing. We see these only as aggregate
-        counts in Cloudflare's dashboard. A small script from <code>static.cloudflareinsights.com</code> loads on each
+        counts in Cloudflare's dashboard; we keep no copy of our own. A small script from <code>static.cloudflareinsights.com</code> loads on each
         page to report them.
       </li>
       <li>
         <strong>Delivering pages:</strong> like any web host, Cloudflare processes your IP address and browser
-        details to serve the site and protect it from abuse.
+        details to serve the site and protect it from abuse. Cloudflare keeps that data under its own
+        <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>.
       </li>
       <li>
         <strong>Search statistics:</strong> Google Search Console shows us which searches led to the site, as

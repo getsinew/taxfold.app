@@ -1,7 +1,12 @@
 // The guide transform and the launch-state switch, run on hand-built hast trees (no build needed).
-import { describe, expect, it } from 'vitest';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, utimesSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
 import { transformRoot } from '../src/lib/hast-taxfold.mjs';
-import { launchView } from '../src/lib/launch-state.mjs';
+import { guideFiles } from '../src/lib/lastmod.mjs';
+import { launchCacheKey, pruneStaleLaunchCaches } from '../src/lib/launch-cache.mjs';
+import { appStoreUrl, ctFromCluster, LAUNCH_STATE, launchView, SITE_CT } from '../src/lib/launch-state.mjs';
 
 type Node = { type: string; tagName?: string; value?: string; properties?: Record<string, unknown>; children?: Node[] };
 
@@ -15,6 +20,7 @@ const element = (tagName: string, children: Node[] = [], properties: Record<stri
 const rootOf = (...children: Node[]) => ({ type: 'root', children });
 const tagsOf = (nodes: Node[]) => nodes.map((node) => node.tagName);
 const NO_IDS = { TESTFLIGHT_URL: '', APP_STORE_ID: '', APP_STORE_PT: '' };
+const ROOT = join(import.meta.dirname, '..');
 
 describe('guide transform', () => {
   const preBeta = launchView('pre-beta');
@@ -91,49 +97,245 @@ describe('launch state', () => {
     expect(state.itunesMeta).toBeNull();
   });
 
-  it('beta and released refuse to render without their identifiers', () => {
+  it('beta and released refuse to render without their required identifiers', () => {
     expect(() => launchView('beta', NO_IDS)).toThrow(/TESTFLIGHT_URL/);
     expect(() => launchView('released', NO_IDS)).toThrow(/APP_STORE_ID/);
+    expect(() => launchView('released', { ...NO_IDS, APP_STORE_PT: 'pt9' })).toThrow(/APP_STORE_ID/);
     expect(() => launchView('launched' as never)).toThrow(/unknown LAUNCH_STATE/);
   });
 
-  it('released carries the price line, the campaign link and the Smart App Banner value', () => {
-    const state = launchView('released', { TESTFLIGHT_URL: '', APP_STORE_ID: '123', APP_STORE_PT: 'pt9' });
+  it('released refuses an App Store id that is not all digits, naming the variable (a pasted `id…` would ship a broken link)', () => {
+    for (const bad of ['id6739000000', 'ID6739000000', 'abc', '6739 000', '6739000000/', '']) {
+      expect(() => launchView('released', { ...NO_IDS, APP_STORE_ID: bad }), bad).toThrow(/APP_STORE_ID/);
+    }
+    expect(() => launchView('released', { ...NO_IDS, APP_STORE_ID: 'id6739000000' })).toThrow(/digits/);
+    expect(launchView('released', { ...NO_IDS, APP_STORE_ID: '6739000000' }).primary).toMatchObject({ href: 'https://apps.apple.com/app/id6739000000' });
+  });
+
+  it('released renders without a provider token, the launch-day shape: plain store links, no query', () => {
+    const state = launchView('released', { ...NO_IDS, APP_STORE_ID: '123' });
     expect(state.priceLine).toBe('$39.99 once. No subscription.');
     expect(state.pill).toBeNull();
-    expect(state.makerCta?.href).toBe('https://apps.apple.com/app/id123?pt=pt9&ct=guide&mt=8');
+    expect(state.primary).toMatchObject({ kind: 'badge', alt: 'Download Taxfold on the App Store', href: 'https://apps.apple.com/app/id123' });
+    expect(state.makerCta?.hrefFor('receipt-scan-ocr')).toBe('https://apps.apple.com/app/id123');
     expect(state.itunesMeta?.('https://taxfold.app/')).toBe('app-id=123, app-argument=https://taxfold.app/');
   });
-});
 
-describe('table semantics for the mobile card layout', () => {
-  const tableOf = () =>
-    element('table', [
-      element('thead', [element('tr', [element('th', [text('Situation')]), element('th', [text('Source')])])]),
-      element('tbody', [element('tr', [element('td', [text('Groceries')]), element('td', [text('Pub. 529')])])]),
-    ]);
-
-  it('labels each body cell with its column header and names every role', () => {
-    const wrapped = transformRoot(rootOf(tableOf()), launchView('pre-beta')).children[0] as Node;
-    const table = wrapped.children![0];
-    expect(table.properties?.role).toBe('table');
-    const [head, body] = table.children!;
-    expect(head.properties?.role).toBe('rowgroup');
-    expect(head.children![0].children!.map((cell) => cell.properties?.role)).toEqual(['columnheader', 'columnheader']);
-    const row = body.children![0];
-    expect(row.properties?.role).toBe('row');
-    expect(row.children!.map((cell) => cell.properties)).toEqual([
-      { role: 'cell', dataLabel: 'Situation' },
-      { role: 'cell', dataLabel: 'Source' },
-    ]);
+  it('released with a provider token carries the site token on the badge and the cluster token on a guide', () => {
+    const state = launchView('released', { ...NO_IDS, APP_STORE_ID: '123', APP_STORE_PT: 'pt9' });
+    expect(state.primary).toMatchObject({ href: 'https://apps.apple.com/app/id123?pt=pt9&ct=site&mt=8' });
+    expect(state.makerCta?.hrefFor('receipt-scan-ocr')).toBe('https://apps.apple.com/app/id123?pt=pt9&ct=receipt-scan-ocr&mt=8');
   });
 
-  it('gives a cell beyond the header an empty label rather than crashing (anti-vacuity)', () => {
-    const wide = element('table', [
-      element('thead', [element('tr', [element('th', [text('A')])])]),
-      element('tbody', [element('tr', [element('td', [text('1')]), element('td', [text('2')])])]),
-    ]);
-    const row = ((transformRoot(rootOf(wide), launchView('pre-beta')).children[0] as Node).children![0].children![1]).children![0];
-    expect(row.children!.map((cell) => cell.properties?.dataLabel)).toEqual(['A', '']);
+  it('released names the Apple-supplied badge artwork in both colour schemes', () => {
+    const state = launchView('released', { ...NO_IDS, APP_STORE_ID: '123' });
+    expect(state.primary).toMatchObject({ art: { light: '/app-store-badge-black.svg', dark: '/app-store-badge-white.svg' } });
+  });
+
+  it('carries one Apple credit line in every state, because every state names Apple marks', () => {
+    const lines = [
+      launchView('pre-beta').creditLine,
+      launchView('beta', { ...NO_IDS, TESTFLIGHT_URL: 'https://t' }).creditLine,
+      launchView('released', { ...NO_IDS, APP_STORE_ID: '123' }).creditLine,
+    ];
+    expect(new Set(lines).size).toBe(1);
+    for (const mark of ['Apple', 'Apple logo', 'iPhone', 'iPad', 'iCloud', 'Live Text', 'App Store', 'TestFlight']) {
+      expect(lines[0], mark).toContain(mark);
+    }
+    expect(lines[0]).toContain('registered in the U.S. and other countries');
+    expect(lines[0]).toContain('Cisco');
   });
 });
+
+describe('App Store link', () => {
+  it('is a campaign link only when a provider token exists (Apple issues ct and pt together)', () => {
+    expect(appStoreUrl('123', 'pt9', 'site')).toBe('https://apps.apple.com/app/id123?pt=pt9&ct=site&mt=8');
+    expect(appStoreUrl('123', '', 'site')).toBe('https://apps.apple.com/app/id123');
+    expect(appStoreUrl('123', undefined, 'site')).toBe('https://apps.apple.com/app/id123');
+  });
+
+  it('encodes a campaign token that carries reserved characters', () => {
+    expect(appStoreUrl('123', 'pt9', 'a b&c')).toBe('https://apps.apple.com/app/id123?pt=pt9&ct=a%20b%26c&mt=8');
+  });
+
+  it('still requires the app id, as digits only', () => {
+    expect(() => appStoreUrl('', 'pt9', 'site')).toThrow(/APP_STORE_ID/);
+    expect(() => appStoreUrl('id123', 'pt9', 'site')).toThrow(/APP_STORE_ID/);
+  });
+});
+
+describe('campaign tokens', () => {
+  const guideClusters = () =>
+    guideFiles(ROOT).map((file) => {
+      const frontmatter = readFileSync(join(ROOT, file), 'utf8').split('---')[1];
+      const cluster = frontmatter.match(/^cluster:\s*"(.*)"\s*$/m)?.[1];
+      return { file, cluster: cluster as string };
+    });
+
+  it('takes the first cluster entry and drops the core: prefix', () => {
+    expect(ctFromCluster('core:receipt-scan-ocr, core:receipt-app-generic')).toBe('receipt-scan-ocr');
+    expect(ctFromCluster('core:self-employed-expenses')).toBe('self-employed-expenses');
+    expect(ctFromCluster('receipts-for-taxes')).toBe('receipts-for-taxes');
+  });
+
+  it('refuses a cluster that cannot be a valid Apple campaign token', () => {
+    expect(() => ctFromCluster(undefined)).toThrow(/cluster/);
+    expect(() => ctFromCluster('')).toThrow(/cluster/);
+    expect(() => ctFromCluster('core:')).toThrow(/cluster/);
+    expect(() => ctFromCluster(`core:${'x'.repeat(31)}`)).toThrow(/30/);
+    expect(() => ctFromCluster('core:bad\ttab')).toThrow(/cluster/);
+    expect(() => ctFromCluster('core:café')).toThrow(/cluster/);
+  });
+
+  it('keeps the site-wide token valid by the same rule', () => {
+    expect(ctFromCluster(SITE_CT)).toBe(SITE_CT);
+  });
+
+  it('maps every current guide to a token of at most 30 characters, none padded with a space', () => {
+    const guides = guideClusters();
+    expect(guides.length).toBeGreaterThan(0);
+    for (const { file, cluster } of guides) {
+      expect(cluster, file).toBeTruthy();
+      const token = ctFromCluster(cluster);
+      expect(token.length, file).toBeLessThanOrEqual(30);
+      expect(token, file).toBe(token.trim());
+    }
+  });
+
+  // Guides sharing a first cluster entry share a token on purpose (DESIGN.md § 5.6); a collision is two different
+  // first entries that map to one token.
+  const tokenCollisions = (clusters: string[]) => {
+    const firstEntries = new Map<string, Set<string>>();
+    for (const cluster of clusters) {
+      const token = ctFromCluster(cluster);
+      firstEntries.set(token, (firstEntries.get(token) ?? new Set()).add(cluster.split(',')[0].trim()));
+    }
+    return [...firstEntries].filter(([, entries]) => entries.size > 1).map(([token]) => token);
+  };
+
+  it('gives no two distinct first entries one token, and none the site token', () => {
+    const clusters = guideClusters().map(({ cluster }) => cluster);
+    expect(tokenCollisions(clusters)).toEqual([]);
+    expect(clusters.map(ctFromCluster)).not.toContain(SITE_CT);
+  });
+
+  it('lets guides share a first entry, whatever follows it', () => {
+    expect(tokenCollisions(['core:a-b, core:c', 'core:a-b, core:d', 'core:a-b'])).toEqual([]);
+  });
+
+  it('would catch a collision (anti-vacuity)', () => {
+    expect(tokenCollisions(['core:a', 'a'])).toEqual(['a']);
+    expect(tokenCollisions(['core:a, core:x', 'a, core:y'])).toEqual(['a']);
+  });
+
+  it('puts the guide cluster token on the maker note call to action', () => {
+    const released = launchView('released', { ...NO_IDS, APP_STORE_ID: '123', APP_STORE_PT: 'pt9' });
+    const tree = transformRoot(rootOf(element('h2', [text('Where Taxfold fits')]), element('p')), released, 'core:receipts-for-taxes, core:expense-tax-deductions');
+    expect(JSON.stringify(tree)).toContain('"href":"https://apps.apple.com/app/id123?pt=pt9&ct=receipts-for-taxes&mt=8"');
+  });
+
+  it('refuses to build a released maker note CTA for a guide with no cluster', () => {
+    const released = launchView('released', { ...NO_IDS, APP_STORE_ID: '123' });
+    expect(() => transformRoot(rootOf(element('h2', [text('Where Taxfold fits')]), element('p')), released)).toThrow(/cluster/);
+  });
+});
+
+describe('launch override (build-test seam)', () => {
+  const KEYS = ['TAXFOLD_LAUNCH_STATE', 'TAXFOLD_APP_STORE_ID', 'TAXFOLD_APP_STORE_PT', 'TAXFOLD_TESTFLIGHT_URL'];
+  afterEach(() => KEYS.forEach((key) => delete process.env[key]));
+
+  it('is off unless set: the committed constants render', () => {
+    expect(launchView().state).toBe(LAUNCH_STATE);
+  });
+
+  it('selects released from the environment, whatever state is committed', () => {
+    process.env.TAXFOLD_LAUNCH_STATE = 'released';
+    process.env.TAXFOLD_APP_STORE_ID = '555';
+    expect(launchView().primary).toMatchObject({ kind: 'badge', href: 'https://apps.apple.com/app/id555' });
+    process.env.TAXFOLD_APP_STORE_PT = 'ptX';
+    expect(launchView().primary).toMatchObject({ href: 'https://apps.apple.com/app/id555?pt=ptX&ct=site&mt=8' });
+  });
+
+  it('selects pre-beta from the environment too, whatever state is committed', () => {
+    process.env.TAXFOLD_LAUNCH_STATE = 'pre-beta';
+    process.env.TAXFOLD_APP_STORE_ID = '';
+    expect(launchView()).toMatchObject({ state: 'pre-beta', primary: { href: '#guides' } });
+  });
+
+  it('honours an explicit empty value, so a missing id stays testable once an id is committed', () => {
+    process.env.TAXFOLD_LAUNCH_STATE = 'released';
+    process.env.TAXFOLD_APP_STORE_ID = '';
+    process.env.TAXFOLD_APP_STORE_PT = '';
+    expect(() => launchView()).toThrow(/APP_STORE_ID/);
+  });
+
+  it('is ignored outside Vitest, so an .env file Astro loads mid-build cannot split a site across two states', () => {
+    const inVitest = process.env.VITEST;
+    delete process.env.VITEST;
+    try {
+      process.env.TAXFOLD_LAUNCH_STATE = LAUNCH_STATE === 'released' ? 'pre-beta' : 'released';
+      process.env.TAXFOLD_APP_STORE_ID = '555';
+      expect(launchView().state).toBe(LAUNCH_STATE);
+    } finally {
+      process.env.VITEST = inVitest;
+    }
+  });
+});
+
+describe('content cache key', () => {
+  const KEYS = ['TAXFOLD_LAUNCH_STATE', 'TAXFOLD_APP_STORE_ID', 'TAXFOLD_APP_STORE_PT', 'TAXFOLD_TESTFLIGHT_URL'];
+  afterEach(() => KEYS.forEach((key) => delete process.env[key]));
+
+  it('changes with the launch state and ids, because Astro caches rendered Markdown (the maker note) across builds', () => {
+    const committed = launchCacheKey();
+    process.env.TAXFOLD_LAUNCH_STATE = 'released';
+    process.env.TAXFOLD_APP_STORE_ID = '555';
+    const launchDay = launchCacheKey();
+    process.env.TAXFOLD_APP_STORE_PT = 'ptX';
+    const withToken = launchCacheKey();
+    expect(new Set([committed, launchDay, withToken]).size).toBe(3);
+    expect(launchCacheKey()).toBe(withToken);
+    expect(withToken).toMatch(/^[0-9a-f]{12}$/);
+  });
+
+  it('changes with the code that renders the maker note, not only with its inputs', () => {
+    expect(launchCacheKey(['launch-state v1', 'hast v1'])).not.toBe(launchCacheKey(['launch-state v2', 'hast v1']));
+    expect(launchCacheKey(['launch-state v1', 'hast v1'])).not.toBe(launchCacheKey(['launch-state v1', 'hast v2']));
+    expect(launchCacheKey(['launch-state v1', 'hast v1'])).toBe(launchCacheKey(['launch-state v1', 'hast v1']));
+  });
+
+  it('skips an entry that vanishes between the listing and the stat (a concurrent prune)', () => {
+    const root = mkdtempSync(join(tmpdir(), 'taxfold-cache-'));
+    try {
+      symlinkSync(join(root, 'nowhere'), join(root, '.astro-dangling'));
+      expect(() => pruneStaleLaunchCaches(root, 'current00000', 0)).not.toThrow();
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it('prunes stale keyed cache directories, never the current one, a recent one, or anything else', () => {
+    const root = mkdtempSync(join(tmpdir(), 'taxfold-cache-'));
+    const DAY = 24 * 60 * 60 * 1000;
+    const dir = (name: string, ageDays: number) => {
+      mkdirSync(join(root, name));
+      const when = new Date(Date.now() - ageDays * DAY);
+      utimesSync(join(root, name), when, when);
+    };
+    try {
+      dir('.astro-aaaaaaaaaaaa', 30);
+      dir('.astro-current00000', 30);
+      dir('.astro-recent000000', 1);
+      dir('.astro', 30);
+      dir('other', 30);
+      pruneStaleLaunchCaches(root, 'current00000', 14 * DAY);
+      expect(existsSync(join(root, '.astro-aaaaaaaaaaaa'))).toBe(false);
+      for (const kept of ['.astro-current00000', '.astro-recent000000', '.astro', 'other']) {
+        expect(existsSync(join(root, kept)), kept).toBe(true);
+      }
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+

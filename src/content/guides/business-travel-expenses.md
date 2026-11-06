@@ -6,6 +6,8 @@ cluster: "core:travel-expenses"
 
 Tracking business travel means two things: knowing which trip costs count, and keeping a record of each one that the IRS will accept. Both come from one source, [Publication 463, Travel, Gift, and Car Expenses](https://www.irs.gov/publications/p463) (2025 edition, for 2025 returns), and everything here is US federal; state rules vary. This guide is about the money you spend on a trip. Apps that map where you've been, or log the miles you drive, do a different job; car mileage is covered under Schedule C line 9 in the [self-employed expense tracking guide](/guides/self-employed-expense-tracking/).
 
+The deductions in this guide are for self-employed people. Most employees can't deduct unreimbursed work travel: Publication 463 says Form 2106, the form for employee business expenses, "is only used by Armed Forces reservists, qualified performing artists, fee-basis state or local government officials, and employees with impairment-related work expenses." Employees recover travel costs through their employer instead; see [how to make an expense report](/guides/how-to-make-an-expense-report/). The recordkeeping rules below apply to both.
+
 ## When a trip counts as business travel
 
 Publication 463 defines travel expenses as "the ordinary and necessary expenses of traveling away from home for your business, profession, or job." You are traveling away from home if both of these are true:
@@ -40,7 +42,7 @@ Publication 463's Table 1-1 summarizes the costs you may be able to deduct once 
 
 On meals, Publication 463 says that "regardless of the method you use, you can generally deduct only 50% of the unreimbursed cost of your meals." Record the full amount; the limit applies when the deduction is figured.
 
-You generally can't deduct travel costs for a spouse or other companion who isn't your employee with a genuine business reason to be there. Publication 463's example: a double room costs $199 a night and a single $149, so only $149 a night is deductible.
+You generally can't deduct travel costs for a spouse or other companion. Publication 463 allows them only if the person is your employee, has a bona fide business purpose for the travel, and would otherwise be allowed to deduct the travel expenses; a business associate who meets the last two conditions also qualifies. Publication 463's example: a double room costs $199 a night and a single $149, so only $149 a night is deductible.
 
 ## Trips that mix business and personal days
 
@@ -49,9 +51,9 @@ Inside the United States, the test is what the trip was mainly for:
 - **Primarily business:** you can deduct the cost of getting there and back, plus your business expenses at the destination. Extra vacation days, or a personal side trip, are not deductible.
 - **Primarily personal:** "the entire cost of the trip is a nondeductible personal expense." Business expenses you have while at the destination are still deductible.
 
-Publication 463's example: a trip from Atlanta to New Orleans with a stop on the way home to visit family in Mobile costs $2,165 for 9 days. Without the stop it would have been 6 days and $1,633.50, so $1,633.50 is deductible, round-trip transportation included.
+Publication 463's example: a trip from Atlanta to New Orleans with a stop on the way home to visit family in Mobile costs $2,165 for 9 days. Without the stop it would have been 6 days and $1,633.50, so $1,633.50 is deductible, round-trip transportation included, with the meals in it still subject to the 50% limit.
 
-Travel outside the United States has its own allocation rules. A trip is considered entirely for business if you were outside the United States "for a week or less, combining business and nonbusiness activities," and there are other exceptions; see Travel Outside the United States in chapter 1 of Publication 463.
+Travel outside the United States has its own allocation rules. A trip is considered entirely for business if you were outside the United States "for a week or less, combining business and nonbusiness activities." Count carefully: "One week means 7 consecutive days. In counting the days, don't count the day you leave the United States, but do count the day you return to the United States." There are other exceptions; see Travel Outside the United States in chapter 1 of Publication 463.
 
 ## What to record each day
 
@@ -68,7 +70,7 @@ A trip log can be as simple as this, one line per expense, with the trip's purpo
 
 | Date | Expense | Amount | Place | Receipt |
 |---|---|---:|---|---|
-| Apr 13 | Flight, Chicago to Boston | 241.30 | Boston | Yes |
+| Apr 13 | Flight, Chicago to Boston, round trip | 241.30 | Boston | Yes |
 | Apr 13 | Taxis, airport to hotel and to client office | 58.00 | Boston | No, under $75 |
 | Apr 13 | Dinner, alone | 31.40 | Boston | Yes |
 | Apr 14 | Lunch with client, 2 people | 72.60 | Boston | Yes |
@@ -79,12 +81,12 @@ Trip purpose at the top: "Quarterly planning meeting, client office." For the cl
 
 ## Which receipts to keep
 
-Publication 463 says you "must generally have documentary evidence such as receipts, canceled checks, or bills, to support your expenses." Two exceptions apply to travel: an expense "other than lodging" under $75, and "a transportation expense for which a receipt isn't readily available." Even then, the written record above is still required.
+Publication 463 says you "must generally have documentary evidence such as receipts, canceled checks, or bills, to support your expenses." Two exceptions apply to most travel records (a third covers meals or lodging accounted for to an employer under a per diem; see the [expense report guide](/guides/how-to-make-an-expense-report/)): an expense "other than lodging" under $75, and "a transportation expense for which a receipt isn't readily available." Even then, the written record above is still required.
 
 - **Lodging: always.** The $75 exception doesn't cover it. A hotel receipt is enough if it shows the name and location of the hotel, the dates you stayed, and separate amounts for charges such as lodging, meals and telephone calls. Ask for the itemized folio, not just the card slip.
 - **Meals of $75 or more.** A restaurant receipt should show the restaurant's name and location, the number of people served, and the date and amount.
 - **Anything else of $75 or more.** Flights, car rentals, conference fees.
-- **Card statements aren't enough alone.** They prove payment, not what was bought; keep them with the receipts.
+- **Keep card statements with the receipts, not instead of them.** Publication 463 says "a canceled check by itself doesn't prove a business expense without other evidence to show that it was for a business purpose." A card statement is the same kind of proof of payment.
 
 If you use the standard meal allowance instead of actual meal costs (available to employees and self-employed people alike), you don't need meal receipts, but you "must still keep records to prove the time, place, and business purpose of your travel." Lodging has no equivalent: "There is no optional standard lodging amount similar to the standard meal allowance. Your allowable lodging expense deduction is your actual cost."
 
@@ -92,7 +94,7 @@ How long to keep a trip's receipts depends on the return they support; [which re
 
 ## Receipts in another currency
 
-The IRS page on [foreign currency and currency exchange rates](https://www.irs.gov/individuals/international-taxpayers/foreign-currency-and-currency-exchange-rates) says: "You must express the amounts you report on your U.S. tax return in U.S. dollars." For most people, whose functional currency is the dollar, it says to "Use the exchange rate prevailing when you receive, pay, or accrue the item." Record each receipt in the currency it shows, and note the dollar amount, for example from the card statement line, next to it.
+The IRS page on [foreign currency and currency exchange rates](https://www.irs.gov/individuals/international-taxpayers/foreign-currency-and-currency-exchange-rates) says: "You must express the amounts you report on your U.S. tax return in U.S. dollars." For most people, whose functional currency is the dollar, it says to "Use the exchange rate prevailing when you receive, pay, or accrue the item." The same page adds: "If there is more than one exchange rate, use the one that most properly reflects your income. You can generally get exchange rates from banks and U.S. Embassies." As practical advice, not an IRS rule: record each receipt in the currency it shows, and note next to it the dollar amount and where the rate came from, for example your card statement.
 
 ## Where it goes on the return
 

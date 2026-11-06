@@ -10,11 +10,11 @@ An expense log is a list of what you spent, one line per purchase, written close
 
 Memory is the weak link. The IRS makes the point in [Publication 552, Recordkeeping for Individuals](https://www.irs.gov/pub/irs-pdf/p552.pdf) (last revised January 2011): "You may forget an expense unless you record it when it occurs." For businesses, [Publication 583, Starting a Business and Keeping Records](https://www.irs.gov/publications/p583), says: "Generally, it is best to record transactions on a daily basis."
 
-If daily doesn't stick, weekly is the floor. For travel, meal and car records, [Publication 463, Travel, Gift, and Car Expenses](https://www.irs.gov/publications/p463) (2025 edition), says you don't need to write everything down the same day:
+If daily doesn't stick, weekly is a pace the IRS accepts as timely for one kind of log. For travel, meal and car records, [Publication 463, Travel, Gift, and Car Expenses](https://www.irs.gov/publications/p463) (2025 edition), says you don't need to write everything down the same day:
 
 > You don't need to write down the elements of every expense on the day of the expense. If you maintain a log on a weekly basis that accounts for use during the week, the log is considered a timely kept record.
 
-Past a week, entries turn into reconstruction from card statements, and cash purchases are the first to go missing.
+Our practical advice: the longer the gap, the more an entry becomes reconstruction from card statements, and cash purchases are the first to go missing.
 
 ## What to write for each entry
 
@@ -30,7 +30,7 @@ Keep the entry short enough that you will actually make it. These fields cover a
 | Note | Weekly shop | What it was for, if the merchant name doesn't say |
 | Receipt | Yes, in March folder | Where the receipt is, or that there wasn't one |
 
-For a personal budget, date, amount and category are the minimum. For a business, the IRS page [What kind of records should I keep](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep) says supporting documents should identify "the payee, the amount paid, proof of payment, the date incurred," and include a description showing the amount was for a business expense. The table's columns cover each of those.
+For a personal budget, date, amount and category are the minimum. For a business, the IRS page [What kind of records should I keep](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep) says supporting documents should identify "the payee, the amount paid, proof of payment, the date incurred," and include a description showing the amount was for a business expense. The table's columns record each of those, and the Receipt column points to the document that proves them.
 
 You don't have to copy everything off the receipt. Publication 463 says: "You don't have to record information in your account book or other record that duplicates information shown on a receipt as long as your records and receipts complement each other in an orderly manner." A log line that points to the receipt, plus the receipt, is enough.
 
@@ -78,7 +78,7 @@ At the end of the month the review gives these totals:
 | Other | 1 | 18.00 |
 | **Total** | **39** | **939.45** |
 
-The useful finding here is small: two subscriptions, one of them unused. That is what a monthly review is for.
+Suppose one of the two subscriptions turns out to be unused. A small finding like that is what a monthly review is for.
 
 If you are self-employed, use the expense lines of Schedule C as your business categories so the year-end totals map straight onto the form; the [self-employed expense tracking guide](/guides/self-employed-expense-tracking/) lists them.
 
@@ -101,10 +101,10 @@ A paper journal works if you carry it. A bullet-journal spread with columns for 
 
 ## When the log needs receipts
 
-For household spending, the log is for you, and receipts matter mainly for returns and warranties. Most personal purchases have no federal tax use; [which receipts to keep for taxes](/guides/which-receipts-to-keep-for-taxes/) covers the exceptions and how long to keep them.
+For household spending, the log is for you, and receipts matter mainly for returns and warranties. Most personal purchases have no federal tax use: [Publication 529](https://www.irs.gov/publications/p529) (Rev. 12/2020) lists "Personal, living, or family expenses" among nondeductible expenses; [which receipts to keep for taxes](/guides/which-receipts-to-keep-for-taxes/) covers the exceptions and how long to keep them.
 
 For a business, the log alone is not proof. Publication 583 says supporting documents for an expense "should show the amount paid and that the amount was for a business expense," and that the law generally does not require "any specific kind of records." The log is your summary; the receipts and statements back it up. For filing them, see [how to organize receipts](/guides/how-to-organize-receipts/).
 
 ## Where Taxfold fits
 
-Taxfold is an iPhone app we make for logging what you spend from the receipt. You scan a receipt or import one from Photos, the text is read on the phone, and every field the app reads is editable. An expense with no receipt can be entered by hand. Receipts are listed by month with a subtotal for each month and filed under their tax year, and a year can be exported as CSV or PDF through the share sheet. It has no budgets and no bank connection, and no account, no sync server and no analytics; the data stays on your iPhone and in your own iPhone backup.
+Taxfold is an iPhone app we make for logging what you spend from the receipt. You scan a receipt or import one from Photos, the text is read on the phone, and every field the app reads is editable. An expense with no receipt can be entered by hand. By default, receipts are listed by month with a subtotal for each month, and they are filed under their tax year. A year can be exported as CSV or PDF through the share sheet. It has no budgets and no bank connection, and no account, no sync server and no analytics; the data stays on your iPhone and in your own iPhone backup.

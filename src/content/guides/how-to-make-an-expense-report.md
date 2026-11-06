@@ -19,11 +19,11 @@ Publication 463 says: "Your employer should tell you what method of reimbursemen
 | Advances | Any cash advance or per diem already paid to you | The report has to account for every dollar you received |
 | Total | Expenses minus advances | What you are owed, or what you owe back |
 
-For travel, Publication 463 lists what your records must show in its Table 5-1: the cost of each separate expense, the dates you left and returned, the destination, and the business purpose. An expense report that covers those four for each line is complete in IRS terms.
+For travel, Publication 463 lists what your records must show in its Table 5-1: the cost of each separate expense, the dates you left and returned, the destination, and the business purpose. An expense report that records those four elements covers what Table 5-1 asks for; the receipts and the accounting for advances complete it.
 
 ## The rules behind the deadlines: accountable plans
 
-Most employer reimbursement programs are set up as accountable plans. Publication 463 says such a plan must include all of these rules:
+Many employers reimburse under an accountable plan; ask yours whether it does. Publication 463 says such a plan must include all of these rules:
 
 - "Your expenses must have a business connection—that is, you must have paid or incurred deductible expenses while performing services as an employee of your employer."
 - "You must adequately account to your employer for these expenses within a reasonable period of time."
@@ -54,12 +54,12 @@ The practical rule: submit the report within 60 days of the expense, and pay bac
 
 Some employers pay a per diem allowance, which Publication 463 defines as "a fixed amount of daily reimbursement your employer gives you for your lodging and M&IE when you are away from home on business." M&IE is meals and incidental expenses.
 
-A per diem can stand in as proof of the amount, but not of everything. Among Publication 463's conditions, the allowance must be no more than the federal rate, and you must still "prove the time (dates), place, and business purpose of your expenses to your employer." The federal rates are set per city on the [GSA per diem rates page](https://www.gsa.gov/travel/plan-book/per-diem-rates). Publication 463 also cites the IRS high-low rates from Notice 2025-54, effective October 1, 2025: $319 a day (including $86 for M&IE) in listed high-cost localities and $225 a day (including $74 for M&IE) elsewhere in the continental United States.
+A per diem can stand in as proof of the amount, but not of everything. Among Publication 463's conditions, the allowance must be no more than the federal rate, and you must still "prove the time (dates), place, and business purpose of your expenses to your employer." The federal rates are set per city on the [GSA per diem rates page](https://www.gsa.gov/travel/plan-book/per-diem-rates). Many employers use the IRS high-low rates instead, and Publication 463 explains that method. Its 2025 edition prints rates that have since been replaced: for travel on or after October 1, 2026, [Notice 2026-60](https://www.irs.gov/pub/irs-drop/n-26-60.pdf) sets $329 a day for travel to a listed high-cost locality and $230 a day for any other locality in the continental United States, of which $86 and $74 are for M&IE. The notice allows transition rules for the last three months of 2026, so your employer may still be on the earlier rates until December 31, 2026; ask which it uses.
 
 Two points from the same chapter:
 
 - **Unused days go back.** If you don't prove you actually traveled on each day you were paid a per diem for, you must return that amount within a reasonable period.
-- **An allowance above the federal rate is partly wages.** In Publication 463's example, an employee gets $90 a day for M&IE in Phoenix, where the federal M&IE rate is $86. The trip is cut from 5 days to 3, so the employee returns $180 for the 2 days not traveled, keeps the $4-a-day difference for the 3 days traveled, and that $12 is reported as wages on Form W-2.
+- **An allowance above the federal rate is partly wages.** In Publication 463's example (a March 2025 trip), an employee gets $90 a day for M&IE in Phoenix, where the federal M&IE rate was $86. The trip is cut from 5 days to 3, so the employee returns $180 for the 2 days not traveled, keeps the $4-a-day difference for the 3 days traveled, and that $12 is reported as wages on Form W-2.
 
 ## Freelancers: billing expenses to a client
 
@@ -91,7 +91,7 @@ Things to notice:
 
 - **The hotel needs its receipt at any amount.** Publication 463's $75 exception for documentary evidence excludes lodging. It says a hotel receipt is enough if it shows the hotel's name and location, the dates you stayed, and separate amounts for charges such as lodging, meals and telephone calls.
 - **The $38.75 dinner is under $75,** so federal rules don't require a receipt for it, though the line still needs its date, place and purpose. Your employer's policy may still ask for one; follow the policy.
-- **The airfare was paid on February 24.** The 60-day limit runs from when each expense was paid, so submitting by April 24 keeps every line inside it.
+- **The airfare was paid on February 24.** The 60-day limit runs from when each expense was paid, so submitting by April 25, 60 days after February 24, keeps every line inside it.
 
 For the travel rules behind each line, what counts as a business trip and what you can claim on one, see [business travel expenses](/guides/business-travel-expenses/).
 

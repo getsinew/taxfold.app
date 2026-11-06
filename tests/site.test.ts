@@ -187,9 +187,14 @@ describe('every page', () => {
   });
 });
 
-// Apple asks for a credit line naming every Apple mark a site uses. These are the marks (Apple Trademark List,
-// read 2026-11-06) that could plausibly appear; IOS is Cisco's, credited separately.
-const APPLE_MARKS = ['iPhone', 'iPad', 'iCloud', 'Live Text', 'Safari', 'TestFlight', 'App Store', 'Mac', 'macOS', 'Siri', 'FaceTime', 'Apple Pay', 'Apple Watch', 'AirDrop', 'Face ID', 'Touch ID'];
+// Apple asks for a credit line naming every Apple mark a site uses. This test checks the marks LISTED here (a hand
+// list from Apple's Trademark List, read 2026-11-06, not the whole list): it fails when a page names one the credit
+// line omits, and a mark outside the list is not caught. IOS is Cisco's, credited separately.
+const APPLE_MARKS = [
+  'iPhone', 'iPad', 'iPadOS', 'iCloud', 'Live Text', 'Live Photos', 'Safari', 'TestFlight', 'App Store', 'Mac', 'macOS',
+  'watchOS', 'Siri', 'FaceTime', 'Apple Pay', 'Apple Watch', 'Apple Card', 'Apple Intelligence', 'Wallet', 'Numbers',
+  'AirDrop', 'Face ID', 'Touch ID',
+];
 const unlistedAppleMarks = (visibleText: string, credit: string) =>
   [...APPLE_MARKS, 'iOS']
     .filter((mark) => new RegExp(`\\b${mark}\\b`).test(visibleText))

@@ -413,7 +413,7 @@ drives the hero CTA, the status pill, the maker-note status line, the Smart App 
 Apple's badge rules (App Store marketing guidelines): one badge per layout, never modified, minimum clear space ¼ of the
 badge height, minimum 40px on screen; the black badge is preferred and the white one is the alternative for a layout where
 it complements the colours and no other platform's badge appears. The white badge is used on the dark scheme.
-Apple asks for credit lines once per site, where legal copy goes. The footer carries one in every state, naming every Apple mark the pages use (`creditLine` in `launch-state.mjs`; a test fails when a page names a mark it omits).
+Apple asks for credit lines once per site, where legal copy goes. The footer carries one in every state, naming the Apple marks the pages use (`creditLine` in `launch-state.mjs`). A test fails when a page names a mark from its hand-kept list of 23 that the line omits; a mark outside that list is not caught, so extend the list when copy starts using a new one.
 
 Primary button states:
 

@@ -41,6 +41,14 @@ const GUIDES_HREF = '#guides';
 const PRIVACY_HREF = '/privacy/#app';
 const READ_GUIDES = { kind: 'button', label: 'Read the receipt guides', href: GUIDES_HREF };
 
+// The id is the digits only: the URL and the Smart App Banner add the `id` prefix themselves, so a pasted `id6739…`
+// would ship `…/idid6739…`.
+const appStoreId = (id) => {
+  if (!id) missing('APP_STORE_ID');
+  if (!/^\d+$/.test(id)) throw new Error(`launch-state: APP_STORE_ID must be digits only (no "id" prefix), got ${JSON.stringify(id)}`);
+  return id;
+};
+
 const missing = (name) => {
   throw new Error(`launch-state: LAUNCH_STATE needs ${name} to be set before it can render`);
 };
@@ -80,7 +88,7 @@ export function launchView(state = effectiveLaunch().state, ids = effectiveLaunc
     };
   }
   if (state === 'released') {
-    const id = ids.APP_STORE_ID || missing('APP_STORE_ID');
+    const id = appStoreId(ids.APP_STORE_ID);
     const pt = ids.APP_STORE_PT;
     return {
       state,
@@ -104,7 +112,7 @@ export function launchView(state = effectiveLaunch().state, ids = effectiveLaunc
 // together with the first campaign link, and a ct without it attributes nothing, so with no pt the link is the plain
 // store page and carries no query at all.
 export const appStoreUrl = (id, pt, ct) => {
-  const base = `https://apps.apple.com/app/id${id || missing('APP_STORE_ID')}`;
+  const base = `https://apps.apple.com/app/id${appStoreId(id)}`;
   return pt ? `${base}?pt=${encodeURIComponent(pt)}&ct=${encodeURIComponent(ct)}&mt=8` : base;
 };
 

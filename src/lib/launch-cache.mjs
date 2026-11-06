@@ -20,9 +20,9 @@ export function launchCacheKey(sources = renderingSources()) {
 // other launch state beside this one must keep its cache.
 export function pruneStaleLaunchCaches(root, keepKey, staleAfterMs = STALE_AFTER_MS) {
   for (const entry of readdirSync(root)) {
-    const stale = entry.startsWith(CACHE_PREFIX) && entry !== `${CACHE_PREFIX}${keepKey}`;
-    if (stale && Date.now() - statSync(join(root, entry)).mtimeMs > staleAfterMs) {
-      rmSync(join(root, entry), { recursive: true, force: true });
-    }
+    if (!entry.startsWith(CACHE_PREFIX) || entry === `${CACHE_PREFIX}${keepKey}`) continue;
+    // A concurrent build's prune may have removed it between the listing and now.
+    const stats = statSync(join(root, entry), { throwIfNoEntry: false });
+    if (stats && Date.now() - stats.mtimeMs > staleAfterMs) rmSync(join(root, entry), { recursive: true, force: true });
   }
 }

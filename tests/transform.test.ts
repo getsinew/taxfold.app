@@ -1,5 +1,5 @@
 // The guide transform and the launch-state switch, run on hand-built hast trees (no build needed).
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, utimesSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, utimesSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -104,6 +104,14 @@ describe('launch state', () => {
     expect(() => launchView('launched' as never)).toThrow(/unknown LAUNCH_STATE/);
   });
 
+  it('released refuses an App Store id that is not all digits, naming the variable (a pasted `id…` would ship a broken link)', () => {
+    for (const bad of ['id6739000000', 'ID6739000000', 'abc', '6739 000', '6739000000/', '']) {
+      expect(() => launchView('released', { ...NO_IDS, APP_STORE_ID: bad }), bad).toThrow(/APP_STORE_ID/);
+    }
+    expect(() => launchView('released', { ...NO_IDS, APP_STORE_ID: 'id6739000000' })).toThrow(/digits/);
+    expect(launchView('released', { ...NO_IDS, APP_STORE_ID: '6739000000' }).primary).toMatchObject({ href: 'https://apps.apple.com/app/id6739000000' });
+  });
+
   it('released renders without a provider token, the launch-day shape: plain store links, no query', () => {
     const state = launchView('released', { ...NO_IDS, APP_STORE_ID: '123' });
     expect(state.priceLine).toBe('$39.99 once. No subscription.');
@@ -150,8 +158,9 @@ describe('App Store link', () => {
     expect(appStoreUrl('123', 'pt9', 'a b&c')).toBe('https://apps.apple.com/app/id123?pt=pt9&ct=a%20b%26c&mt=8');
   });
 
-  it('still requires the app id', () => {
+  it('still requires the app id, as digits only', () => {
     expect(() => appStoreUrl('', 'pt9', 'site')).toThrow(/APP_STORE_ID/);
+    expect(() => appStoreUrl('id123', 'pt9', 'site')).toThrow(/APP_STORE_ID/);
   });
 });
 
@@ -293,6 +302,16 @@ describe('content cache key', () => {
     expect(launchCacheKey(['launch-state v1', 'hast v1'])).not.toBe(launchCacheKey(['launch-state v2', 'hast v1']));
     expect(launchCacheKey(['launch-state v1', 'hast v1'])).not.toBe(launchCacheKey(['launch-state v1', 'hast v2']));
     expect(launchCacheKey(['launch-state v1', 'hast v1'])).toBe(launchCacheKey(['launch-state v1', 'hast v1']));
+  });
+
+  it('skips an entry that vanishes between the listing and the stat (a concurrent prune)', () => {
+    const root = mkdtempSync(join(tmpdir(), 'taxfold-cache-'));
+    try {
+      symlinkSync(join(root, 'nowhere'), join(root, '.astro-dangling'));
+      expect(() => pruneStaleLaunchCaches(root, 'current00000', 0)).not.toThrow();
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 
   it('prunes stale keyed cache directories, never the current one, a recent one, or anything else', () => {

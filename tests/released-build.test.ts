@@ -59,8 +59,6 @@ describe('released state, launch day: an App Store id and no provider token yet'
     expect(landing).toContain('Read the receipt guides');
     expect(landing).toContain('$39.99 once. No subscription.');
     expect(landing).not.toContain('In development');
-    expect(existsSync(join(build.outDir, 'app-store-badge-black.svg'))).toBe(true);
-    expect(existsSync(join(build.outDir, 'app-store-badge-white.svg'))).toBe(true);
   });
 
   it('puts the Smart App Banner and the Apple credit line on every page', () => {

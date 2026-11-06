@@ -19,6 +19,9 @@ import { launchView } from '../src/lib/launch-state.mjs';
 const ROOT = join(import.meta.dirname, '..');
 const DIST = join(ROOT, 'dist');
 const SITE = 'https://taxfold.app';
+// dist/ is built from the committed launch state, so every launch-state expectation below is read from that view.
+const view = launchView();
+const released = view.state === 'released';
 const STATIC_PATHS = ['/', '/about/', '/contact/', '/how-we-write/', '/privacy/'];
 
 const read = (rel: string) => readFileSync(join(DIST, rel), 'utf8');
@@ -174,10 +177,47 @@ describe('every page', () => {
     }
   });
 
-  it('carries no App Store badge or link before approval', () => {
+  it('carries the App Store badge, link and banner only once released', () => {
     for (const path of allPaths()) {
-      expect(html(path), path).not.toMatch(/apps\.apple\.com|Download on the App Store|apple-itunes-app/i);
+      const page = html(path);
+      expect(/apple-itunes-app/.test(page), path).toBe(released);
+      expect(/Download Taxfold on the App Store/.test(page), path).toBe(released && path === '/');
+      if (!released) expect(page, path).not.toMatch(/apps\.apple\.com/i);
     }
+  });
+});
+
+// Apple asks for a credit line naming every Apple mark a site uses. This test checks the marks LISTED here (a hand
+// list from Apple's Trademark List, read 2026-11-06, not the whole list): it fails when a page names one the credit
+// line omits, and a mark outside the list is not caught. IOS is Cisco's, credited separately.
+const APPLE_MARKS = [
+  'iPhone', 'iPad', 'iPadOS', 'iCloud', 'Live Text', 'Live Photos', 'Safari', 'TestFlight', 'App Store', 'Mac', 'macOS',
+  'watchOS', 'Siri', 'FaceTime', 'Apple Pay', 'Apple Watch', 'Apple Card', 'Apple Intelligence', 'Wallet', 'Numbers',
+  'AirDrop', 'Face ID', 'Touch ID',
+];
+const unlistedAppleMarks = (visibleText: string, credit: string) =>
+  [...APPLE_MARKS, 'iOS']
+    .filter((mark) => new RegExp(`\\b${mark}\\b`).test(visibleText))
+    .filter((mark) => !(mark === 'iOS' ? /Cisco/ : new RegExp(`\\b${mark}\\b`)).test(credit));
+
+describe('Apple credit line', () => {
+  const credit = view.creditLine ?? '';
+  const withoutCredit = (path: string) => text(path).replace(credit, '');
+
+  it('is in the footer of every page, once', () => {
+    for (const path of [...allPaths(), '/404.html']) {
+      const page = path.endsWith('.html') ? read(path.slice(1)) : html(path);
+      expect(page.split(credit).length - 1, path).toBe(1);
+    }
+  });
+
+  it('names every Apple mark the pages use', () => {
+    for (const path of allPaths()) expect(unlistedAppleMarks(withoutCredit(path), credit), path).toEqual([]);
+  });
+
+  it('would catch a mark the line leaves out (anti-vacuity)', () => {
+    expect(unlistedAppleMarks('Scan with Live Text on a Mac running iOS tools', 'Apple and iPhone are trademarks')).toEqual(['Live Text', 'Mac', 'iOS']);
+    expect(unlistedAppleMarks('Scan with Live Text on iPhone', credit)).toEqual([]);
   });
 });
 
@@ -235,11 +275,12 @@ describe('internal links and launch status', () => {
 
   it('the guides links never point at an empty guides section', () => {
     const landing = html('/');
+    const guidesLinkClass = view.state === 'pre-beta' ? 'btn-primary' : 'link';
     if (guidePaths().length === 0) {
       expect(landing).not.toMatch(/href="(\/)?#guides"/);
-      expect(landing).toMatch(/href="\/how-we-write\/" class="btn-primary"/);
+      expect(landing).toMatch(new RegExp(`href="\\/how-we-write\\/" class="${guidesLinkClass}"`));
     } else {
-      expect(landing).toMatch(/href="#guides" class="btn-primary"/);
+      expect(landing).toMatch(new RegExp(`href="#guides" class="${guidesLinkClass}"`));
       expect(landing).toMatch(/href="\/#guides" class="nav-link"/);
     }
   });

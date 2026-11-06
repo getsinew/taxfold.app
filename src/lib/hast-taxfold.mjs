@@ -82,16 +82,17 @@ function wrapScrollRegions(children, state) {
   });
 }
 
-function makerNoteFooter(view) {
+function makerNoteFooter(view, cluster) {
   const footer = [el('p', { className: ['maker-note-status'] }, [text(view.makerStatus)])];
   if (view.makerCta) {
-    const link = el('a', { className: ['btn-primary', 'btn-compact'], href: view.makerCta.href }, [text(view.makerCta.label)]);
+    const href = view.makerCta.hrefFor(cluster);
+    const link = el('a', { className: ['btn-primary', 'btn-compact'], href }, [text(view.makerCta.label)]);
     footer.push(el('p', { className: ['maker-note-cta'] }, [link]));
   }
   return footer;
 }
 
-function wrapMakerNote(children, view) {
+function wrapMakerNote(children, view, cluster) {
   const start = children.findIndex((child) => isElement(child, 'h2') && textOf(child).trim() === MAKER_HEADING);
   if (start === -1) return children;
   const after = children.slice(start + 1);
@@ -103,21 +104,21 @@ function wrapMakerNote(children, view) {
     el('p', { className: ['maker-note-label'] }, [text(MAKER_LABEL)]),
     heading,
     ...section,
-    ...makerNoteFooter(view),
+    ...makerNoteFooter(view, cluster),
   ]);
   return [...children.slice(0, start), note, ...rest];
 }
 
-export function transformRoot(root, view = launchView()) {
+export function transformRoot(root, view = launchView(), cluster = undefined) {
   const scrollable = wrapScrollRegions(root.children, { nearestHeading: '' });
-  return { ...root, children: wrapMakerNote(scrollable, view) };
+  return { ...root, children: wrapMakerNote(scrollable, view, cluster) };
 }
 
 export function taxfoldHastPlugin(view = launchView()) {
   return {
     name: 'taxfold',
     after(root, ctx) {
-      ctx.replaceNode(root, transformRoot(root, view));
+      ctx.replaceNode(root, transformRoot(root, view, ctx.data.astro?.frontmatter?.cluster));
     },
   };
 }

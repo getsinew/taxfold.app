@@ -254,6 +254,32 @@
   .btn-primary:active { transform: translateY(1px); }
   .btn-primary:focus-visible { border-radius: var(--radius-md); }
 
+  /* Apple's App Store badge: Apple's artwork is shown unmodified, 48px tall (Apple's minimum on screen is 40px).
+     The anchor is the badge, so the ring wraps the artwork and nothing sits inside Apple's 1/4-height clear space. */
+  .store-badge {
+    display: block;
+    width: fit-content;
+    line-height: 0;
+  }
+
+  .store-badge img {
+    display: block;
+    height: calc(var(--spacing) * 12);
+    width: auto;
+  }
+
+  .store-badge:focus-visible { border-radius: var(--radius-md); }
+
+  /* In a guide, `.prose a` (specificity 0,1,1) would otherwise win over `.btn-primary` and paint brand text on the brand fill. */
+  .prose a.btn-primary {
+    @apply text-on-brand;
+    text-decoration: none;
+    transition: background-color 120ms ease-out;
+  }
+
+  .prose a.btn-primary:hover, .prose a.btn-primary:active { @apply text-on-brand; }
+  .prose a.btn-primary::after { content: none; }
+
   .btn-compact {
     min-height: calc(var(--spacing) * 11);
     padding-inline: calc(var(--spacing) * 5);

@@ -1,7 +1,10 @@
 ---
+import { launchView } from '../lib/launch-state.mjs';
+
 interface Props { showDisclaimer?: boolean }
 
 const { showDisclaimer = true } = Astro.props;
+const { creditLine } = launchView();
 ---
 <footer class="border-rule border-t">
   <div class="max-w-page text-ink-soft mx-auto px-5 py-8 text-sm md:px-8 lg:px-10">
@@ -9,6 +12,7 @@ const { showDisclaimer = true } = Astro.props;
     {showDisclaimer && <p class="mb-2">Guides on this site are general information, not tax, legal or accounting advice.</p>}
     <p>© Opal Harmony P.C.</p>
     <p class="mb-2">OPAL HARMONY P.C. (Ι.Κ.Ε.) · Olympou 9, 54630 Thessaloniki, Greece · G.E.MI. no. 176908106000 · VAT EL802467746</p>
+    {creditLine && <p class="mb-2">{creditLine}</p>}
     <ul class="footer-links">
       <li><a class="footer-link" href="/how-we-write/">How we write</a></li>
       <li><a class="footer-link" href="/privacy/">Privacy</a></li>

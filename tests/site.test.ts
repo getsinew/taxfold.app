@@ -190,13 +190,13 @@ describe('trust pages', () => {
     expect(t).toContain('Taxfold team');
   });
 
-  it('privacy names both halves: the app collects nothing, the site runs cookieless Cloudflare Web Analytics', () => {
+  it('privacy names both halves: the app collects nothing, the site runs no tracking script', () => {
     const t = text('/privacy/');
     expect(html('/privacy/')).toMatch(/<h2 id="app">The app: we collect nothing<\/h2>/);
     expect(t).toContain('Data Not Collected');
-    expect(t).toContain('Cloudflare Web Analytics');
-    expect(t).toContain('No cookies.');
-    expect(t).toContain('for the purpose of displaying analytics');
+    expect(t).toContain('no analytics or tracking script');
+    expect(t).not.toContain('Cloudflare Web Analytics');
+    expect(t).not.toContain('cloudflareinsights');
     expect(t).toContain('We see these only as aggregate counts');
     expect(t).toContain('without telling us who you are');
   });

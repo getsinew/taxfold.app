@@ -54,12 +54,13 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: npx wrangler pages deploy dist --project-name=taxfold-app --branch=main --commit-hash="$GITHUB_SHA"
-      # The privacy page says the site runs Cloudflare Web Analytics; fail loudly if the live page lacks the beacon.
-      - name: Check the live site carries the Web Analytics beacon
+      # The privacy page promises no analytics script (the CF beacon reads device info, so ePrivacy Art. 5(3) would need consent); fail loudly if Cloudflare injects it.
+      - name: Check the live site carries no Web Analytics beacon
         run: |
-          for _ in $(seq 1 18); do
-            if curl -fsS -H 'Accept: text/html' https://taxfold.app/ | grep -q 'data-cf-beacon'; then echo "beacon present"; exit 0; fi
-            sleep 10
-          done
-          echo "::error::https://taxfold.app/ has no Cloudflare Web Analytics beacon; the privacy page's analytics section is untrue until it does"
-          exit 1
+          page=$(curl -fsS -H 'Accept: text/html' https://taxfold.app/)
+          test -n "$page"
+          if printf '%s' "$page" | grep -q -E 'data-cf-beacon|cloudflareinsights'; then
+            echo "::error::https://taxfold.app/ carries the Cloudflare Web Analytics beacon; turn Web Analytics off on the Pages project (the privacy page says there is no tracking script)"
+            exit 1
+          fi
+          echo "no beacon"

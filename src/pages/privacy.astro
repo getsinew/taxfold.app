@@ -9,7 +9,7 @@ const { privacyLabelLead } = launchView();
 ---
 <Base
   title="Privacy: what Taxfold and taxfold.app collect"
-  description="The Taxfold app sends us no data; your receipts stay on your iPhone. This website runs cookieless Cloudflare Web Analytics. Here is each part."
+  description="The Taxfold app sends us no data; your receipts stay on your iPhone. This website runs no analytics script and sets no cookies. Here is each part."
 >
   <article class="prose">
     <h1>Privacy</h1>
@@ -64,22 +64,20 @@ const { privacyLabelLead } = launchView();
       keep first.
     </p>
 
-    <h2>This website: cookieless analytics</h2>
+    <h2>This website: no tracking script</h2>
     <p>
-      “We collect nothing” would not be true of the website, so here is what it does. taxfold.app is hosted on
-      Cloudflare and runs <strong>Cloudflare Web Analytics</strong> to count visits.
+      “We collect nothing” would not be quite true of the website, so here is what happens when you visit it.
+      taxfold.app is hosted on Cloudflare.
     </p>
     <ul>
       <li>
-        <strong>No cookies.</strong> In Cloudflare’s words, Web Analytics “does not use any client-side state, such as
-        cookies or localStorage, to collect usage metrics”, and Cloudflare does not “fingerprint” individuals “via
-        their IP address, User Agent string, or any other data for the purpose of displaying analytics.”
+        <strong>Nothing runs in your browser to measure you.</strong> The site sets no cookies, uses no
+        localStorage and loads no analytics or tracking script.
       </li>
       <li>
-        <strong>What it records:</strong> page views and visits, the page visited, the referring site, the visitor’s
-        country, device type, browser and operating system, and page-load timing. We see these only as aggregate
-        counts in Cloudflare’s dashboard; we keep no copy of our own. A small script from <code>static.cloudflareinsights.com</code> loads on each
-        page to report them.
+        <strong>Visit counts:</strong> Cloudflare counts the requests it serves, as part of hosting: how many, which
+        pages, and from which countries. We see these only as aggregate counts in Cloudflare’s dashboard; we keep no
+        copy of our own.
       </li>
       <li>
         <strong>Delivering pages:</strong> like any web host, Cloudflare processes your IP address and browser
@@ -109,7 +107,7 @@ const { privacyLabelLead } = launchView();
         protecting the website and in answering the messages you send us.
       </li>
       <li>
-        <strong>Recipients:</strong> Cloudflare (hosting, analytics, email forwarding) and Google (our email
+        <strong>Recipients:</strong> Cloudflare (hosting, email forwarding) and Google (our email
         inbox). Both are US companies and may process data outside the EU, under the safeguards they offer,
         such as the EU–US Data Privacy Framework and the European Commission’s standard contractual clauses.
       </li>

@@ -38,7 +38,11 @@ Both give you an image. Use the document scanner when you can, because it lets y
 
 ## What makes a scan worth keeping
 
-The IRS page [What kind of records should I keep](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep) says supporting documents for business expenses "should identify the payee, the amount paid, proof of payment, the date incurred, and include a description of the item purchased or service received that shows the amount was for a business expense." It adds that "a combination of supporting documents may be needed." That is the IRS standard for business-expense records (US federal), and it gives you a practical test for each scan:
+The IRS page [What kind of records should I keep](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep) says supporting documents for business expenses:
+
+> …should identify the payee, the amount paid, proof of payment, the date incurred, and include a description of the item purchased or service received that shows the amount was for a business expense.
+
+It adds that "a combination of supporting documents may be needed." That is the IRS standard for business-expense records (US federal), and it gives you a practical test for each scan:
 
 - **Merchant name** is readable.
 - **Date** is readable.

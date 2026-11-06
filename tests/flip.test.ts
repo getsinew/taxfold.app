@@ -43,10 +43,10 @@ afterAll(() => scratch.forEach((dir) => rmSync(dir, { recursive: true, force: tr
 describe.skipIf(LAUNCH_STATE !== 'pre-beta')('the launch-day flip', () => {
   it('leaves `npm test` green: build, then every suite, against the flipped constants', () => {
     const repo = flippedClone();
-    const env = { ...process.env };
-    for (const key of Object.keys(env)) if (key === 'VITEST' || key.startsWith('VITEST_') || key.startsWith('TAXFOLD_')) delete env[key];
+    const env = { ...process.env, NO_COLOR: '1' };
+    for (const key of Object.keys(env)) if (key === 'VITEST' || key.startsWith('VITEST_') || key.startsWith('TAXFOLD_') || key === 'FORCE_COLOR') delete env[key];
     const result = run(repo, 'npm', ['test'], env);
-    const output = `${result.stdout}\n${result.stderr}`;
+    const output = `${result.stdout}\n${result.stderr}`.replace(/\x1b\[[0-9;]*m/g, '');
     expect(existsSync(join(repo, 'dist/app-store-badge-black.svg')), 'the build rendered the released state').toBe(true);
     expect(readFileSync(join(repo, 'dist/index.html'), 'utf8')).toContain('class="store-badge"');
     expect(output, output.slice(-4000)).toMatch(/Tests\s+\d+ passed/);

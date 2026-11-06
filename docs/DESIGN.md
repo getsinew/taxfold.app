@@ -58,7 +58,7 @@ Aaker personality: **Sincerity + Competence**, low Excitement.
 | P1 | **Paper, not platform** | Warm paper ground and ink text. One deep green accent. No gradients, no glassmorphism, no stock photos of laptops. Serif display headings carry the editorial and archival tone. |
 | P2 | **Show the absence** | The proof section is a two-column "What it does / What it leaves out" ledger. The difference is carried by headings and words, never by colour alone. |
 | P3 | **Cite, don't claim** | Long tables and quotes are first-class, readable components (horizontal scroll, tabular numbers, quote blocks). Links are always underlined. |
-| P4 | **The page has manners** | No pop-ups, no cookie banner (none is needed: the analytics are cookieless), no chat widget, no autoplay, no scroll-jacking. The only JavaScript is the Cloudflare beacon plus the optional copy button. |
+| P4 | **The page has manners** | No pop-ups, no cookie banner (none is needed: no cookies and no analytics script; the Cloudflare beacon was removed 2026-11-06 because ePrivacy Art. 5(3) would require consent for it), no chat widget, no autoplay, no scroll-jacking. The only JavaScript is the optional copy button. |
 | P5 | **One accent, used for action** | Brand green appears only on links, the one primary button, the focus ring, the current-page marker, the status pill and the maker note. Never on non-interactive text that could pass for a link. |
 
 **Brand voice** (it carries over to the app's microcopy):
@@ -426,7 +426,7 @@ The button is an `<a>` styled as a button, because it navigates. The badge `img`
   `tabindex="0"` (a scrollable region needs keyboard access), `role="group"` and `aria-label="Code"`.
 - Inline `code`: `sunk` ground, padding 2/6, `radius-sm`, 0.9em.
 - No syntax highlighting. These are one-line formulas, and colour would be noise. Turn off Shiki/Prism highlighting.
-- **Copy button (progressive enhancement, the only site JS besides the beacon):** a script inserts
+- **Copy button (progressive enhancement, the only site JS):** a script inserts
   `<button type="button">Copy</button>` in a strip at the top-right of each code block's `.code-block` wrapper (the `pre` scrolls
   horizontally, so a button inside it would scroll away and cover the code). Without JS, no button exists.
 
@@ -494,7 +494,7 @@ iOS doesn't zoom.
 
 - **Mechanism: `prefers-color-scheme` only, no toggle.** Why: (1) the OS setting is the user's own choice, already made; (2) a
   toggle has to remember its state in `localStorage` or a cookie. The privacy page promises a site with no client-side
-  state beyond Cloudflare's cookieless beacon, and a toggle would put that sentence at risk. (3) A toggle needs a blocking
+  state, and a toggle would put that sentence at risk. (3) A toggle needs a blocking
   head script to avoid a flash. **Reopen if** a real user asks for it.
 - `<meta name="color-scheme" content="light dark">`, plus two `theme-color` metas (`#f6f4ee` light / `#131614` dark) with
   `media` queries.

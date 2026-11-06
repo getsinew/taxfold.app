@@ -407,12 +407,13 @@ drives the hero CTA, the status pill, the maker-note status line, the Smart App 
 |---|---|---|---|---|
 | `pre-beta` (now) | Button "Read the receipt guides" → `#guides` | Link "What the app will and won't collect" → `/privacy/#app` | "In development · not on the App Store yet" | — |
 | `beta` | Button "Join the TestFlight beta" → `TESTFLIGHT_URL` (↗, same tab) | "Read the receipt guides" | "Public beta · free while in testing" | Helper below the button: "Needs an iPhone with iOS <min> and Apple's free TestFlight app." |
-| `released` | Apple's official "Download on the App Store" badge (black on light, white on dark, unmodified artwork, 48px tall, ≥40px is Apple's minimum), campaign link `…/id<ID>?pt=<pt>&ct=site&mt=8`. Without `pt` (launch day) the link is `https://apps.apple.com/app/id<ID>` with no query | "Read the receipt guides" | Pill removed | `<meta name="apple-itunes-app" content="app-id=<ID>, app-argument=<canonical>">` on every page. Price line "$39.99 once. No subscription." Apple's credit line in the footer. A guide's maker-note button carries the campaign token of its cluster (the first `cluster` entry without `core:`), not a per-page one |
+| `released` | Apple's official "Download on the App Store" badge (black on light, white on dark, unmodified artwork, 48px tall, ≥40px is Apple's minimum), campaign link `…/id<ID>?pt=<pt>&ct=site&mt=8`. Without `pt` (launch day) the link is `https://apps.apple.com/app/id<ID>` with no query | "Read the receipt guides" | Pill removed | `<meta name="apple-itunes-app" content="app-id=<ID>, app-argument=<canonical>">` on every page. Price line "$39.99 once. No subscription." A guide's maker-note button carries the campaign token of its cluster (the first `cluster` entry without `core:`), not a per-page one |
 
 `APP_STORE_PT` is optional: Apple issues it only once App Store Connect shows the Campaigns tab, at least 24 hours after release.
 Apple's badge rules (App Store marketing guidelines): one badge per layout, never modified, minimum clear space ¼ of the
 badge height, minimum 40px on screen; the black badge is preferred and the white one is the alternative for a layout where
 it complements the colours and no other platform's badge appears. The white badge is used on the dark scheme.
+Apple asks for credit lines once per site, where legal copy goes. The footer carries one in every state, naming every Apple mark the pages use (`creditLine` in `launch-state.mjs`; a test fails when a page names a mark it omits).
 
 Primary button states:
 

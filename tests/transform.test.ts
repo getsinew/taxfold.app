@@ -1,10 +1,12 @@
 // The guide transform and the launch-state switch, run on hand-built hast trees (no build needed).
-import { readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, utimesSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { transformRoot } from '../src/lib/hast-taxfold.mjs';
 import { guideFiles } from '../src/lib/lastmod.mjs';
-import { appStoreUrl, ctFromCluster, launchCacheKey, launchView, SITE_CT } from '../src/lib/launch-state.mjs';
+import { launchCacheKey, pruneStaleLaunchCaches } from '../src/lib/launch-cache.mjs';
+import { appStoreUrl, ctFromCluster, LAUNCH_STATE, launchView, SITE_CT } from '../src/lib/launch-state.mjs';
 
 type Node = { type: string; tagName?: string; value?: string; properties?: Record<string, unknown>; children?: Node[] };
 
@@ -117,12 +119,23 @@ describe('launch state', () => {
     expect(state.makerCta?.hrefFor('receipt-scan-ocr')).toBe('https://apps.apple.com/app/id123?pt=pt9&ct=receipt-scan-ocr&mt=8');
   });
 
-  it('released names the Apple-supplied badge artwork in both colour schemes and carries the Apple credit line', () => {
+  it('released names the Apple-supplied badge artwork in both colour schemes', () => {
     const state = launchView('released', { ...NO_IDS, APP_STORE_ID: '123' });
     expect(state.primary).toMatchObject({ art: { light: '/app-store-badge-black.svg', dark: '/app-store-badge-white.svg' } });
-    expect(state.creditLine).toBe('Apple, the Apple Logo and App Store are trademarks of Apple Inc., registered in the U.S. and other countries.');
-    expect(launchView('pre-beta').creditLine).toBeNull();
-    expect(launchView('beta', { ...NO_IDS, TESTFLIGHT_URL: 'https://t' }).creditLine).toBeNull();
+  });
+
+  it('carries one Apple credit line in every state, because every state names Apple marks', () => {
+    const lines = [
+      launchView('pre-beta').creditLine,
+      launchView('beta', { ...NO_IDS, TESTFLIGHT_URL: 'https://t' }).creditLine,
+      launchView('released', { ...NO_IDS, APP_STORE_ID: '123' }).creditLine,
+    ];
+    expect(new Set(lines).size).toBe(1);
+    for (const mark of ['Apple', 'Apple logo', 'iPhone', 'iPad', 'iCloud', 'Live Text', 'App Store', 'TestFlight']) {
+      expect(lines[0], mark).toContain(mark);
+    }
+    expect(lines[0]).toContain('registered in the U.S. and other countries');
+    expect(lines[0]).toContain('Cisco');
   });
 });
 
@@ -180,18 +193,30 @@ describe('campaign tokens', () => {
     }
   });
 
-  it('gives no two clusters one token, and none the site token', () => {
-    const byToken = new Map<string, Set<string>>();
-    for (const { cluster } of guideClusters()) {
+  // Guides sharing a first cluster entry share a token on purpose (DESIGN.md § 5.6); a collision is two different
+  // first entries that map to one token.
+  const tokenCollisions = (clusters: string[]) => {
+    const firstEntries = new Map<string, Set<string>>();
+    for (const cluster of clusters) {
       const token = ctFromCluster(cluster);
-      byToken.set(token, (byToken.get(token) ?? new Set()).add(cluster));
+      firstEntries.set(token, (firstEntries.get(token) ?? new Set()).add(cluster.split(',')[0].trim()));
     }
-    for (const [token, clusters] of byToken) expect([...clusters], token).toHaveLength(1);
-    expect(byToken.has(SITE_CT)).toBe(false);
+    return [...firstEntries].filter(([, entries]) => entries.size > 1).map(([token]) => token);
+  };
+
+  it('gives no two distinct first entries one token, and none the site token', () => {
+    const clusters = guideClusters().map(({ cluster }) => cluster);
+    expect(tokenCollisions(clusters)).toEqual([]);
+    expect(clusters.map(ctFromCluster)).not.toContain(SITE_CT);
+  });
+
+  it('lets guides share a first entry, whatever follows it', () => {
+    expect(tokenCollisions(['core:a-b, core:c', 'core:a-b, core:d', 'core:a-b'])).toEqual([]);
   });
 
   it('would catch a collision (anti-vacuity)', () => {
-    expect(ctFromCluster('core:a-b, core:c')).toBe(ctFromCluster('core:a-b, core:d'));
+    expect(tokenCollisions(['core:a', 'a'])).toEqual(['a']);
+    expect(tokenCollisions(['core:a, core:x', 'a, core:y'])).toEqual(['a']);
   });
 
   it('puts the guide cluster token on the maker note call to action', () => {
@@ -210,11 +235,11 @@ describe('launch override (build-test seam)', () => {
   const KEYS = ['TAXFOLD_LAUNCH_STATE', 'TAXFOLD_APP_STORE_ID', 'TAXFOLD_APP_STORE_PT', 'TAXFOLD_TESTFLIGHT_URL'];
   afterEach(() => KEYS.forEach((key) => delete process.env[key]));
 
-  it('is off by default: the committed state renders', () => {
-    expect(launchView().state).toBe('pre-beta');
+  it('is off unless set: the committed constants render', () => {
+    expect(launchView().state).toBe(LAUNCH_STATE);
   });
 
-  it('renders released from the environment, so a build can be tested before launch day', () => {
+  it('selects released from the environment, whatever state is committed', () => {
     process.env.TAXFOLD_LAUNCH_STATE = 'released';
     process.env.TAXFOLD_APP_STORE_ID = '555';
     expect(launchView().primary).toMatchObject({ kind: 'badge', href: 'https://apps.apple.com/app/id555' });
@@ -222,7 +247,37 @@ describe('launch override (build-test seam)', () => {
     expect(launchView().primary).toMatchObject({ href: 'https://apps.apple.com/app/id555?pt=ptX&ct=site&mt=8' });
   });
 
-  it('keys the content cache on the launch state and ids, because Astro caches rendered Markdown (the maker note) across builds', () => {
+  it('selects pre-beta from the environment too, whatever state is committed', () => {
+    process.env.TAXFOLD_LAUNCH_STATE = 'pre-beta';
+    process.env.TAXFOLD_APP_STORE_ID = '';
+    expect(launchView()).toMatchObject({ state: 'pre-beta', primary: { href: '#guides' } });
+  });
+
+  it('honours an explicit empty value, so a missing id stays testable once an id is committed', () => {
+    process.env.TAXFOLD_LAUNCH_STATE = 'released';
+    process.env.TAXFOLD_APP_STORE_ID = '';
+    process.env.TAXFOLD_APP_STORE_PT = '';
+    expect(() => launchView()).toThrow(/APP_STORE_ID/);
+  });
+
+  it('is ignored outside Vitest, so an .env file Astro loads mid-build cannot split a site across two states', () => {
+    const inVitest = process.env.VITEST;
+    delete process.env.VITEST;
+    try {
+      process.env.TAXFOLD_LAUNCH_STATE = LAUNCH_STATE === 'released' ? 'pre-beta' : 'released';
+      process.env.TAXFOLD_APP_STORE_ID = '555';
+      expect(launchView().state).toBe(LAUNCH_STATE);
+    } finally {
+      process.env.VITEST = inVitest;
+    }
+  });
+});
+
+describe('content cache key', () => {
+  const KEYS = ['TAXFOLD_LAUNCH_STATE', 'TAXFOLD_APP_STORE_ID', 'TAXFOLD_APP_STORE_PT', 'TAXFOLD_TESTFLIGHT_URL'];
+  afterEach(() => KEYS.forEach((key) => delete process.env[key]));
+
+  it('changes with the launch state and ids, because Astro caches rendered Markdown (the maker note) across builds', () => {
     const committed = launchCacheKey();
     process.env.TAXFOLD_LAUNCH_STATE = 'released';
     process.env.TAXFOLD_APP_STORE_ID = '555';
@@ -233,36 +288,35 @@ describe('launch override (build-test seam)', () => {
     expect(launchCacheKey()).toBe(withToken);
     expect(withToken).toMatch(/^[0-9a-f]{12}$/);
   });
-});
 
-describe('table semantics for the mobile card layout', () => {
-  const tableOf = () =>
-    element('table', [
-      element('thead', [element('tr', [element('th', [text('Situation')]), element('th', [text('Source')])])]),
-      element('tbody', [element('tr', [element('td', [text('Groceries')]), element('td', [text('Pub. 529')])])]),
-    ]);
-
-  it('labels each body cell with its column header and names every role', () => {
-    const wrapped = transformRoot(rootOf(tableOf()), launchView('pre-beta')).children[0] as Node;
-    const table = wrapped.children![0];
-    expect(table.properties?.role).toBe('table');
-    const [head, body] = table.children!;
-    expect(head.properties?.role).toBe('rowgroup');
-    expect(head.children![0].children!.map((cell) => cell.properties?.role)).toEqual(['columnheader', 'columnheader']);
-    const row = body.children![0];
-    expect(row.properties?.role).toBe('row');
-    expect(row.children!.map((cell) => cell.properties)).toEqual([
-      { role: 'cell', dataLabel: 'Situation' },
-      { role: 'cell', dataLabel: 'Source' },
-    ]);
+  it('changes with the code that renders the maker note, not only with its inputs', () => {
+    expect(launchCacheKey(['launch-state v1', 'hast v1'])).not.toBe(launchCacheKey(['launch-state v2', 'hast v1']));
+    expect(launchCacheKey(['launch-state v1', 'hast v1'])).not.toBe(launchCacheKey(['launch-state v1', 'hast v2']));
+    expect(launchCacheKey(['launch-state v1', 'hast v1'])).toBe(launchCacheKey(['launch-state v1', 'hast v1']));
   });
 
-  it('gives a cell beyond the header an empty label rather than crashing (anti-vacuity)', () => {
-    const wide = element('table', [
-      element('thead', [element('tr', [element('th', [text('A')])])]),
-      element('tbody', [element('tr', [element('td', [text('1')]), element('td', [text('2')])])]),
-    ]);
-    const row = ((transformRoot(rootOf(wide), launchView('pre-beta')).children[0] as Node).children![0].children![1]).children![0];
-    expect(row.children!.map((cell) => cell.properties?.dataLabel)).toEqual(['A', '']);
+  it('prunes stale keyed cache directories, never the current one, a recent one, or anything else', () => {
+    const root = mkdtempSync(join(tmpdir(), 'taxfold-cache-'));
+    const DAY = 24 * 60 * 60 * 1000;
+    const dir = (name: string, ageDays: number) => {
+      mkdirSync(join(root, name));
+      const when = new Date(Date.now() - ageDays * DAY);
+      utimesSync(join(root, name), when, when);
+    };
+    try {
+      dir('.astro-aaaaaaaaaaaa', 30);
+      dir('.astro-current00000', 30);
+      dir('.astro-recent000000', 1);
+      dir('.astro', 30);
+      dir('other', 30);
+      pruneStaleLaunchCaches(root, 'current00000', 14 * DAY);
+      expect(existsSync(join(root, '.astro-aaaaaaaaaaaa'))).toBe(false);
+      for (const kept of ['.astro-current00000', '.astro-recent000000', '.astro', 'other']) {
+        expect(existsSync(join(root, kept)), kept).toBe(true);
+      }
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });
+

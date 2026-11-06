@@ -5,9 +5,13 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { formatDate } from '../src/lib/format-date.mjs';
 import { GUIDES_DIR, guideFiles } from '../src/lib/lastmod.mjs';
+import { launchView } from '../src/lib/launch-state.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
 const DIST = join(ROOT, 'dist');
+// dist/ is built from the committed launch state, so every launch-state expectation below is read from that view.
+const view = launchView();
+const released = view.state === 'released';
 
 const read = (path: string) => readFileSync(join(DIST, path), 'utf8');
 const builtPages = () =>
@@ -141,25 +145,26 @@ describe('every built page', () => {
     }
   });
 
-  it('never claims "nowhere else" or "nothing leaves the phone", and shows no price on the pages it wrote', () => {
+  it('never claims "nowhere else" or "nothing leaves the phone", and shows a price only where the launch state allows it', () => {
     for (const { file, html } of builtPages()) {
       expect(html, file).not.toMatch(/nowhere else|nothing leaves the phone/i);
-      if (!file.startsWith('guides/')) expect(html, file).not.toMatch(/\$\s?\d|39\.99/);
+      const mayShowPrice = released && file === 'index.html';
+      if (!file.startsWith('guides/') && !mayShowPrice) expect(html, file).not.toMatch(/\$\s?\d|39\.99/);
     }
   });
 });
 
 describe('landing page', () => {
-  it('leads with the pre-beta CTA to the guides, the status pill and the price-free line', () => {
+  it('leads with the launch-state CTA, the status pill and the price line', () => {
     const html = read('index.html');
-    expect(html).toMatch(
-      guideSlugs().length > 0
-        ? /<a href="#guides" class="btn-primary">Read the receipt guides<\/a>/
-        : /<a href="\/how-we-write\/" class="btn-primary">How we write the guides<\/a>/,
-    );
-    expect(html).toContain('href="/privacy/#app"');
-    expect(html).toContain('In development · not on the App Store yet');
-    expect(html).toContain('One-time purchase when it ships. No subscription.');
+    const guidesLink = guideSlugs().length > 0 ? /href="#guides"/ : /href="\/how-we-write\/"/;
+    const guidesLinkClass = view.state === 'pre-beta' ? 'btn-primary' : 'link';
+    expect(html).toMatch(new RegExp(`<a ${guidesLink.source} class="${guidesLinkClass}">`));
+    expect(html.includes('class="store-badge"')).toBe(released);
+    expect(html.includes('class="pill"')).toBe(Boolean(view.pill));
+    if (view.pill) expect(html).toContain(view.pill);
+    if (view.state === 'pre-beta') expect(html).toContain('href="/privacy/#app"');
+    expect(html).toContain(view.priceLine);
     expect(html).toMatch(/<section[^>]*id="guides"/);
   });
 
@@ -366,7 +371,8 @@ describe('say it once per screen', () => {
   });
 
   it('keeps the one-time purchase line out of the leaves-out ledger', () => {
-    expect(visibleBodyText(read('index.html')).match(/one-time purchase/gi)).toHaveLength(1);
+    const lines = /one-time purchase/i.test(view.priceLine) ? 1 : 0;
+    expect(visibleBodyText(read('index.html')).match(/one-time purchase/gi) ?? []).toHaveLength(lines);
   });
 });
 

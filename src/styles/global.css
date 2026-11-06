@@ -274,6 +274,7 @@
   .prose a.btn-primary {
     @apply text-on-brand;
     text-decoration: none;
+    transition: background-color 120ms ease-out;
   }
 
   .prose a.btn-primary:hover, .prose a.btn-primary:active { @apply text-on-brand; }

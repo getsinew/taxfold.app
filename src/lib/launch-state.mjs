@@ -1,5 +1,3 @@
-import { createHash } from 'node:crypto';
-
 // The single switch for DESIGN.md § 5.6. Pages and the guide transform read launchView(); none of them
 // tests the state itself, so flipping LAUNCH_STATE (and filling the ids below) is the whole launch change.
 export const LAUNCH_STATE = 'pre-beta';
@@ -13,27 +11,31 @@ export const APP_STORE_PT = '';
 // per-slug tokens never clear Apple's 5-user reporting floor.
 export const SITE_CT = 'site';
 
-// Test seam: a build can render another state without editing the constants above. Unset, the committed state wins.
-const fromEnv = (name, committed) => process.env[name] || committed;
-const activeState = () => fromEnv('TAXFOLD_LAUNCH_STATE', LAUNCH_STATE);
-const activeIds = () => ({
-  TESTFLIGHT_URL: fromEnv('TAXFOLD_TESTFLIGHT_URL', TESTFLIGHT_URL),
-  APP_STORE_ID: fromEnv('TAXFOLD_APP_STORE_ID', APP_STORE_ID),
-  APP_STORE_PT: fromEnv('TAXFOLD_APP_STORE_PT', APP_STORE_PT),
+// Test seam, open only under Vitest (which sets VITEST, and so do the builds it spawns): a build can render another
+// state without editing the constants above. Outside Vitest nothing here reads the environment, because Astro loads
+// .env files into process.env mid-build, after astro.config.mjs has already built the maker note, and a stray
+// TAXFOLD_* there would split one site across two states. A variable that is set, even to '', replaces its constant.
+const fromEnv = (name, committed) => (process.env.VITEST && name in process.env ? process.env[name] : committed);
+export const effectiveLaunch = () => ({
+  state: fromEnv('TAXFOLD_LAUNCH_STATE', LAUNCH_STATE),
+  ids: {
+    TESTFLIGHT_URL: fromEnv('TAXFOLD_TESTFLIGHT_URL', TESTFLIGHT_URL),
+    APP_STORE_ID: fromEnv('TAXFOLD_APP_STORE_ID', APP_STORE_ID),
+    APP_STORE_PT: fromEnv('TAXFOLD_APP_STORE_PT', APP_STORE_PT),
+  },
 });
-
-// Astro caches rendered Markdown (the maker note) in node_modules/.astro without knowing it depends on the launch
-// state, so astro.config.mjs puts that cache under a directory named by this key.
-export function launchCacheKey() {
-  const ids = activeIds();
-  const effective = [activeState(), ids.TESTFLIGHT_URL, ids.APP_STORE_ID, ids.APP_STORE_PT].join('\n');
-  return createHash('sha256').update(effective).digest('hex').slice(0, 12);
-}
 
 // Apple's "Download on the App Store" badge, US English, exactly as served by Apple Marketing Tools (see FRONTEND.md).
 const BADGE_ART = { light: '/app-store-badge-black.svg', dark: '/app-store-badge-white.svg' };
+
+// One credit line in every state, in the footer where the legal notice already is: Apple asks for a credit once per
+// site, and every state's pages name these marks. Wording follows Apple's own attribution notices (Apple Trademark
+// List and its legal footer, read 2026-11-06). The marks listed are the ones the site's pages use; a test fails when a
+// page names an Apple mark this line omits.
 const APPLE_CREDIT =
-  'Apple, the Apple Logo and App Store are trademarks of Apple Inc., registered in the U.S. and other countries.';
+  'Apple, the Apple logo, iPhone, iPad, iCloud, Live Text, Safari, TestFlight and App Store are trademarks of Apple Inc., ' +
+  'registered in the U.S. and other countries and regions. IOS is a trademark or registered trademark of Cisco in the ' +
+  'U.S. and other countries and is used under license.';
 
 const GUIDES_HREF = '#guides';
 const PRIVACY_HREF = '/privacy/#app';
@@ -43,7 +45,7 @@ const missing = (name) => {
   throw new Error(`launch-state: LAUNCH_STATE needs ${name} to be set before it can render`);
 };
 
-export function launchView(state = activeState(), ids = activeIds()) {
+export function launchView(state = effectiveLaunch().state, ids = effectiveLaunch().ids) {
   if (state === 'pre-beta') {
     return {
       state,
@@ -57,7 +59,7 @@ export function launchView(state = activeState(), ids = activeIds()) {
       privacyLabelLead: 'When the app is listed, its App Store privacy label will read',
       makerCta: null,
       itunesMeta: null,
-      creditLine: null,
+      creditLine: APPLE_CREDIT,
     };
   }
   if (state === 'beta') {
@@ -74,7 +76,7 @@ export function launchView(state = activeState(), ids = activeIds()) {
       privacyLabelLead: 'When the app is listed, its App Store privacy label will read',
       makerCta: { label: 'Join the TestFlight beta', hrefFor: () => href },
       itunesMeta: null,
-      creditLine: null,
+      creditLine: APPLE_CREDIT,
     };
   }
   if (state === 'released') {

@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { guideFiles } from '../src/lib/lastmod.mjs';
 
 const ROOT = join(import.meta.dirname, '..');
@@ -19,11 +19,15 @@ const GUIDES = guideFiles(ROOT).map((file) => {
   return { slug, token: cluster.split(',')[0].trim().replace(/^core:/, '') };
 });
 
+// Every seam variable is set on every build, an empty value meaning "empty", so what a build renders never depends
+// on the constants committed in launch-state.mjs (which the launch-day flip changes).
+const SEAM = { TAXFOLD_LAUNCH_STATE: 'released', TAXFOLD_APP_STORE_ID: '', TAXFOLD_APP_STORE_PT: '', TAXFOLD_TESTFLIGHT_URL: '' };
+const BUILD_TIMEOUT = 120_000;
+
 function buildReleased(overrides: Record<string, string>) {
   const outDir = mkdtempSync(join(tmpdir(), 'taxfold-released-'));
   scratch.push(outDir);
-  const env = { ...process.env, TAXFOLD_LAUNCH_STATE: 'released', ...overrides };
-  for (const key of Object.keys(env)) if (env[key] === '') delete env[key];
+  const env = { ...process.env, ...SEAM, ...overrides };
   const run = spawnSync('npx', ['astro', 'build', '--outDir', outDir], { cwd: ROOT, env, encoding: 'utf8' });
   const page = (path: string) => readFileSync(join(outDir, path, 'index.html'), 'utf8');
   return { run, outDir, page };
@@ -32,7 +36,10 @@ function buildReleased(overrides: Record<string, string>) {
 afterAll(() => scratch.forEach((dir) => rmSync(dir, { recursive: true, force: true })));
 
 describe('released state, launch day: an App Store id and no provider token yet', () => {
-  const build = buildReleased({ TAXFOLD_APP_STORE_ID: APP_ID });
+  let build: ReturnType<typeof buildReleased>;
+  beforeAll(() => {
+    build = buildReleased({ TAXFOLD_APP_STORE_ID: APP_ID });
+  }, BUILD_TIMEOUT);
 
   it('builds', () => {
     expect(build.run.status, build.run.stderr).toBe(0);
@@ -60,7 +67,7 @@ describe('released state, launch day: an App Store id and no provider token yet'
     for (const path of ['/', '/about/', '/contact/', '/privacy/', '/how-we-write/', ...GUIDES.map(({ slug }) => `/guides/${slug}/`)]) {
       const page = build.page(path);
       expect(page, path).toMatch(new RegExp(`<meta name="apple-itunes-app" content="app-id=${APP_ID}, app-argument=https://taxfold\\.app${path}"`));
-      expect(page, path).toContain('Apple, the Apple Logo and App Store are trademarks of Apple Inc., registered in the U.S. and other countries.');
+      expect(page, path).toContain('Apple, the Apple logo, iPhone, iPad, iCloud, Live Text, Safari, TestFlight and App Store are trademarks of Apple Inc.');
     }
   });
 
@@ -75,7 +82,10 @@ describe('released state, launch day: an App Store id and no provider token yet'
 });
 
 describe('released state, once the provider token exists', () => {
-  const build = buildReleased({ TAXFOLD_APP_STORE_ID: APP_ID, TAXFOLD_APP_STORE_PT: 'pt9' });
+  let build: ReturnType<typeof buildReleased>;
+  beforeAll(() => {
+    build = buildReleased({ TAXFOLD_APP_STORE_ID: APP_ID, TAXFOLD_APP_STORE_PT: 'pt9' });
+  }, BUILD_TIMEOUT);
 
   it('builds', () => {
     expect(build.run.status, build.run.stderr).toBe(0);
@@ -102,13 +112,18 @@ describe('the maker note button inside a guide', () => {
   it('overrides the prose link colour, underline and external marker', () => {
     expect(css).toMatch(/\.prose a\.btn-primary\s*\{[^}]*text-on-brand[^}]*text-decoration:\s*none/);
     expect(css).toMatch(/\.prose a\.btn-primary:hover[^{]*\{[^}]*text-on-brand/);
+    expect(css).toMatch(/\.prose a\.btn-primary\s*\{[^}]*transition:\s*background-color/);
     expect(css).toMatch(/\.prose a\.btn-primary::after\s*\{[^}]*content:\s*none/);
   });
 });
 
 describe('released state without an App Store id', () => {
-  it('fails the build instead of rendering a dead badge', () => {
-    const { run } = buildReleased({ TAXFOLD_APP_STORE_PT: 'pt9' });
+  let run: ReturnType<typeof buildReleased>['run'];
+  beforeAll(() => {
+    run = buildReleased({ TAXFOLD_APP_STORE_ID: '', TAXFOLD_APP_STORE_PT: 'pt9' }).run;
+  }, BUILD_TIMEOUT);
+
+  it('fails the build instead of rendering a dead badge, even when an id is committed', () => {
     expect(run.status).not.toBe(0);
     expect(`${run.stdout}${run.stderr}`).toMatch(/APP_STORE_ID/);
   });

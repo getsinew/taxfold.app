@@ -10,7 +10,11 @@ The same publication gives the shape to start from: keep supporting documents "i
 
 ## What each receipt has to show
 
-Before you file anything, know what a receipt is for. The IRS page [What kind of records should I keep](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep) says supporting documents for business expenses "should identify the payee, the amount paid, proof of payment, the date incurred, and include a description of the item purchased or service received that shows the amount was for a business expense." It also notes that "A combination of supporting documents may be needed to substantiate all elements of the expense."
+Before you file anything, know what a receipt is for. The IRS page [What kind of records should I keep](https://www.irs.gov/businesses/small-businesses-self-employed/what-kind-of-records-should-i-keep) says supporting documents for business expenses:
+
+> …should identify the payee, the amount paid, proof of payment, the date incurred, and include a description of the item purchased or service received that shows the amount was for a business expense.
+
+It also notes that "A combination of supporting documents may be needed to substantiate all elements of the expense."
 
 **Worked example.** You buy $86.40 of lumber for a client job. The register slip shows the store, the date, the items and the total. Your card statement shows the payment left your account. Neither says which job it was for, so you write "Kitchen shelves, Ruiz job" on the slip before you scan it. The slip, the statement line and that note together cover every element the IRS lists.
 

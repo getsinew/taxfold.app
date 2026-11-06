@@ -8,7 +8,9 @@ Keep a receipt when it backs up something on your federal tax return: income you
 
 ## The rule behind every receipt
 
-The IRS does not ask for any particular filing system. [Publication 552, Recordkeeping for Individuals](https://www.irs.gov/pub/irs-pdf/p552.pdf) (last revised January 2011) says: "The IRS does not require you to keep your records in a particular way. Keep them in a manner that allows you and the IRS to determine your correct tax."
+The IRS does not ask for any particular filing system. [Publication 552, Recordkeeping for Individuals](https://www.irs.gov/pub/irs-pdf/p552.pdf) (last revised January 2011) says:
+
+> The IRS does not require you to keep your records in a particular way. Keep them in a manner that allows you and the IRS to determine your correct tax.
 
 For expenses, its basic records are sales slips, invoices, receipts, canceled checks or other proof of payment, and written communications from qualified charities. Two details matter:
 
@@ -53,7 +55,11 @@ Even without a business, some personal costs need paperwork when you claim them:
 
 ## How long to keep receipts
 
-The IRS page [How long should I keep records?](https://www.irs.gov/businesses/small-businesses-self-employed/how-long-should-i-keep-records) ties the answer to the period of limitations: "Generally, you must keep your records that support an item of income, deduction or credit shown on your tax return until the period of limitations for that tax return runs out." The years count from when you filed, and "Returns filed before the due date are treated as filed on the due date." Its list:
+The IRS page [How long should I keep records?](https://www.irs.gov/businesses/small-businesses-self-employed/how-long-should-i-keep-records) ties the answer to the period of limitations:
+
+> Generally, you must keep your records that support an item of income, deduction or credit shown on your tax return until the period of limitations for that tax return runs out.
+
+The years count from when you filed, and "Returns filed before the due date are treated as filed on the due date." Its list:
 
 - "Keep records for 3 years" if none of the longer periods below apply.
 - "Keep records for 3 years from the date you filed your original return or 2 years from the date you paid the tax, whichever is later, if you file a claim for credit or refund after you file your return."

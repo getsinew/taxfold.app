@@ -8,7 +8,9 @@ If you work for yourself in the US as a sole proprietor, your business expenses 
 
 ## The test every expense has to pass
 
-In [Publication 334, Tax Guide for Small Business](https://www.irs.gov/publications/p334) (chapter 8): "To be deductible, a business expense must be both ordinary and necessary." It goes on: "An ordinary expense is one that is common and accepted in your field of business. A necessary expense is one that is helpful and appropriate for your business. An expense does not have to be indispensable to be considered necessary."
+In [Publication 334, Tax Guide for Small Business](https://www.irs.gov/publications/p334) (chapter 8): "To be deductible, a business expense must be both ordinary and necessary." It goes on:
+
+> An ordinary expense is one that is common and accepted in your field of business. A necessary expense is one that is helpful and appropriate for your business. An expense does not have to be indispensable to be considered necessary.
 
 The same chapter covers costs that are partly personal: "separate the personal part from the business part. The personal part is generally not deductible." So for a car or a phone line you use both ways, the business share is what goes in your records, and you need some basis for that share.
 
@@ -21,7 +23,11 @@ Two rules that catch people out:
 
 ## Keep business money in its own account
 
-[Publication 583, Starting a Business and Keeping Records](https://www.irs.gov/publications/p583), is direct about this: "One of the first things you should do when you start a business is open a business checking account. You should keep your business account separate from your personal checking account." It adds: "Use the business account for business purposes only."
+[Publication 583, Starting a Business and Keeping Records](https://www.irs.gov/publications/p583), is direct about this:
+
+> One of the first things you should do when you start a business is open a business checking account. You should keep your business account separate from your personal checking account.
+
+It adds: "Use the business account for business purposes only."
 
 In practice, a separate account and a card tied to it do most of the sorting for you. When you pay yourself, move money from the business account to your personal one. For cash payments, Publication 583 says to keep the receipt, and if you can't get one, "make an adequate explanation in your records at the time of payment."
 

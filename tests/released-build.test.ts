@@ -57,7 +57,7 @@ describe('released state, launch day: an App Store id and no provider token yet'
     expect(landing).toMatch(/<img[^>]*\sheight="48"/);
     expect(landing).not.toMatch(/class="btn-primary"[^>]*>\s*Read the receipt guides/);
     expect(landing).toContain('Read the receipt guides');
-    expect(landing).toContain('$39.99 once. No subscription.');
+    expect(landing).toContain('Free for your first 40 receipts, then $39.99 once. No subscription.');
     expect(landing).not.toContain('In development');
   });
 

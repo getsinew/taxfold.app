@@ -96,7 +96,7 @@ export function launchView(state = effectiveLaunch().state, ids = effectiveLaunc
       secondary: READ_GUIDES,
       pill: null,
       helper: null,
-      priceLine: '$39.99 once. No subscription.',
+      priceLine: 'Free for your first 40 receipts, then $39.99 once. No subscription.',
       makerStatus: 'Taxfold is on the App Store.',
       metaStatus: '',
       privacyLabelLead: 'Its App Store privacy label reads',

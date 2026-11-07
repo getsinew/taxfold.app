@@ -114,7 +114,7 @@ describe('launch state', () => {
 
   it('released renders without a provider token, the launch-day shape: plain store links, no query', () => {
     const state = launchView('released', { ...NO_IDS, APP_STORE_ID: '123' });
-    expect(state.priceLine).toBe('$39.99 once. No subscription.');
+    expect(state.priceLine).toBe('Free for your first 40 receipts, then $39.99 once. No subscription.');
     expect(state.pill).toBeNull();
     expect(state.primary).toMatchObject({ kind: 'badge', alt: 'Download Taxfold on the App Store', href: 'https://apps.apple.com/app/id123' });
     expect(state.makerCta?.hrefFor('receipt-scan-ocr')).toBe('https://apps.apple.com/app/id123');

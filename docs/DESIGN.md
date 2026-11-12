@@ -36,8 +36,8 @@ saturates (orange-red, violet, sky blue) or SaaS black.
 - 🟢 **We show no scale we don't have.** No user counts, no "#1", no star ratings, no accuracy percentage. Text recognition
   misreads faint digits, and the copy says so ("you correct any field it gets wrong").
 - 🟢 **We earn competence with citations, not superlatives.** "Audit ready" is argued in the guides by quoting IRS
-  Publication 583 and Rev. Proc. 97-22, with a link at the point of each claim. The public GitHub review record is the
-  provenance proof.
+  Publication 583 and Rev. Proc. 97-22, with a link at the point of each claim. Each guide's pull request, with its
+  fact-check comment and the approval that published it, is the provenance proof.
 - 🟢 **The CTA opens no account.** Before the beta it is "read the guides". During the beta it is a TestFlight link. After
   approval it is the App Store badge. No waitlist and no email capture, ever (§ 4.1).
 - 🟢 **We borrow SparkReceipt's candour, not its personality.** Price stated up front and plain sentences, yes. The byline
@@ -245,7 +245,7 @@ Every page has one H1. Headings never skip a level. Landmarks: `header` › `nav
 | 1 | **Hero + CTA** | H1 (proposed copy below). A lede (`text-lg` 400, `ink-soft`, ≤2 sentences). The **launch-state CTA** (§ 5.6). The status pill. One decorative "receipt tear" rule under the section (the favicon's zigzag edge as an 8px SVG), used **once** on the whole site (`aria-hidden`) |
 | 2 | **Proof: "What it does / What it leaves out"** | Two-column ledger. *Does*: scan on the phone, file by tax year, export CSV/PDF. *Leaves out*: account, sync server, bank connection, analytics, subscription, each with a one-line consequence. A link to `/privacy/#app` |
 | 3 | **Guides** (`id="guides"`, the nav target) | Guide cards (§ 5.4) in a contents-page list, sorted by title, not by date |
-| 4 | **Who makes it** | Opal Harmony P.C., a small company in Greece. Links to About, How we write, Privacy. "The site's source and every review are public on GitHub" |
+| 4 | **Who makes it** | Opal Harmony P.C., a small company in Greece. Links to About, How we write, Privacy. "The site's source is public on GitHub, where each guide's fact-check and the approval that published it stay visible on its pull request" (the line `/how-we-write/` uses) |
 
 - **Hero copy, proposed:** H1 *"Receipts for tax time, kept on your iPhone."* (43 chars, against the skeleton's 76). It
   gives 2–3 lines at 375px instead of 4–5. Never "nowhere else" or "nothing leaves the phone": app data is part of the

@@ -230,10 +230,13 @@ describe('trust pages', () => {
     expect(t).toContain('Taxfold team');
   });
   it('the landing page claims only the public record how-we-write describes', () => {
-    const t = text('/');
-    expect(t).not.toMatch(/every review/i);
-    expect(t).toMatch(/source is public on GitHub/);
-    expect(t).toMatch(/fact-check and the approval that published it stay visible on its pull request/);
+    const landing = text('/');
+    const record = text('/how-we-write/');
+    for (const claim of ['source is public on', 'fact-check', 'the approval that published it stay visible']) {
+      expect(landing, `landing states "${claim}"`).toContain(claim);
+      expect(record, `how-we-write backs "${claim}"`).toContain(claim);
+    }
+    expect(landing).not.toMatch(/every review|all reviews|reviews are public/i);
   });
 
   it('privacy names both halves: the app collects nothing, the site runs no tracking script', () => {

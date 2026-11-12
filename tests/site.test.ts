@@ -235,7 +235,7 @@ describe('trust pages', () => {
     const landing = text('/').replace(/ ,/g, ',');
     expect(landing).toContain(claim);
     // The whole page counts, guide cards included; only the non-record senses of "public" are excluded.
-    const claims = landing.match(/\bpublic(ly)?\b(?! (transport|holidays?))|every (review|comment|discussion)/gi);
+    const claims = landing.match(/\bpublic(ly)?\b(?! (transport|holidays?|beta))|every (review|comment|discussion)/gi);
     expect(claims, 'no second public-record claim on the landing').toHaveLength(1);
     // Its backing comes from how-we-write's Public record paragraph only, never another step's sentence.
     const item = html('/how-we-write/').match(/<li>(?:(?!<\/li>)[\s\S])*Public record(?:(?!<\/li>)[\s\S])*<\/li>/)?.[0];

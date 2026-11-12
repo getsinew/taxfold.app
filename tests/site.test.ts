@@ -229,6 +229,12 @@ describe('trust pages', () => {
     expect(t).toMatch(/Nothing publishes until that person approves it/);
     expect(t).toContain('Taxfold team');
   });
+  it('the landing page claims only the public record how-we-write describes', () => {
+    const t = text('/');
+    expect(t).not.toMatch(/every review/i);
+    expect(t).toMatch(/source is public on GitHub/);
+    expect(t).toMatch(/fact-check and the approval that published it stay visible on its pull request/);
+  });
 
   it('privacy names both halves: the app collects nothing, the site runs no tracking script', () => {
     const t = text('/privacy/');

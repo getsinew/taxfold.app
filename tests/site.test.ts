@@ -230,13 +230,18 @@ describe('trust pages', () => {
     expect(t).toContain('Taxfold team');
   });
   it('the landing page claims only the public record how-we-write describes', () => {
-    const landing = text('/');
-    const record = text('/how-we-write/');
-    for (const claim of ['source is public on', 'fact-check', 'the approval that published it stay visible']) {
-      expect(landing, `landing states "${claim}"`).toContain(claim);
-      expect(record, `how-we-write backs "${claim}"`).toContain(claim);
-    }
-    expect(landing).not.toMatch(/every review|all reviews|reviews are public/i);
+    // The landing's whole claim, scope words included; any widening changes the sentence.
+    const claim = 'The site’s source is public on GitHub, where each guide’s fact-check and the approval that published it stay visible on its pull request.';
+    const landing = text('/').replace(/ ,/g, ',');
+    expect(landing).toContain(claim);
+    expect(landing.match(/\bpublic\b/gi), 'no second public-record claim on the landing').toHaveLength(1);
+    // Its backing comes from how-we-write's Public record paragraph only, never another step's sentence.
+    const item = html('/how-we-write/').match(/<li>(?:(?!<\/li>)[\s\S])*Public record(?:(?!<\/li>)[\s\S])*<\/li>/)?.[0];
+    expect(item, 'how-we-write keeps a Public record paragraph').toBeDefined();
+    const record = item!.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').replace(/ ([.,])/g, '$1');
+    expect(record).toContain('The site’s source is public on GitHub.');
+    expect(record).toContain('Guides arrive as pull requests');
+    expect(record).toContain('each pull request’s fact-check comment and the approval that published it stay visible there.');
   });
 
   it('privacy names both halves: the app collects nothing, the site runs no tracking script', () => {

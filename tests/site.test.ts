@@ -26,8 +26,8 @@ const STATIC_PATHS = ['/', '/about/', '/contact/', '/how-we-write/', '/privacy/'
 
 const read = (rel: string) => readFileSync(join(DIST, rel), 'utf8');
 const html = (path: string) => read(join(path, 'index.html'));
-const text = (path: string) =>
-  html(path)
+const text = (path: string, source = html(path)) =>
+  source
     .replace(/<script[\s\S]*?<\/script>/g, '')
     .replace(/<[^>]+>/g, ' ')
     .replace(/\s+/g, ' ');
@@ -234,7 +234,10 @@ describe('trust pages', () => {
     const claim = 'The site’s source is public on GitHub, where each guide’s fact-check and the approval that published it stay visible on its pull request.';
     const landing = text('/').replace(/ ,/g, ',');
     expect(landing).toContain(claim);
-    expect(landing.match(/\bpublic\b/gi), 'no second public-record claim on the landing').toHaveLength(1);
+    // Guide cards are guide text, not a claim about the record ("public transport"); the rest of the page counts.
+    const claims = text('/', html('/').replace(/<ul class="card-grid">[\s\S]*?<\/ul>/, ''))
+      .match(/\bpublic(ly)?\b|every (review|comment|discussion)/gi);
+    expect(claims, 'no second public-record claim on the landing').toHaveLength(1);
     // Its backing comes from how-we-write's Public record paragraph only, never another step's sentence.
     const item = html('/how-we-write/').match(/<li>(?:(?!<\/li>)[\s\S])*Public record(?:(?!<\/li>)[\s\S])*<\/li>/)?.[0];
     expect(item, 'how-we-write keeps a Public record paragraph').toBeDefined();
